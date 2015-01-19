@@ -29,7 +29,6 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View mProgress;
 
-
     public interface Callbacks {
         void onShowDetails(NoteGsonModel note);
         void onErrorDialog(Exception e);
@@ -106,6 +105,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
     public void onError(Exception e) {
         mProgress.setVisibility(View.GONE);
         Callbacks callbacks = getCallbacks();
-        callbacks.onErrorDialog(e);
+//        callbacks.onErrorDialog(e);
     }
+
 }

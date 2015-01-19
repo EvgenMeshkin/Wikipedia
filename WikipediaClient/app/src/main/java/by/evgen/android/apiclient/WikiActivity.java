@@ -88,12 +88,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wiki);
-//        if (savedInstanceState == null) {
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            SearchFragment fragment = new SearchFragment();
-//            transaction.replace(R.id.framemain, fragment);
-//            transaction.commit();
-//        }
         mVisibleMenu = 1;
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
@@ -134,8 +128,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerListRight.setOnItemClickListener(new RightDrawerItemClickListener());
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mAm = AccountManager.get(this);
-        LoadRandomPage load = new LoadRandomPage();
-        load.loadingRandomPage(this);
+//        LoadRandomPage load = new LoadRandomPage();
+//        load.loadingRandomPage(this);
         if (sAccount == null) {
             sAccount = new Account(getString(R.string.news), ACCOUNT_TYPE);
         }
@@ -171,15 +165,22 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     public void onShowDetails(NoteGsonModel note) {
             mVisibleMenu = 1;
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            DetailsFragment detailsmain = new DetailsFragment();
-            mNoteGsonModel = (NoteGsonModel) note;
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("key", mNoteGsonModel);
-            detailsmain.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.framemain,detailsmain)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
+//            DetailsFragment detailsmain = new DetailsFragment();
+//            mNoteGsonModel = (NoteGsonModel) note;
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelable("key", mNoteGsonModel);
+//            detailsmain.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.framemain,detailsmain)
+//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                    .commit();
+        NoteGsonModel noteGsonModel = (NoteGsonModel) note;
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("key", noteGsonModel);
+        Intent intent = new Intent();
+        intent.setClass(this, DetailsFragmentActivity.class);
+        intent.putExtra("key", bundle);
+        startActivity(intent);
     }
 
     @Override

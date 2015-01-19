@@ -25,8 +25,7 @@ import java.util.List;
  * Created by evgen on 06.01.2015.
  */
 public class WatchListFragment extends Fragment {
-    private TextView mTitle;
-    private TextView mDate;
+
     private View content;
     private TextView empty;
     private DateAdapter mAdapter;
@@ -35,7 +34,6 @@ public class WatchListFragment extends Fragment {
     //TODO what is example
     final Uri WIKI_URI = Uri
             .parse("content://com.example.evgenmeshkin.GeoData/geodata");
-    final static String LOG_TAG = WatchListFragment.class.getSimpleName();
 
     public interface Callbacks {
         void onShowDetails(NoteGsonModel note);

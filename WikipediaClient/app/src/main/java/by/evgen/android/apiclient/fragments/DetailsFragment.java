@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.helper.WikiContentPageCallback;
+import by.evgen.android.apiclient.listener.OnBackPressedListener;
 import by.evgen.android.apiclient.processing.ContentsArrayProcessor;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.processing.Processor;
@@ -31,6 +31,7 @@ import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.FindResponder;
+import by.evgen.android.apiclient.utils.Log;
 
 import java.util.List;
 
@@ -39,10 +40,9 @@ import java.util.List;
  */
 
 //TODO check with Default WebViewFragment
-public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks {
+public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks, OnBackPressedListener {
 
     private View content;
-    final static String LOG_TAG = "DetailsFragment";
     private MobileViewProcessor mMobileViewProcessor = new MobileViewProcessor();
     private NoteGsonModel obj;
     //TODO remove static
@@ -56,13 +56,37 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     private final String WIKI_NAME = "name";
     private final String WIKI_DATE = "wikidate";
 
+    @Override
+    public void onBackPressed() {
+        Log.text(getClass(), "pressonback");
+        if(mWebView.canGoBack()) {
+
+            mWebView.goBack();
+        } else {
+       //     super.onBackPressed();
+        }
+    }
+
+    public void showDetails(NoteGsonModel note){
+        super.showDetails(note);
+    }
+
+    @Override
+    public void onDetach() {
+//        if(mWebView.canGoBack()) {
+//            mWebView.goBack();
+//        } else {
+            super.onDetach();
+//        }
+    }
+
     public interface Callbacks {
         void onSetContents(List data);
     }
-//
-    void setListData(List data) {
+
+    public  void setListData(List data) {
         Callbacks callbacks = getCallbacks();
-        callbacks.onSetContents(data);
+//        callbacks.onSetContents(data);
     }
 
     private Callbacks getCallbacks() {
@@ -103,7 +127,6 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     @Override
     public void onExecute(List data) {
         mData = data;
-
         mTextHtml = "";
         ContentValues cv = new ContentValues();
         cv.put(WIKI_NAME, mHistory);
@@ -113,29 +136,6 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             getActivity().getContentResolver().insert(WIKI_URI, cv);
         }
         new WikiContentPageCallback(this, Api.CONTENTS_GET + mHistory);
-//        ManagerDownload.load(new ManagerDownload.Callback<List<String>>() {
-//                                 @Override
-//                                 public void onPreExecute() {
-//
-//                                 }
-//
-//                                 @Override
-//                                 public void onPostExecute(List<String> data) {
-//                                     mData = data;
-//                                     setListData(data);
-//                                     Log.d(LOG_TAG, data.toString());
-//                                 }
-//
-//                                 @Override
-//                                 public void onError(Exception e) {
-////                                     onError(e);
-//                                 }
-//                             },
-//                Api.CONTENTS_GET + mHistory,
-//                new HttpDataSource(),
-//                new ContentsArrayProcessor());
-
-
         if (data == null || data.isEmpty()) {
             //TODO empty!!! this is not error!!!
             //this is not error state
@@ -144,7 +144,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             for (int i = 0; i < data.size(); i++) {
                 mTextHtml = mTextHtml + mData.get(i).getText();
             }
-            Log.d(LOG_TAG, "STR =" + mTextHtml);
+            Log.text(getClass(), "STR =" + mTextHtml);
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setLoadWithOverviewMode(true);
@@ -167,6 +167,8 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         setListData(data);
     }
 
+
+
     //TODO create new activity
     private class WikiWebViewClient extends WebViewClient {
 
@@ -176,8 +178,10 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             final MobileViewProcessor processor = getProcessor();
             Integer position = url.lastIndexOf("/");
             mHistory = url.substring(position + 1);
+            NoteGsonModel note = new NoteGsonModel(obj.getId(), mHistory, obj.getContent());
+            Log.text(getClass(), obj.getId() + mHistory + obj.getContent() );
+        //    showDetails(note);
             String newUrl = Api.MOBILE_GET + mHistory;
-            Log.d(LOG_TAG, "newurl =" + newUrl);
             update(dataSource, processor, newUrl);
             content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
             return true;
