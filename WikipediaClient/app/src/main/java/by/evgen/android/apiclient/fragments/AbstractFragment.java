@@ -38,6 +38,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
         return FindResponder.findFirstResponder(this, Callbacks.class);
     }
 
+    //TODO create another Serializable model class and make template like T
     public void showDetails(NoteGsonModel note) {
         Callbacks callbacks = getCallbacks();
         callbacks.onShowDetails(note);
