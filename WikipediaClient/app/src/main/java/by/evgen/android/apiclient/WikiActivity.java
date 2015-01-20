@@ -9,6 +9,8 @@ import android.accounts.AccountManager;
 
 
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.DialogFragment;
@@ -55,7 +57,7 @@ import by.evgen.android.apiclient.utils.Log;
 import java.util.List;
 
 //TODO clear unused code
-public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks, SearchView.OnQueryTextListener, LoadVkUserData.Callbacks, LoadRandomPage.Callbacks, SentsVkNotes.Callbacks, WatchListFragment.Callbacks {
+public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks, LoadVkUserData.Callbacks, LoadRandomPage.Callbacks, WatchListFragment.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -109,7 +111,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                 getSupportActionBar().setTitle(mTitle);
                 supportInvalidateOptionsMenu();
             }
-
             public void onDrawerOpened(View drawerView) {
                 getSupportActionBar().setTitle(mDrawerTitle);
                 supportInvalidateOptionsMenu();
@@ -129,10 +130,10 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
             ContentResolver.setSyncAutomatically(sAccount, AUTHORITY, true);
         }
         try {
+//            mDrawerList.addHeaderView(headerDrawer);
             mAm.setUserData(sAccount, "Token", EncrManager.encrypt(this, VkOAuthHelper.mAccessToken));
             LoadVkUserData loadVkUserData = new LoadVkUserData(this);
             mLikeItem.setEnabled(true);
-
         } catch (Exception e) {
         }
     }
@@ -155,6 +156,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
         intent.putExtra("key", bundle);
+        intent.putExtra("keynote", note);
         startActivity(intent);
     }
 
@@ -162,33 +164,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     public void onErrorDialog(Exception e) {
         DialogFragment newFragment = ErrorDialog.newInstance(e.getMessage());
         newFragment.show(getSupportFragmentManager(), "dialog");
-    }
-
-   @Override
-    public boolean onQueryTextSubmit(String s) {
-       onSentSearch(s);
-       return true;
-    }
-
-    private void onSentSearch(String s){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        SearchFragment fragmentmain = new SearchFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("key", s);
-        fragmentmain.setArguments(bundle);
-        transaction.replace(R.id.framemain, fragmentmain);
-        transaction.commit();
-     }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-//       SearchViewValue.textsearch(s);
-       return true;
-    }
-
-    @Override
-    public void onReturnId(Long id) {
-
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -254,27 +229,24 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem searchItem = menu.findItem(R.id.search);
-        mNoteItem = menu.findItem(R.id.action_note);
-        mLikeItem = menu.findItem(R.id.action_like);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint("Search");
-        searchView.setOnQueryTextListener(this);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
     return true;
     }
 
-    public void sentNote(MenuItem item) {
-        Log.text(getClass(), "sentNote");
-        if (!mNoteGsonModel.equals(null)) {
-            new SentsVkNotes(this, this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
+    @Override
+    public void onNewIntent(Intent intent) {
+       if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            intent.setClass(this, SearchFragmentActivity.class);
+            startActivity(intent);
         }
     }
 
+    public void sentNote(MenuItem item) {
+    }
+
     public void sentLike(MenuItem item) {
-        Log.text(getClass(), "sentLike");
-        if (!mNoteGsonModel.equals(null)) {
-           new LikeVkNotes(this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
-        }
     }
 
     @Override
@@ -285,18 +257,12 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+            case R.id.search:
+                onSearchRequested();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
-        mNoteItem = menu.findItem(R.id.action_note);
-        mLikeItem = menu.findItem(R.id.action_like);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

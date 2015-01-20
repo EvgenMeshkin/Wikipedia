@@ -3,13 +3,9 @@ package by.evgen.android.apiclient;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -26,15 +22,15 @@ import java.util.List;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.DetailsFragment;
+import by.evgen.android.apiclient.fragments.SearchFragment;
 import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
-import by.evgen.android.apiclient.listener.RightDrawerItemClickListener;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
- * Created by User on 13.11.2014.
+ * Created by evgen on 20.01.2015.
  */
-public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks, SentsVkNotes.Callbacks, DetailsFragment.Callbacks {
+public class SearchFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -51,18 +47,14 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark_material_light));
-        mDrawerListRight = (ListView) findViewById(R.id.list_right_menu);
-        if (getIntent().getParcelableExtra("keynote") != null) {
-         mNoteGsonModel =  getIntent().getParcelableExtra("keynote");
-        }
-        Log.text(getClass(),"activity");// obj.getId() + mHistory + obj.getContent() );
-        DetailsFragment details = new DetailsFragment();
-        mDrawerListRight.setOnItemClickListener(details);//new RightDrawerItemClickListener());
-        details.setArguments(getIntent().<Bundle>getParcelableExtra("key"));
-            getSupportFragmentManager().beginTransaction().add(
-                    R.id.framemain, details).commit();
+        String search = getIntent().getStringExtra(SearchManager.QUERY);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        SearchFragment fragmentmain = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("key", search);
+        fragmentmain.setArguments(bundle);
+        transaction.replace(R.id.framemain, fragmentmain);
+        transaction.commit();
     }
 
     @Override
@@ -75,6 +67,13 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         return true;
     }
 
+
+    public void sentNote(MenuItem item) {
+    }
+
+    public void sentLike(MenuItem item) {
+    }
+
     @Override
     public void onNewIntent(Intent intent) {
         if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -83,31 +82,21 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         }
     }
 
-    public void sentNote(MenuItem item) {
-        Log.text(getClass(), "sentNote");
-        new SentsVkNotes(this, this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
-    }
-
-    public void sentLike(MenuItem item) {
-        Log.text(getClass(), "sentLike");
-              new LikeVkNotes(this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            case R.id.action_settings:
-                return true;
             case R.id.search:
                 onSearchRequested();
                 return true;
-            case R.id.action_note:
-                return true;
-            case R.id.action_like:
-                return true;
+//            case R.id.action_settings:
+//                return true;
+//            case R.id.action_note:
+//                return true;
+//            case R.id.action_like:
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -130,14 +119,5 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     }
 
-    @Override
-    public void onReturnId(Long id) {
-
-    }
-
-    @Override
-    public void onSetContents(List data) {
-        mDrawerListRight.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item,android.R.id.text2, data));
-    }
-
 }
+
