@@ -12,21 +12,21 @@ public class NoteGsonModel implements Parcelable {
 
     private String content;
 
-    private Long id;
+  //  private Long id;
 
     public NoteGsonModel(Long id, String title, String content) {
         this.title = title;
         this.content = content;
-        this.id = id;
+     //   this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public Long getId() {
-        return id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
 
     public String getContent() {
         return content;
@@ -39,7 +39,7 @@ public class NoteGsonModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringArray(new String[] { id.toString(), title, content });
+        parcel.writeStringArray(new String[] {  title, content });
 
     }
    public static final Parcelable.Creator<NoteGsonModel> CREATOR = new Parcelable.Creator<NoteGsonModel>() {
@@ -55,10 +55,10 @@ public class NoteGsonModel implements Parcelable {
 
     // конструктор, считывающий данные из Parcel
     private NoteGsonModel(Parcel parcel) {
-        String[] data = new String[3];
+        String[] data = new String[2];
         parcel.readStringArray(data);
-        title = data[1];
-        content = data[2];
+        title = data[0];
+        content = data[1];
 
     }
 

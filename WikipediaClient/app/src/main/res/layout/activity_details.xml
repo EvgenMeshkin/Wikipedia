@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,8 +19,6 @@
         android:minHeight = "?attr/actionBarSize"
         android:elevation="3dp"
         android:background = "?attr/colorPrimary"  />
-
-
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -21,3 +28,12 @@
 
 
 </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_right_menu"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/list_background"/>
+
+</android.support.v4.widget.DrawerLayout>

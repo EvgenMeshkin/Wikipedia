@@ -33,6 +33,14 @@
             android:name="by.evgen.android.apiclient.LoginActivity"
             android:label="@string/app_name" />
         <activity
+            android:name="by.evgen.android.apiclient.DetailsFragmentActivity"
+            android:parentActivityName="by.evgen.android.apiclient.WikiActivity"
+            android:label="@string/app_name" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="by.evgen.android.apiclient.WikiActivity" />
+        </activity>
+        <activity
             android:name="by.evgen.android.apiclient.VkLoginActivity"
             android:label="@string/app_name" />
         <activity
@@ -73,12 +81,12 @@
         <activity
             android:name=".account.AuthenticatorActivity"
             android:label="@string/app_name" />
-        <activity
-            android:name="by.evgen.android.apiclient.DetailsFragmentActivity"
-            android:label="@string/app_name" >
-           <meta-data android:name="android.app.default_searchable"
-                android:value=".WikiActivity" />
-           </activity>
+        <!--<activity-->
+            <!--android:name="by.evgen.android.apiclient.DetailsFragmentActivity"-->
+            <!--android:label="@string/app_name" >-->
+           <!--<meta-data android:name="android.app.default_searchable"-->
+                <!--android:value=".WikiActivity" />-->
+           <!--</activity>-->
 
         <provider
             android:name="by.evgen.android.apiclient.db.provider.WikiContentProvider"

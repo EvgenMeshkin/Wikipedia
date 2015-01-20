@@ -15,7 +15,7 @@ public class RightDrawerItemClickListener implements ListView.OnItemClickListene
     public void onItemClick(
             AdapterView<?> parent, View view, int position,  long id
     ) {
-        DetailsFragment.setListener(position);
+ //       DetailsFragment.setListener(position);
     }
 
 }

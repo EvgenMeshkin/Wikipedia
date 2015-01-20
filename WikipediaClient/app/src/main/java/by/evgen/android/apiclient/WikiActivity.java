@@ -55,12 +55,12 @@ import by.evgen.android.apiclient.utils.Log;
 import java.util.List;
 
 //TODO clear unused code
-public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks, DetailsFragment.Callbacks, SearchView.OnQueryTextListener, LoadVkUserData.Callbacks, LoadRandomPage.Callbacks, SentsVkNotes.Callbacks, WatchListFragment.Callbacks {
+public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks, SearchView.OnQueryTextListener, LoadVkUserData.Callbacks, LoadRandomPage.Callbacks, SentsVkNotes.Callbacks, WatchListFragment.Callbacks {
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ListView mDrawerListRight;
     private ActionBarDrawerToggle mDrawerToggle;
-    NoteGsonModel mNoteGsonModel;
+    private NoteGsonModel mNoteGsonModel;
     // navigation drawer title
     private CharSequence mDrawerTitle;
     // used to store app title
@@ -74,13 +74,11 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private AccountManager mAm;
     //TODO why static?
     public static Account sAccount;
-    private ViewPager mPager;
     private View  mDetailsFrame;
     private View headerDrawer;
     private MenuItem mLikeItem;
     private MenuItem mNoteItem;
     private Menu mMenu;
-    private Integer mVisibleMenu;
     private enum mMenuValue {Home, Random, Nearby, Favourites, Watchlist, Settings, Log_in};
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -88,10 +86,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wiki);
-        mVisibleMenu = 1;
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
-        mPager = (ViewPager) findViewById(R.id.pager);
         mTitle = getTitle();
         mDrawerTitle = getResources().getString(R.string.menu);
         viewsNames = getResources().getStringArray(R.array.views_array);
@@ -99,8 +95,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark_material_light));
         headerDrawer = View.inflate(this, R.layout.view_header, null);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerListRight = (ListView) findViewById(R.id.list_right_menu);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerListRight);
         mDrawerList.addHeaderView(headerDrawer);
         mDrawerList.setHeaderDividersEnabled(true);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, viewsNames));
@@ -125,8 +119,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerListRight.setOnItemClickListener(new RightDrawerItemClickListener());
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mAm = AccountManager.get(this);
 //        LoadRandomPage load = new LoadRandomPage();
 //        load.loadingRandomPage(this);
@@ -157,26 +149,9 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     }
 
     @Override
-    public void onSetContents(List data) {
-        mDrawerListRight.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item,android.R.id.text2, data));
-    }
-
-    @Override
     public void onShowDetails(NoteGsonModel note) {
-            mVisibleMenu = 1;
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-//            DetailsFragment detailsmain = new DetailsFragment();
-//            mNoteGsonModel = (NoteGsonModel) note;
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable("key", mNoteGsonModel);
-//            detailsmain.setArguments(bundle);
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.framemain,detailsmain)
-//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-//                    .commit();
-        NoteGsonModel noteGsonModel = (NoteGsonModel) note;
         Bundle bundle = new Bundle();
-        bundle.putParcelable("key", noteGsonModel);
+        bundle.putParcelable("key", note);
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
         intent.putExtra("key", bundle);
@@ -196,7 +171,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     }
 
     private void onSentSearch(String s){
-        mVisibleMenu = 0;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         SearchFragment fragmentmain = new SearchFragment();
         Bundle bundle = new Bundle();
@@ -230,41 +204,33 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
       if (position != 0) {
           switch (mMenuValue.valueOf(viewsNames[position - 1])) {
               case Home:
-                  mVisibleMenu = 0;
                   FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                   SearchFragment fragmentmain = new SearchFragment();
                   transaction.replace(R.id.framemain, fragmentmain);
                   transaction.commit();
-                  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerListRight);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Random:
-                  mVisibleMenu = 1;
                   LoadRandomPage load = new LoadRandomPage();
                   load.loadingRandomPage(this);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Nearby:
-                  mVisibleMenu = 0;
                   FragmentTransaction transactionwiki = getSupportFragmentManager().beginTransaction();
                   WikiFragment fragmentwiki = new WikiFragment();
                   transactionwiki.replace(R.id.framemain, fragmentwiki);
                   transactionwiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                   transactionwiki.commit();
-                  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerListRight);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Favourites:
-                  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerListRight);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Watchlist:
-                  mVisibleMenu = 0;
                   FragmentTransaction transactionwatch = getSupportFragmentManager().beginTransaction();
                   WatchListFragment fragmentwatch = new WatchListFragment();
                   transactionwatch.replace(R.id.framemain, fragmentwatch);
                   transactionwatch.commit();
-                  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerListRight);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Settings:
@@ -278,7 +244,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   buck.commit();
                   startActivity(new Intent(this, StartActivity.class));
               default:
-                  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerListRight);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
           }
@@ -331,13 +296,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         mNoteItem = menu.findItem(R.id.action_note);
         mLikeItem = menu.findItem(R.id.action_like);
-        if (mVisibleMenu == 0) {
-            mLikeItem.setVisible(false);
-            mNoteItem.setVisible(false);
-        } else {
-            mLikeItem.setVisible(true);
-            mNoteItem.setVisible(true);
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 
