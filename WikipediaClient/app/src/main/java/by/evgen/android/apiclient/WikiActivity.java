@@ -44,6 +44,7 @@ import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.DetailsFragment;
+import by.evgen.android.apiclient.fragments.FavouritesFragment;
 import by.evgen.android.apiclient.fragments.SearchFragment;
 import by.evgen.android.apiclient.fragments.WatchListFragment;
 import by.evgen.android.apiclient.fragments.WikiFragment;
@@ -62,14 +63,11 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NoteGsonModel mNoteGsonModel;
     // navigation drawer title
     private CharSequence mDrawerTitle;
     // used to store app title
     private CharSequence mTitle;
     private String[] viewsNames;
-    private ArrayAdapter mAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     public static final String ACCOUNT_TYPE = "com.example.evgen.apiclient.account";
     public static final String AUTHORITY = "com.example.evgen.apiclient";
     public static final int requestL = 0;
@@ -78,9 +76,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     public static Account sAccount;
     private View  mDetailsFrame;
     private View headerDrawer;
-    private MenuItem mLikeItem;
-    private MenuItem mNoteItem;
-    private Menu mMenu;
     private enum mMenuValue {Home, Random, Nearby, Favourites, Watchlist, Settings, Log_in};
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -133,7 +128,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
 //            mDrawerList.addHeaderView(headerDrawer);
             mAm.setUserData(sAccount, "Token", EncrManager.encrypt(this, VkOAuthHelper.mAccessToken));
             LoadVkUserData loadVkUserData = new LoadVkUserData(this);
-            mLikeItem.setEnabled(true);
         } catch (Exception e) {
         }
     }
@@ -199,6 +193,10 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Favourites:
+                  FragmentTransaction transactionFavorit = getSupportFragmentManager().beginTransaction();
+                  FavouritesFragment fragmentFavor = new FavouritesFragment();
+                  transactionFavorit.replace(R.id.framemain, fragmentFavor);
+                  transactionFavorit.commit();
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Watchlist:
@@ -228,7 +226,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.wikimain, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -241,12 +239,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
             intent.setClass(this, SearchFragmentActivity.class);
             startActivity(intent);
         }
-    }
-
-    public void sentNote(MenuItem item) {
-    }
-
-    public void sentLike(MenuItem item) {
     }
 
     @Override

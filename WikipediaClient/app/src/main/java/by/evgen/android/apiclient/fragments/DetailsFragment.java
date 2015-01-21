@@ -2,35 +2,25 @@ package by.evgen.android.apiclient.fragments;
 
 
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.WebViewFragment;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.helper.WikiContentPageCallback;
-import by.evgen.android.apiclient.processing.ContentsArrayProcessor;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
-import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
-import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.FindResponder;
 
@@ -41,18 +31,16 @@ import java.util.List;
  * Created by User on 22.10.2014.
  */
 
-//TODO check with Default WebViewFragment
+
 public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks, ListView.OnItemClickListener {
 
     private View content;
     private MobileViewProcessor mMobileViewProcessor = new MobileViewProcessor();
-    private NoteGsonModel obj;
-    //TODO remove static
-    private static WebView mWebView;
-    private static List<Category> mData;
-    private static List mContent;
-    //TODO remove static
-    private static String mTextHtml;
+    private NoteGsonModel mObj;
+    private WebView mWebView;
+    private List<Category> mData;
+    private List mContent;
+    private String mTextHtml;
     private String mHistory;
     private final Uri WIKI_URI = Uri
             .parse("content://com.example.evgenmeshkin.GeoData/geodata");
@@ -88,14 +76,14 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         content = inflater.inflate(R.layout.fragment_details, null);
         //TODO create variable
         if (getArguments() != null) {
-            obj = (NoteGsonModel) getArguments().getParcelable("key");
+            mObj = (NoteGsonModel) getArguments().getParcelable("key");
         }
         mWebView = (WebView) content.findViewById(R.id.webView);
         mWebView.setWebViewClient(new WikiWebViewClient());
-        mHistory = obj.getTitle().replaceAll(" ", "_");
+        mHistory = mObj.getTitle().replaceAll(" ", "_");
         content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
 //        //TODO use URLEncoder, URLDecoder
-        String url = Api.MOBILE_GET + obj.getTitle().replaceAll(" ", "%20");
+        String url = Api.MOBILE_GET + mObj.getTitle().replaceAll(" ", "%20");
         return   content;
     }
 
@@ -109,7 +97,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     public String getUrl() {
-        String url = Api.MOBILE_GET + obj.getTitle().replaceAll(" ", "%20");
+        String url = Api.MOBILE_GET + mObj.getTitle().replaceAll(" ", "%20");
         return url;
     }
 
@@ -158,9 +146,9 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             Integer position = url.lastIndexOf("/");
             mHistory = url.substring(position + 1);
-            NoteGsonModel note = new NoteGsonModel(null, mHistory, obj.getContent());
+            NoteGsonModel note = new NoteGsonModel(null, mHistory, mObj.getContent());
             showDetails(note);
-            Log.i(LOG_TAG, mHistory + obj.getContent() );
+            Log.i(LOG_TAG, mHistory + mObj.getContent());
             content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
             return true;
         }

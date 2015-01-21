@@ -32,10 +32,6 @@ import by.evgen.android.apiclient.utils.Log;
  */
 public class SearchFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks {
 
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ListView mDrawerListRight;
-    private ActionBarDrawerToggle mDrawerToggle;
     private NoteGsonModel mNoteGsonModel;// = (NoteGsonModel) getIntent().<Bundle>getParcelableExtra("key");
 
 
@@ -60,18 +56,11 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.wikimain, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
-    }
-
-
-    public void sentNote(MenuItem item) {
-    }
-
-    public void sentLike(MenuItem item) {
     }
 
     @Override
@@ -91,12 +80,8 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
             case R.id.search:
                 onSearchRequested();
                 return true;
-//            case R.id.action_settings:
-//                return true;
-//            case R.id.action_note:
-//                return true;
-//            case R.id.action_like:
-//                return true;
+            case R.id.action_settings:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -1,5 +1,7 @@
 package by.evgen.android.apiclient;
 
+import by.evgen.android.apiclient.auth.VkOAuthHelper;
+
 /**
  * Created by evgen on 15.11.2014.
  */
@@ -25,5 +27,7 @@ public class Api {
     public static final String VKNOTES_ALL_GET = BASE_PATH_VK + "notes.get?fields=notes$count=100&sort=0&v=5.26&access_token=";
     public static final String VKLIKEIS_GET = BASE_PATH_VK + "likes.isLiked?type=note&v=5.26&item_id=";
     public static final String VKLIKE_GET = BASE_PATH_VK + "likes.add?type=note&v=5.26&item_id=";
+    public static final String STORAGE_SET = BASE_PATH_VK + "storage.set?v=5.27&access_token=" + VkOAuthHelper.mAccessToken + "&key=";
+    public static final String STORAGE_KEYS_GET = BASE_PATH_VK + "storage.getKeys?v=5.27&access_token=" + VkOAuthHelper.mAccessToken;
 
 }

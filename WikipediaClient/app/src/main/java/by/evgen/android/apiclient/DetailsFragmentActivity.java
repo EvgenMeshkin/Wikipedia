@@ -28,6 +28,7 @@ import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.DetailsFragment;
 import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
+import by.evgen.android.apiclient.helper.SentsVkStorage;
 import by.evgen.android.apiclient.listener.RightDrawerItemClickListener;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -40,8 +41,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     private ListView mDrawerList;
     private ListView mDrawerListRight;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NoteGsonModel mNoteGsonModel;// = (NoteGsonModel) getIntent().<Bundle>getParcelableExtra("key");
-
+    private NoteGsonModel mNoteGsonModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         if (getIntent().getParcelableExtra("keynote") != null) {
          mNoteGsonModel =  getIntent().getParcelableExtra("keynote");
         }
-        Log.text(getClass(),"activity");// obj.getId() + mHistory + obj.getContent() );
+        Log.text(getClass(),"activity");
         DetailsFragment details = new DetailsFragment();
         mDrawerListRight.setOnItemClickListener(details);//new RightDrawerItemClickListener());
         details.setArguments(getIntent().<Bundle>getParcelableExtra("key"));
@@ -82,6 +82,12 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
             startActivity(intent);
         }
     }
+
+    public void sentStorage (MenuItem item) {
+        Log.text(getClass(), "sentStorage");
+        new SentsVkStorage(this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
+    }
+
 
     public void sentNote(MenuItem item) {
         Log.text(getClass(), "sentNote");

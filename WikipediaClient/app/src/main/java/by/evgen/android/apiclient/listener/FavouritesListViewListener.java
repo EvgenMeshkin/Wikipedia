@@ -1,7 +1,6 @@
 package by.evgen.android.apiclient.listener;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -16,26 +15,27 @@ import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.processing.SearchPagesProcessor;
+import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
- * Created by User on 16.01.2015.
+ * Created by User on 21.01.2015.
  */
-public class SearchListViewOnScrollListener implements AbsListView.OnScrollListener, ManagerDownload.Callback<List<Category>> {
+public class FavouritesListViewListener implements AbsListView.OnScrollListener, ManagerDownload.Callback<List<String>> {
     private int previousTotal = 0;
     private int visibleThreshold = 5;
     private ListView mListView;
-    private List<Category> mData;
+    private List<String> mData;
     private ArrayAdapter mAdapter;
     private View mFooterProgress;
     private boolean isImageLoaderControlledByDataManager = false;
-    public static final int COUNT = 4;
+    public static final int COUNT = 6;
     private ImageLoader mImageLoader;
     private boolean isPagingEnabled = true;
     private String mValue;
 
-    public SearchListViewOnScrollListener(Context context, ListView listView, ImageLoader imageLoader, List data, ArrayAdapter adapter, String value) {
+    public FavouritesListViewListener (Context context, ListView listView, ImageLoader imageLoader, List data, ArrayAdapter adapter, String value) {
         mImageLoader = imageLoader;
         mListView = listView;
         mData = data;
@@ -80,7 +80,7 @@ public class SearchListViewOnScrollListener implements AbsListView.OnScrollListe
         if (previousTotal != totalItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             previousTotal = totalItemCount;
             isImageLoaderControlledByDataManager = true;
-            ManagerDownload.load(this, getUrl(COUNT, count), new VkDataSource(),new SearchPagesProcessor());
+            ManagerDownload.load(this, getUrl(COUNT, count), new VkDataSource(),new StorageGetKeysProcessor());
         }
         if (mData != null && mData.size() == COUNT) {
             isPagingEnabled = true;
@@ -90,7 +90,7 @@ public class SearchListViewOnScrollListener implements AbsListView.OnScrollListe
         refreshFooter();
     }
 
-    private void updateAdapter(List<Category> data) {
+    private void updateAdapter(List<String> data) {
         if (data != null && data.size() == COUNT) {
             isPagingEnabled = true;
             mListView.addFooterView(mFooterProgress, null, false);
@@ -133,7 +133,7 @@ public class SearchListViewOnScrollListener implements AbsListView.OnScrollListe
     }
 
     @Override
-    public void onPostExecute(List<Category> data) {
+    public void onPostExecute(List<String> data) {
         updateAdapter(data);
         refreshFooter();
         mImageLoader.resume();
@@ -147,3 +147,4 @@ public class SearchListViewOnScrollListener implements AbsListView.OnScrollListe
         isImageLoaderControlledByDataManager = false;
     }
 }
+
