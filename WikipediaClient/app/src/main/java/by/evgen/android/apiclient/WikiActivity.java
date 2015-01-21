@@ -59,8 +59,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     // used to store app title
     private CharSequence mTitle;
     private String[] viewsNames;
-    public static final String ACCOUNT_TYPE = "com.example.evgen.apiclient.account";
-    public static final String AUTHORITY = "com.example.evgen.apiclient";
+    public static final String ACCOUNT_TYPE = "by.evgen.android.apiclient.account";
+    public static final String AUTHORITY = "by.evgen.android.apiclient";
     public static final int requestL = 0;
     private AccountManager mAm;
     //TODO why static?

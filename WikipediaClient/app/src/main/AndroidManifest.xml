@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--TODO remove -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -14,10 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!--TODO remove or need explain-->
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
-
-    <application
+   <application
         android:name="by.evgen.android.apiclient.CoreApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -28,10 +23,6 @@
             android:name="by.evgen.android.apiclient.StartActivity"
             android:label="@string/app_name" >
         </activity>
-        <!-- TODO orientation, launchMode, etc -->
-        <activity
-            android:name="by.evgen.android.apiclient.LoginActivity"
-            android:label="@string/app_name" />
         <activity
             android:name="by.evgen.android.apiclient.DetailsFragmentActivity"
             android:parentActivityName="by.evgen.android.apiclient.WikiActivity"
@@ -72,19 +63,17 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-
-        <!-- TODO remove -->
         <service
-            android:name=".account.WikipediaAccount"
+            android:name=".account.WikiAuthService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
-
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/wiki_auth" />
         </service>
+
         <service
             android:name="by.evgen.android.apiclient.account.SyncService"
             android:exported="false"
@@ -97,14 +86,11 @@
                 android:resource="@xml/sync_adapter" />
         </service>
 
-        <!--TODO remove -->
-        <activity
-            android:name=".account.AuthenticatorActivity"
-            android:label="@string/app_name" />
         <provider
             android:name="by.evgen.android.apiclient.db.provider.WikiContentProvider"
             android:authorities="com.example.evgenmeshkin.GeoData"
             android:exported="true"
+            android:syncable="true"
             android:multiprocess="true" >
         </provider>
 

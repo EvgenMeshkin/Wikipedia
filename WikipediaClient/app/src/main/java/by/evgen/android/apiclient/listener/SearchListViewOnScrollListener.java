@@ -45,7 +45,7 @@ public class SearchListViewOnScrollListener implements AbsListView.OnScrollListe
     }
 
     private String getUrl(int count, int offset) {
-        String url = Api.STORAGE_KEYS_GET + "&count="+count+"&sroffset="+offset;
+        String url = Api.SEARCH_GET + "srlimit="+count+"&sroffset="+offset + "&srsearch=" + mValue;
         return url;
     }
 
@@ -142,6 +142,7 @@ public class SearchListViewOnScrollListener implements AbsListView.OnScrollListe
 
     @Override
     public void onError(Exception e) {
+        e.printStackTrace();
         onError(e);
         mImageLoader.resume();
         isImageLoaderControlledByDataManager = false;

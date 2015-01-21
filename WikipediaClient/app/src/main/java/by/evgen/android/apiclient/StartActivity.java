@@ -9,6 +9,7 @@ package by.evgen.android.apiclient;
  */
 //TODO refactoring
 public class StartActivity extends ActionBarActivity {
+
     public static final int requestL = 0;
 
     @Override

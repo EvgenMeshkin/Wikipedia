@@ -5,13 +5,13 @@
     <PreferenceCategory android:title="@string/general_settings" />
 
     <PreferenceScreen
-        android:key="com.example.evgen.apiclient.KEY_ACCOUNT_SYNC"
+        android:key="by.evgen.android.apiclient.KEY_ACCOUNT_SYNC"
         android:summary="@string/sync_settings_summary"
         android:title="@string/sync">
         <intent
-            android:action="com.example.evgen.apiclient.ACTION_SYNC_SETTINGS"
-            android:targetClass="com.example.evgen.apiclient.SyncSettingsActivity"
-            android:targetPackage="com.example.evgen.apiclient" />
+            android:action="by.evgen.android.apiclient.ACTION_SYNC_SETTINGS"
+            android:targetClass="by.evgen.android.apiclient.SyncSettingsActivity"
+            android:targetPackage="by.evgen.android.apiclient" />
     </PreferenceScreen>
 
 </PreferenceScreen>
