@@ -26,6 +26,7 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
         void onReturnId(Long id);
     }
 
+    //TODO WTF? baseUrl
     public SentsVkNotes (final Callbacks callbacks, final Context context, final String url){
         mCallbacks = callbacks;
         mContext = context;

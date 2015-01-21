@@ -4,8 +4,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import by.evgen.android.apiclient.fragments.DetailsFragment;
-
 /**
  * Created by evgen on 31.12.2014.
  */

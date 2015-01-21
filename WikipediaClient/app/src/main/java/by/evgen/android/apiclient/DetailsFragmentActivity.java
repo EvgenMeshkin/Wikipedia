@@ -3,13 +3,9 @@ package by.evgen.android.apiclient;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +14,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -29,7 +27,6 @@ import by.evgen.android.apiclient.fragments.DetailsFragment;
 import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkStorage;
-import by.evgen.android.apiclient.listener.RightDrawerItemClickListener;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -59,7 +56,16 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         }
         Log.text(getClass(),"activity");
         DetailsFragment details = new DetailsFragment();
+        //TODO inside listener need to call getSupportFragmentManager().findFragmentById
         mDrawerListRight.setOnItemClickListener(details);//new RightDrawerItemClickListener());
+        //TODO
+        /*mDrawerListRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DetailsFragment fragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.framemain);
+                fragment.downloadPage("newurl");
+            }
+        });*/
         details.setArguments(getIntent().<Bundle>getParcelableExtra("key"));
             getSupportFragmentManager().beginTransaction().add(
                     R.id.framemain, details).commit();

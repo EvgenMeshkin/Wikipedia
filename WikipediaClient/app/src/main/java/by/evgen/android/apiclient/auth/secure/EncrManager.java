@@ -14,7 +14,7 @@ import javax.crypto.spec.DESKeySpec;
  */
 public class EncrManager {
 
-    public static final String ENCODING = "UTF8";
+    public static final String ENCODING = "UTF-8";
     public static final String DES = "DES";
 
 

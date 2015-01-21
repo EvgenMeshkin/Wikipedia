@@ -129,6 +129,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         }
     }
 
+    //TODO rename notifyWebView
     public  void setListener(Integer position) {
         mWebView.loadDataWithBaseURL("https://en.wikipedia.org/" + "#" + mContent.get(position).toString().replaceAll(" ", "_"), mTextHtml, "text/html", "utf-8", null);
         Log.i(LOG_TAG, mContent.get(position).toString().replaceAll(" ", "_")  );
@@ -149,6 +150,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             NoteGsonModel note = new NoteGsonModel(null, mHistory, mObj.getContent());
             showDetails(note);
             Log.i(LOG_TAG, mHistory + mObj.getContent());
+            //TODO set progress view to member or create common method that will return progress view
             content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
             return true;
         }
@@ -156,11 +158,13 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            //TODO set progress view to member or create common method that will return progress view
             content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
+            //TODO set progress view to member or create common method that will return progress view
             content.findViewById(android.R.id.progress).setVisibility(View.GONE);
          }
     }

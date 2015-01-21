@@ -20,10 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.content.res.Configuration;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -43,19 +40,13 @@ import by.evgen.android.apiclient.auth.secure.EncrManager;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
-import by.evgen.android.apiclient.fragments.DetailsFragment;
 import by.evgen.android.apiclient.fragments.FavouritesFragment;
 import by.evgen.android.apiclient.fragments.SearchFragment;
 import by.evgen.android.apiclient.fragments.WatchListFragment;
 import by.evgen.android.apiclient.fragments.WikiFragment;
-import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.LoadRandomPage;
-import by.evgen.android.apiclient.helper.SentsVkNotes;
-import by.evgen.android.apiclient.listener.RightDrawerItemClickListener;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.utils.Log;
-
-import java.util.List;
 
 //TODO clear unused code
 public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks, LoadVkUserData.Callbacks, LoadRandomPage.Callbacks, WatchListFragment.Callbacks {

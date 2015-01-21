@@ -20,6 +20,7 @@ public class WikiContentPageCallback implements ManagerDownload.Callback<List<Ca
     }
 
     public interface Callbacks {
+        //TODO List need to be template <T>
         void onSetContents(List data);
     }
 
