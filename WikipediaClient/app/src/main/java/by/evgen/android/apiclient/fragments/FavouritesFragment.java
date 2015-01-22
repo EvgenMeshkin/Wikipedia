@@ -41,13 +41,8 @@ public class FavouritesFragment extends AbstractFragment {
         View content = inflater.inflate(R.layout.fragment_wiki, null);
         mContext = getActivity();
         mListView = (ListView) content.findViewById(android.R.id.list);
-        //TODO or we use m prefix or not
-        //TODO do not use several getters in one method
-        mValue = "";
         mImageLoader = ImageLoader.get(getActivity());
-        if(getArguments() != null) {
-            mValue = getArguments().getString("key");
-        }
+        mValue = getArguments().getString("key");
         return content;
     }
 
@@ -79,7 +74,7 @@ public class FavouritesFragment extends AbstractFragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final String item = (String) mAdapter.getItem(position);
-                    NoteGsonModel note = new NoteGsonModel (null, item, item);
+                    NoteGsonModel note = new NoteGsonModel(null, item, item);
                     showDetails(note);
                 }
             });

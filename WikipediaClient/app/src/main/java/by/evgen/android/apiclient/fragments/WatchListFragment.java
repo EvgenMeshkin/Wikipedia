@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +25,12 @@ import java.util.List;
  */
 public class WatchListFragment extends Fragment {
 
-    private View content;
-    private TextView empty;
+    private View mContent;
+    private TextView mEmpty;
     private DateAdapter mAdapter;
-    private ImageLoader imageLoader;
     private Cursor mCursor;
-    //TODO what is example
     final Uri WIKI_URI = Uri
-            .parse("content://com.example.evgenmeshkin.GeoData/geodata");
+            .parse("content://by.evgen.android.apiclient.GeoData/geodata");
 
     public interface Callbacks {
         void onShowDetails(NoteGsonModel note);
@@ -52,9 +49,9 @@ public class WatchListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        content = inflater.inflate(R.layout.fragment_wiki, null);
-        empty = (TextView) content.findViewById(android.R.id.empty);
-        empty.setVisibility(View.GONE);
+        mContent = inflater.inflate(R.layout.fragment_wiki, null);
+        mEmpty = (TextView) mContent.findViewById(android.R.id.empty);
+        mEmpty.setVisibility(View.GONE);
         mCursor = getActivity().getContentResolver().query(WIKI_URI, null, null,
                 null, null);
         mCursor.moveToFirst();
@@ -62,10 +59,8 @@ public class WatchListFragment extends Fragment {
         if (mCursor.moveToFirst()) {
             do {
                 list.add(mCursor.getString(mCursor.getColumnIndex("name")));
-
             } while (mCursor.moveToNext());
         }
-
         mCursor.moveToFirst();
         final List<Long> listData = new ArrayList<Long>();
         if (mCursor.moveToFirst()) {
@@ -79,8 +74,7 @@ public class WatchListFragment extends Fragment {
 //            mCursor.close();
 //        }
 
-        ListView listView = (ListView) content.findViewById(android.R.id.list);
-        imageLoader = ImageLoader.get(getActivity());
+        ListView listView = (ListView) mContent.findViewById(android.R.id.list);
         String[] from = new String[] { "name", "wikidate" };
         int[] to = new int[] { R.id.text1, R.id.text2 };
         mCursor.moveToFirst();
@@ -97,7 +91,7 @@ public class WatchListFragment extends Fragment {
                 showDetails(note);
             }
         });
-            return content;
+            return mContent;
    }
 
 }

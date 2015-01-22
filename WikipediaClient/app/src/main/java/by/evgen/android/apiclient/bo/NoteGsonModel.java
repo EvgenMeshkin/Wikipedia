@@ -9,9 +9,7 @@ import android.os.Parcelable;
 public class NoteGsonModel implements Parcelable {
 
     private String title;
-
     private String content;
-
   //  private Long id;
 
     public NoteGsonModel(Long id, String title, String content) {
@@ -44,12 +42,11 @@ public class NoteGsonModel implements Parcelable {
     }
    public static final Parcelable.Creator<NoteGsonModel> CREATOR = new Parcelable.Creator<NoteGsonModel>() {
     // распаковываем объект из Parcel
-    public NoteGsonModel  createFromParcel(Parcel in) {
+    public NoteGsonModel createFromParcel(Parcel in) {
         return new NoteGsonModel(in);
     }
     public NoteGsonModel[] newArray(int size) {
         return new NoteGsonModel[size];
-
     }
 };
 

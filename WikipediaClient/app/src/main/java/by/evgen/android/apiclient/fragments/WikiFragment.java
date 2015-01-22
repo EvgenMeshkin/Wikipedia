@@ -1,32 +1,23 @@
 package by.evgen.android.apiclient.fragments;
 
 
-import android.os.Bundle;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.adapters.RecyclerWikiAdapter;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.listener.RecyclerItemClickListener;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
-import by.evgen.android.apiclient.utils.FindResponder;
 import by.evgen.android.apiclient.utils.Log;
-import by.evgen.android.imageloader.ImageLoader;
 import by.evgen.android.apiclient.processing.CategoryArrayProcessor;
 import by.evgen.android.apiclient.service.GpsLocation;
-import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 
 import java.util.List;

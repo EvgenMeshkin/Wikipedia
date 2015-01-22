@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.content.res.Configuration;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.ActionBarActivity;
@@ -44,12 +45,12 @@ import by.evgen.android.apiclient.fragments.FavouritesFragment;
 import by.evgen.android.apiclient.fragments.SearchFragment;
 import by.evgen.android.apiclient.fragments.WatchListFragment;
 import by.evgen.android.apiclient.fragments.WikiFragment;
-import by.evgen.android.apiclient.helper.LoadRandomPage;
+import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.utils.Log;
 
 //TODO clear unused code
-public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks, LoadVkUserData.Callbacks, LoadRandomPage.Callbacks, WatchListFragment.Callbacks {
+public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -171,7 +172,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Random:
-                  LoadRandomPage load = new LoadRandomPage();
+                  RandomPageCallback load = new RandomPageCallback();
                   load.loadingRandomPage(this);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
@@ -219,9 +220,10 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.wikimain, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        MenuItem search =  menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-    return true;
+        return true;
     }
 
     @Override

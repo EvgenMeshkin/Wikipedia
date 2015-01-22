@@ -14,8 +14,7 @@ import java.util.List;
 /**
  * Created by User on 05.01.2015.
  */
-//TODO rename
-public class LoadRandomPage implements ManagerDownload.Callback<List<Category>>{
+public class RandomPageCallback implements ManagerDownload.Callback<List<Category>>{
 
     private Callbacks mCallback;
 

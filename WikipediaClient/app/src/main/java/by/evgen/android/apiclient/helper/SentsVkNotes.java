@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
 
-    private String mBaseUrl;
+    private String mBaseTitle;
     private Callbacks mCallbacks;
     private Context mContext;
 
@@ -26,19 +26,16 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
         void onReturnId(Long id);
     }
 
-    //TODO WTF? baseUrl
-    public SentsVkNotes (final Callbacks callbacks, final Context context, final String url){
+    public SentsVkNotes (final Callbacks callbacks, final Context context, final String title){
         mCallbacks = callbacks;
         mContext = context;
-        mBaseUrl = url;
+        mBaseTitle = title;
         ManagerDownload.load(this,
                 Api.VKNOTES_ALL_GET + VkOAuthHelper.mAccessToken,
                 new HttpDataSource(),
                 new NotesAllProcessor());
         Log.text(this.getClass(), "Url " + VkOAuthHelper.mAccessToken);
-
-    }
-
+   }
 
     @Override
     public void onPreExecute() {
@@ -50,7 +47,7 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
 
         Long id = null;
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getTitle().indexOf(mBaseUrl) != -1) {
+            if (data.get(i).getTitle().indexOf(mBaseTitle) != -1) {
                 id = data.get(i).getId();
             }
         }
@@ -58,7 +55,6 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
             mCallbacks.onReturnId(id);
             Toast.makeText(mContext, "You already added this note", Toast.LENGTH_SHORT).show();
         } else {
-            final Long[] mData = new Long[1];
             ManagerDownload.load(new ManagerDownload.Callback<Long>() {
                                      @Override
                                      public void onPreExecute() {
@@ -75,7 +71,7 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
                                          onError(e);
                                      }
                                  },
-                    Api.VKNOTES_GET + mBaseUrl + "&text=" + Api.MAIN_URL + mBaseUrl + "&access_token=" + VkOAuthHelper.mAccessToken,
+                    Api.VKNOTES_GET + mBaseTitle + "&text=" + Api.MAIN_URL + mBaseTitle + "&access_token=" + VkOAuthHelper.mAccessToken,
                     new HttpDataSource(),
                     new NoteProcessor());
 

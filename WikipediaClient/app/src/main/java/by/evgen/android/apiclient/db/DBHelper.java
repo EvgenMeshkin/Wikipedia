@@ -28,23 +28,15 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    //TODO rewrite
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(LOG_TAG, "--- onCreate database ---");
         db.execSQL(DB_CREATE);
-        ContentValues cv = new ContentValues();
-        for (int i = 1; i <= 3; i++) {
-            cv.put(WIKI_NAME, "name " + i);
-            cv.put(WIKI_EMAIL, "koordinaty " + i);
-            cv.put(WIKI_CONTENT, "content" + i);
-            cv.put(WIKI_DATE, 333 + i);
-            db.insert(WIKI_TABLE, null, cv);
-        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
 }

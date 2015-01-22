@@ -20,8 +20,7 @@ public class WikiContentPageCallback implements ManagerDownload.Callback<List<Ca
     }
 
     public interface Callbacks {
-        //TODO List need to be template <T>
-        void onSetContents(List data);
+        void onSetContents(List<Category> data);
     }
 
     @Override
@@ -38,4 +37,5 @@ public class WikiContentPageCallback implements ManagerDownload.Callback<List<Ca
     public void onError(Exception e) {
 
     }
+
 }

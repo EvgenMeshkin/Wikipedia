@@ -6,7 +6,5 @@ package by.evgen.android.apiclient.processing;
 public interface Processor<ProcessingResult, Source> {
 
     ProcessingResult process(Source source) throws Exception;
-    //ProcessingResult processwriter(Source source) throws Exception;
-
 
 }

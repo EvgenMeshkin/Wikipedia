@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -20,10 +21,9 @@ import by.evgen.android.apiclient.fragments.SearchFragment;
 /**
  * Created by evgen on 20.01.2015.
  */
-public class SearchFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks {
+public class SearchFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel> {
 
     private NoteGsonModel mNoteGsonModel;// = (NoteGsonModel) getIntent().<Bundle>getParcelableExtra("key");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,8 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.wikimain, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        MenuItem search =  menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }

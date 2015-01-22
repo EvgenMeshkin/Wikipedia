@@ -11,11 +11,10 @@ import by.evgen.android.apiclient.BuildConfig;
  */
 public final class Log {
 
-    //TODO BuildConfig for your notes
     private static Boolean mOff = !BuildConfig.DEBUG;
 
     public static synchronized void text(Class name, String text) {
-        if (!mOff) {
+        if (mOff) {
             android.util.Log.d(name.getSimpleName(), text);
         }
     }

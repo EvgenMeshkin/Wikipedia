@@ -27,7 +27,4 @@ public class SyncService extends Service {
         return sSyncAdapter.getSyncAdapterBinder();
     }
 
-
-
-
 }

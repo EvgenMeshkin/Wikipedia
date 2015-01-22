@@ -1,10 +1,13 @@
 <resources>
 
-    <!-- TODO remove Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light">
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">#607D8B</item>
+        <item name="colorPrimaryDark">#455A64</item>
+
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColor">#212121</item>
+        <item name="android:color">#FFFFFF</item>
+        <item name="android:colorBackground">#607D8B</item>
     </style>
 
 </resources>

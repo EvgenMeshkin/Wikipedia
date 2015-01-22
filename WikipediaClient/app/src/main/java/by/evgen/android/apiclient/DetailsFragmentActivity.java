@@ -4,8 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -32,7 +32,7 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by User on 13.11.2014.
  */
-public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks, SentsVkNotes.Callbacks, DetailsFragment.Callbacks {
+public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, SentsVkNotes.Callbacks, DetailsFragment.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -56,16 +56,13 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         }
         Log.text(getClass(),"activity");
         DetailsFragment details = new DetailsFragment();
-        //TODO inside listener need to call getSupportFragmentManager().findFragmentById
-        mDrawerListRight.setOnItemClickListener(details);//new RightDrawerItemClickListener());
-        //TODO
-        /*mDrawerListRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mDrawerListRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DetailsFragment fragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.framemain);
-                fragment.downloadPage("newurl");
+                fragment.notifyWebView(position);
             }
-        });*/
+        });
         details.setArguments(getIntent().<Bundle>getParcelableExtra("key"));
             getSupportFragmentManager().beginTransaction().add(
                     R.id.framemain, details).commit();
@@ -76,7 +73,8 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        MenuItem search =  menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
@@ -127,7 +125,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     @Override
     public void onShowDetails(NoteGsonModel note) {
-        mNoteGsonModel = (NoteGsonModel) note;
+        mNoteGsonModel = note;
         Bundle bundle = new Bundle();
         bundle.putParcelable("key", note);
         Intent intent = new Intent();

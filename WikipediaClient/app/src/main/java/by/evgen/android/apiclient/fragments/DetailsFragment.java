@@ -3,6 +3,7 @@ package by.evgen.android.apiclient.fragments;
 
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
@@ -32,18 +34,20 @@ import java.util.List;
  */
 
 
-public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks, ListView.OnItemClickListener {
+public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks {
 
-    private View content;
     private MobileViewProcessor mMobileViewProcessor = new MobileViewProcessor();
+    private VkDataSource mVkDataSource;
     private NoteGsonModel mObj;
     private WebView mWebView;
     private List<Category> mData;
     private List mContent;
+    private View mProgress;
+    private Context mContext;
     private String mTextHtml;
     private String mHistory;
     private final Uri WIKI_URI = Uri
-            .parse("content://com.example.evgenmeshkin.GeoData/geodata");
+            .parse("content://by.evgen.android.apiclient.GeoData/geodata");
     private final String WIKI_NAME = "name";
     private final String WIKI_DATE = "wikidate";
     final String LOG_TAG = DetailsFragment.class.getSimpleName();
@@ -52,16 +56,12 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         void onSetContents(List data);
     }
 
-    public void showDetails(NoteGsonModel note){
+    public void showDetails(NoteGsonModel note) {
+        dismissProgress();
         super.showDetails(note);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        setListener(position);
-    }
-
-    public  void setListData(List data) {
+    public void setListData(List data) {
         mContent = data;
         Callbacks callbacks = getCallbacks();
         callbacks.onSetContents(data);
@@ -73,23 +73,23 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
 
     @Override
     public View getViewLayout(LayoutInflater inflater) {
-        content = inflater.inflate(R.layout.fragment_details, null);
-        //TODO create variable
-        if (getArguments() != null) {
-            mObj = (NoteGsonModel) getArguments().getParcelable("key");
+        View content = inflater.inflate(R.layout.fragment_details, null);
+        mContext = getActivity();
+        mVkDataSource = VkDataSource.get(mContext);
+        mObj = getArguments().getParcelable("key");
+        if (mObj != null) {
+            mWebView = (WebView) content.findViewById(R.id.webView);
+            mProgress = content.findViewById(android.R.id.progress);
+            mWebView.setWebViewClient(new WikiWebViewClient());
+            mHistory = mObj.getTitle().replaceAll(" ", "_");
+            content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
         }
-        mWebView = (WebView) content.findViewById(R.id.webView);
-        mWebView.setWebViewClient(new WikiWebViewClient());
-        mHistory = mObj.getTitle().replaceAll(" ", "_");
-        content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
-//        //TODO use URLEncoder, URLDecoder
-        String url = Api.MOBILE_GET + mObj.getTitle().replaceAll(" ", "%20");
-        return   content;
+        return content;
     }
 
     @Override
     public DataSource getDataSource() {
-        return VkDataSource.get(getActivity());
+        return mVkDataSource;
     }
 
     public MobileViewProcessor getProcessor() {
@@ -97,7 +97,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     public String getUrl() {
-        String url = Api.MOBILE_GET + mObj.getTitle().replaceAll(" ", "%20");
+        String url = Api.MOBILE_GET + Uri.encode(mObj.getTitle());
         return url;
     }
 
@@ -109,14 +109,12 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         cv.put(WIKI_NAME, mHistory);
         cv.put(WIKI_DATE, new java.util.Date().getTime());
         //getActivity().getContentResolver().delete(WIKI_URI, null, null);
-        if (!cv.equals(null)) {
-            getActivity().getContentResolver().insert(WIKI_URI, cv);
+        if (!cv.equals(null)&& !mContext.equals(null)) {
+            mContext.getContentResolver().insert(WIKI_URI, cv);
         }
         new WikiContentPageCallback(this, Api.CONTENTS_GET + mHistory);
         if (data == null || data.isEmpty()) {
-            //TODO empty!!! this is not error!!!
-            //this is not error state
-            onError(new NullPointerException("No data"));
+            Toast.makeText(mContext, "Note added", Toast.LENGTH_SHORT).show();
         } else {
             for (int i = 0; i < data.size(); i++) {
                 mTextHtml = mTextHtml + mData.get(i).getText();
@@ -129,18 +127,25 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         }
     }
 
-    //TODO rename notifyWebView
-    public  void setListener(Integer position) {
+    public void notifyWebView(Integer position) {
         mWebView.loadDataWithBaseURL("https://en.wikipedia.org/" + "#" + mContent.get(position).toString().replaceAll(" ", "_"), mTextHtml, "text/html", "utf-8", null);
-        Log.i(LOG_TAG, mContent.get(position).toString().replaceAll(" ", "_")  );
+        Log.i(LOG_TAG, mContent.get(position).toString().replaceAll(" ", "_"));
     }
+
+    private void dismissProgress() {
+        mProgress.setVisibility(View.GONE);
+    }
+
+    private void showProgress() {
+        mProgress.setVisibility(View.VISIBLE);
+    }
+
 
     @Override
     public void onSetContents(List data) {
         setListData(data);
     }
 
-    //TODO create new activity
     private class WikiWebViewClient extends WebViewClient {
 
         @Override
@@ -150,23 +155,19 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             NoteGsonModel note = new NoteGsonModel(null, mHistory, mObj.getContent());
             showDetails(note);
             Log.i(LOG_TAG, mHistory + mObj.getContent());
-            //TODO set progress view to member or create common method that will return progress view
-            content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
+            showProgress();
             return true;
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            //TODO set progress view to member or create common method that will return progress view
-            content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            //TODO set progress view to member or create common method that will return progress view
-            content.findViewById(android.R.id.progress).setVisibility(View.GONE);
-         }
+            dismissProgress();
+        }
     }
 
 }

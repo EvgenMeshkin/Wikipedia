@@ -15,31 +15,25 @@ import by.evgen.android.apiclient.db.DBHelper;
 /**
  * Created by evgen on 13.12.2014.
  */
-//TODO refactoring, try to create something like ORM with content provider
 public class WikiContentProvider extends ContentProvider {
+
     final String LOG_TAG = WikiContentProvider.class.getSimpleName();
     // Table
     static final String WIKI_TABLE = "geodata";
-
     // Items
     static final String WIKI_ID = "_id";
     static final String WIKI_NAME = "name";
-
     static final String WIKI_DATE = "wikidate";
-
     // Uri
     // authority
-    static final String AUTHORITY = "com.example.evgenmeshkin.GeoData";
-
+    static final String AUTHORITY = "by.evgen.android.apiclient.GeoData";
     static final String WIKI_PATH = "geodata";
-
     public static final Uri WIKI_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + WIKI_PATH);
     static final String WIKI_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
             + AUTHORITY + "." + WIKI_PATH;
     static final String WIKI_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd."
             + AUTHORITY + "." + WIKI_PATH;
-
     // UriMatcher
     static final int URI_DATA = 1;
     static final int URI_DATA_ID = 2;
@@ -94,7 +88,6 @@ public class WikiContentProvider extends ContentProvider {
         Log.d(LOG_TAG, "insert, " + uri.toString());
         if (uriMatcher.match(uri) != URI_DATA)
             throw new IllegalArgumentException("Wrong URI: " + uri);
-
         db = dbHelper.getWritableDatabase();
         long rowID = db.insert(WIKI_TABLE, null, values);
         Uri resultUri = ContentUris.withAppendedId(WIKI_CONTENT_URI, rowID);
@@ -132,7 +125,6 @@ public class WikiContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case URI_DATA:
                 Log.d(LOG_TAG, "URI_DATA");
-
                 break;
             case URI_DATA_ID:
                 String id = uri.getLastPathSegment();

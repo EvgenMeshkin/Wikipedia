@@ -2,6 +2,7 @@ package by.evgen.android.apiclient.fragments;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -29,8 +30,8 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View mProgress;
 
-    public interface Callbacks {
-        void onShowDetails(NoteGsonModel note);
+    public interface Callbacks <T> {
+        void onShowDetails(T note);
         void onErrorDialog(Exception e);
     }
 
@@ -38,8 +39,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
         return FindResponder.findFirstResponder(this, Callbacks.class);
     }
 
-    //TODO create another Serializable model class and make template like T
-    public void showDetails(NoteGsonModel note) {
+    public void showDetails( T note) {
         Callbacks callbacks = getCallbacks();
         callbacks.onShowDetails(note);
     }
@@ -79,8 +79,6 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
                 processor);
     }
 
-
-
     @Override
     public void onPreExecute() {
         if (!mSwipeRefreshLayout.isRefreshing()) {
@@ -94,10 +92,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
             mSwipeRefreshLayout.setRefreshing(false);
         }
         mProgress.setVisibility(View.GONE);
-        if (data == null || data.isEmpty()) {
-            //TODO refactoring
-            onError(new NullPointerException("No data"));
-        }else {
+        if (data != null || !data.isEmpty()) {
             onExecute(data);
         }
     }

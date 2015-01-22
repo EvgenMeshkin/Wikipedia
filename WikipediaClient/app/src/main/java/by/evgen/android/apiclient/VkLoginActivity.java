@@ -62,11 +62,6 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
         finish();
     }
 
-    @Override
-    public void onUserId(String id) {
-
-    }
-
     private class VkWebViewClient extends WebViewClient {
 
         public VkWebViewClient() {
