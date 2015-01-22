@@ -203,10 +203,10 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   break;
 
               case Log_in:
-                  FragmentTransaction buck = getSupportFragmentManager().beginTransaction();
-                  SearchFragment fragmentbuck = new SearchFragment();
-                  buck.replace(R.id.framemain, fragmentbuck);
-                  buck.commit();
+//                  FragmentTransaction buck = getSupportFragmentManager().beginTransaction();
+//                  SearchFragment fragmentbuck = new SearchFragment();
+//                  buck.replace(R.id.framemain, fragmentbuck);
+//                  buck.commit();
                   startActivity(new Intent(this, StartActivity.class));
               default:
                   mDrawerLayout.closeDrawer(mDrawerList);

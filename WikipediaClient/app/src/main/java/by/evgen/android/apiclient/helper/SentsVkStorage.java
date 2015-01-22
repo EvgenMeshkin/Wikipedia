@@ -13,6 +13,7 @@ import by.evgen.android.apiclient.processing.NotesAllProcessor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.processing.StorageSetProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -32,14 +33,16 @@ public class SentsVkStorage implements ManagerDownload.Callback<List<String>> {
 
     public SentsVkStorage(final Context context, final String url) {
 //        mCallbacks = callbacks;
-        android.util.Log.d(LOG_TAG, "Sent storage");
+        android.util.Log.d(LOG_TAG, "Sent storage" + VkOAuthHelper.mAccessToken + VkOAuthHelper.sign());
+        Log.text(this.getClass(), "Url " + VkOAuthHelper.mAccessToken);
         mContext = context;
         mBaseUrl = url;
+        Log.text(this.getClass(), "Url " + Api.STORAGE_SET + mBaseUrl +"&value=" + mBaseUrl);
         ManagerDownload.load(this,
                 Api.STORAGE_KEYS_GET,
-                new HttpDataSource(),
+                new VkDataSource(),
                 new StorageGetKeysProcessor());
-        Log.text(this.getClass(), "Url " + VkOAuthHelper.mAccessToken);
+
     }
 
     @Override
@@ -75,11 +78,12 @@ public class SentsVkStorage implements ManagerDownload.Callback<List<String>> {
 
                                      @Override
                                      public void onError(Exception e) {
+//                                         e.printStackTrace();
                                          onError(e);
                                      }
                                  },
                     Api.STORAGE_SET + mBaseUrl +"&value=" + mBaseUrl,
-                    new HttpDataSource(),
+                    new VkDataSource(),
                     new StorageSetProcessor());
         }
     }

@@ -11,7 +11,7 @@ import by.evgen.android.apiclient.BuildConfig;
  */
 public final class Log {
 
-    private static Boolean mOff = !BuildConfig.DEBUG;
+    private static Boolean mOff = BuildConfig.DEBUG;
 
     public static synchronized void text(Class name, String text) {
         if (mOff) {

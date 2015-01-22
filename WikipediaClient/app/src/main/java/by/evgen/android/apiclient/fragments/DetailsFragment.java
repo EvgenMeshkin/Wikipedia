@@ -52,6 +52,12 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     private final String WIKI_DATE = "wikidate";
     final String LOG_TAG = DetailsFragment.class.getSimpleName();
 
+    @Override
+    public void onStop() {
+        dismissProgress();
+        super.onStop();
+    }
+
     public interface Callbacks {
         void onSetContents(List data);
     }

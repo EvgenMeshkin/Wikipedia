@@ -25,6 +25,7 @@ import by.evgen.android.imageloader.ImageLoader;
  * Created by User on 21.01.2015.
  */
 public class FavouritesFragment extends AbstractFragment {
+
     private ArrayAdapter mAdapter;
     private ImageLoader mImageLoader;
     private Context mContext = getActivity();
@@ -41,8 +42,8 @@ public class FavouritesFragment extends AbstractFragment {
         View content = inflater.inflate(R.layout.fragment_wiki, null);
         mContext = getActivity();
         mListView = (ListView) content.findViewById(android.R.id.list);
-        mImageLoader = ImageLoader.get(getActivity());
-        mValue = getArguments().getString("key");
+        mImageLoader = ImageLoader.get(mContext);
+//        mValue = getArguments().getString("key");
         return content;
     }
 

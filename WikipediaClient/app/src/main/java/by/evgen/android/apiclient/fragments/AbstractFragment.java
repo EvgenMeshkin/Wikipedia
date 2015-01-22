@@ -40,6 +40,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
     }
 
     public void showDetails( T note) {
+        mProgress.setVisibility(View.GONE);
         Callbacks callbacks = getCallbacks();
         callbacks.onShowDetails(note);
     }
