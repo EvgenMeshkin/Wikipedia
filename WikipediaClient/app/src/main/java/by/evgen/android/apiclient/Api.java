@@ -22,12 +22,12 @@ public class Api {
     public static final String MAIN_URL = "https://http://en.wikipedia.org/wiki/";
 
     public static final String BASE_PATH_VK = "https://api.vk.com/method/";
-    public static final String VKNOTES_GET = BASE_PATH_VK + "notes.add?privacy=3&comment_privacy=3&v=5.26&title=";
-    public static final String VKFOTOS_GET = BASE_PATH_VK + "users.get?fields=photo_200_orig,city,verified&name_case=Nom&version=5.27&access_token=";
-    public static final String VKNOTES_ALL_GET = BASE_PATH_VK + "notes.get?fields=notes$count=100&sort=0&v=5.26&access_token=";
-    public static final String VKLIKEIS_GET = BASE_PATH_VK + "likes.isLiked?type=note&v=5.26&item_id=";
-    public static final String VKLIKE_GET = BASE_PATH_VK + "likes.add?type=note&v=5.26&item_id=";
-    public static final String STORAGE_SET = BASE_PATH_VK + "storage.set?v=5.27&access_token=" + VkOAuthHelper.mAccessToken + "&key=";
-    public static final String STORAGE_KEYS_GET = BASE_PATH_VK + "storage.getKeys?v=5.27&access_token=" + VkOAuthHelper.mAccessToken;
+    public static final String VKNOTES_GET = VkOAuthHelper.sign(BASE_PATH_VK + "notes.add?privacy=3&comment_privacy=3&v=5.26") + "&title=";
+    public static final String VKFOTOS_GET = VkOAuthHelper.sign(BASE_PATH_VK + "users.get?fields=photo_200_orig,city,verified&name_case=Nom&version=5.27");
+    public static final String VKNOTES_ALL_GET = VkOAuthHelper.sign ( BASE_PATH_VK + "notes.get?fields=notes$count=100&sort=0&v=5.26");
+    public static final String VKLIKEIS_GET = VkOAuthHelper.sign( BASE_PATH_VK + "likes.isLiked?type=note&v=5.26") + "&item_id=";
+    public static final String VKLIKE_GET = VkOAuthHelper.sign(BASE_PATH_VK + "likes.add?type=note&v=5.26") + "&item_id=";
+    public static final String STORAGE_SET = VkOAuthHelper.sign(BASE_PATH_VK + "storage.set?v=5.27") + "&key=";
+    public static final String STORAGE_KEYS_GET = VkOAuthHelper.sign( BASE_PATH_VK + "storage.getKeys?v=5.27");
 
 }

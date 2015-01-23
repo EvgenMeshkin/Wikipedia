@@ -31,10 +31,9 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
         mContext = context;
         mBaseTitle = title;
         ManagerDownload.load(this,
-                Api.VKNOTES_ALL_GET + VkOAuthHelper.mAccessToken,
+                Api.VKNOTES_ALL_GET,
                 new HttpDataSource(),
                 new NotesAllProcessor());
-        Log.text(this.getClass(), "Url " + VkOAuthHelper.mAccessToken);
    }
 
     @Override
@@ -71,7 +70,7 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
                                          onError(e);
                                      }
                                  },
-                    Api.VKNOTES_GET + mBaseTitle + "&text=" + Api.MAIN_URL + mBaseTitle + "&access_token=" + VkOAuthHelper.mAccessToken,
+                    Api.VKNOTES_GET + mBaseTitle + "&text=" + Api.MAIN_URL + mBaseTitle,
                     new HttpDataSource(),
                     new NoteProcessor());
 
@@ -82,9 +81,5 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
     public void onError(Exception e) {
 
     }
-
-
-
-
 
 }

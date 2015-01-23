@@ -1,6 +1,7 @@
 package by.evgen.android.apiclient.account;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
@@ -12,15 +13,31 @@ import android.os.Bundle;
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
-  //  public static final String KEY_FEED_ID = "sync.KEY_FEED_ID";
+    private final AccountManager mAccountManager;
+    private final Context mContext;
+
+    //  public static final String KEY_FEED_ID = "sync.KEY_FEED_ID";
 
     public SyncAdapter(Context context) {
         super(context, true);
+        mContext = context;
+        mAccountManager = AccountManager.get(context);
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
                               SyncResult syncResult) {
+        String authtoken = null;
+        try {
+            // accountType - тип вашего аккаунта, например "com.google"
+            authtoken = mAccountManager.blockingGetAuthToken(account,
+                    "https://oauth.vk.com/", true);
+            String login = account.name;
+            String password = mAccountManager.getPassword(account);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

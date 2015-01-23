@@ -49,7 +49,6 @@ import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.utils.Log;
 
-//TODO clear unused code
 public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks {
 
     private DrawerLayout mDrawerLayout;
@@ -60,7 +59,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     // used to store app title
     private CharSequence mTitle;
     private String[] viewsNames;
-    public static final String ACCOUNT_TYPE = "by.evgen.android.apiclient.account";
+    public static final String ACCOUNT_TYPE = "https://oauth.vk.com/";
     public static final String AUTHORITY = "by.evgen.android.apiclient";
     public static final int requestL = 0;
     private AccountManager mAm;

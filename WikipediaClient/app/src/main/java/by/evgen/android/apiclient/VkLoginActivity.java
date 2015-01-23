@@ -6,39 +6,34 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
+import android.webkit.HttpAuthHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import by.evgen.android.apiclient.auth.VkOAuthHelper;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by User on 30.10.2014.
  */
-//TODO
+
 public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.Callbacks {
 
-    private static final String TAG = VkLoginActivity.class.getSimpleName();
     private WebView mWebView;
-    public static final String ACCOUNT_TYPE = "com.example.evgen.apiclient.account";
-
-    public static final String AUTHORITY = "com.example.evgen.apiclient";
 
     public static Account sAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vk_login);
-//        getSupportActionBar().hide();
         mWebView = (WebView) findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.setWebViewClient(new VkWebViewClient());
         mWebView.loadUrl(VkOAuthHelper.AUTORIZATION_URL);
     }
-
-
 
     @Override
     public void onError(Exception e) {
@@ -70,23 +65,19 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Log.d(TAG, "page started " + url);
+            Log.text(getClass(), "page started " + url);
             showProgress();
             view.setVisibility(View.INVISIBLE);
         }
 
-
-
-        /* (non-Javadoc)
-         * @see android.webkit.WebViewClient#shouldOverrideUrlLoading(android.webkit.WebView, java.lang.String)
-         */
-        @Override
+       @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.d(TAG, "overr " + url);
-            if (VkOAuthHelper.proceedRedirectURL(VkLoginActivity.this, url, VkLoginActivity.this)) {
-                Log.d(TAG, "overr redr");
+            Log.text(getClass(), "overr " + url);
+           android.util.Log.d(getClass().getSimpleName(), "WTFFFF");
+           if (VkOAuthHelper.proceedRedirectURL(VkLoginActivity.this, url, VkLoginActivity.this)) {
+                Log.text(getClass(), "overr redr");
                 view.setVisibility(View.INVISIBLE);
-                Log.d(TAG, "Parsing url" + url);
+                Log.text(getClass(), "Parsing url" + url);
                 setResult(RESULT_OK);
                 finish();
                 return true;
@@ -103,16 +94,27 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
             //showProgress("Error: " + description);
             view.setVisibility(View.VISIBLE);
             dismissProgress();
-            Log.d(TAG, "error " + failingUrl);
+            Log.text(getClass(), "error " + failingUrl);
+        }
+
+        @Override
+        public void onReceivedHttpAuthRequest(WebView view,
+                                              HttpAuthHandler handler, String host, String realm) {
+
+
+            Log.text(getClass(), "errorrrrrrrrrrr ");
+
+            //     handler.proceed("me@test.com", "mypassword");
+
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            Log.d(TAG, "finish " + url);
+            Log.text(getClass(), "finish " + url);
             if (url.contains("&amp;")) {
                 url = url.replace("&amp;", "&");
-                Log.d(TAG, "overr after replace " + url);
+                Log.text(getClass(), "overr after replace " + url);
                 view.loadUrl(url);
                 return;
             }

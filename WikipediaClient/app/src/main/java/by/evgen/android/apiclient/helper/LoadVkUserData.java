@@ -23,9 +23,8 @@ public class LoadVkUserData implements ManagerDownload.Callback<List<Category>> 
     private Callbacks mCallbacks;
 
     public LoadVkUserData(Callbacks callbacks){
-        String url = Api.VKFOTOS_GET + VkOAuthHelper.mAccessToken;
         ManagerDownload.load(this,
-                url,
+                Api.VKFOTOS_GET,
                 new VkDataSource(),
                 new FotoIdUrlProcessor());
         mCallbacks = callbacks;

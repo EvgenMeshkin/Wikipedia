@@ -33,7 +33,7 @@ public class SentsVkStorage implements ManagerDownload.Callback<List<String>> {
 
     public SentsVkStorage(final Context context, final String url) {
 //        mCallbacks = callbacks;
-        android.util.Log.d(LOG_TAG, "Sent storage" + VkOAuthHelper.mAccessToken + VkOAuthHelper.sign());
+        android.util.Log.d(LOG_TAG, "Sent storage" + VkOAuthHelper.mAccessToken );
         Log.text(this.getClass(), "Url " + VkOAuthHelper.mAccessToken);
         mContext = context;
         mBaseUrl = url;

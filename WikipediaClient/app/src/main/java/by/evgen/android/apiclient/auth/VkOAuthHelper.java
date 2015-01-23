@@ -21,9 +21,12 @@ public class VkOAuthHelper {
         void onSuccess();
     }
 
-    public static String sign() {
-            return  mAccessToken;
-
+    public static String sign(String url) {
+        if (url.contains("?")) {
+            return url + "&access_token=" + mAccessToken;
+        } else {
+            return url + "?access_token=" + mAccessToken;
+        }
     }
 
     public static boolean isLogged() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="by.evgen.android.apiclient"
+    android:accountType="https://oauth.vk.com/"
     android:allowParallelSyncs="false"
     android:contentAuthority="by.evgen.android.apiclient"
     android:isAlwaysSyncable="true"

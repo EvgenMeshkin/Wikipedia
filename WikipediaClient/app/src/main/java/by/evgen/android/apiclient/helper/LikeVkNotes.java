@@ -14,11 +14,9 @@ import by.evgen.android.apiclient.utils.Log;
  */
 public class LikeVkNotes implements SentsVkNotes.Callbacks{
 
-    private String mBaseUrl;
     private Context mContext;
 
     public LikeVkNotes (Context context, String url){
-        mBaseUrl = url;
         mContext = context;
         new SentsVkNotes(this, context, url);
 
@@ -36,7 +34,7 @@ public class LikeVkNotes implements SentsVkNotes.Callbacks{
                                      Log.text(this.getClass(), "Sent" + data);
                                      if (data.equals("0")) {
                                          Log.text(this.getClass(), "Sent like");
-                                         new SentVkLike(mContext, Api.VKLIKE_GET + id + "&access_token=" + VkOAuthHelper.mAccessToken);//EncrManager.decrypt(getActivity(), mAm.getUserData(sAccount, "Token")));
+                                         new SentVkLike(mContext, Api.VKLIKE_GET + id);
                                      } else {
                                          Toast.makeText(mContext, "You already added Like this note", Toast.LENGTH_SHORT).show();
                                      }
@@ -47,8 +45,7 @@ public class LikeVkNotes implements SentsVkNotes.Callbacks{
                                      onError(e);
                                  }
                              },
-                //TODO move access token
-                Api.VKLIKEIS_GET + id + "&access_token=" + VkOAuthHelper.mAccessToken,
+                Api.VKLIKEIS_GET + id,
                 new HttpDataSource(),
                 new LikeIsProcessor());
     }
