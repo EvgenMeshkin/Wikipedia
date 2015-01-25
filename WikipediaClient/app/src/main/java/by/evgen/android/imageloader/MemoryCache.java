@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
 public class MemoryCache {
-    private static final String TAG = "MemoryCache";
+
     private static final int MAX_SIZE = 16 * 1024 * 1024;
-    private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_SIZE) {
+    private LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(MAX_SIZE) {
 
         @Override
         protected int sizeOf(String key, Bitmap value) {
@@ -19,12 +19,11 @@ public class MemoryCache {
     };
 
     public Bitmap get(String id){
-            return cache.get(id);
+            return mCache.get(id);
     }
 
     public void put(String id, Bitmap bitmap){
-            cache.put(id, bitmap);
+            mCache.put(id, bitmap);
     }
-
 
 }

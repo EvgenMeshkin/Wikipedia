@@ -18,6 +18,7 @@ import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
+import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -25,17 +26,6 @@ import by.evgen.android.imageloader.ImageLoader;
  * Created by User on 16.01.2015.
  */
 public class SearchListViewOnScrollListener extends AbstractOnScrollListener {
-    private int previousTotal = 0;
-    private int visibleThreshold = 5;
-    private ListView mListView;
-    private List<Category> mData;
-    private ArrayAdapter mAdapter;
-    private View mFooterProgress;
-    private boolean isImageLoaderControlledByDataManager = false;
-    public static final int COUNT = 4;
-    private ImageLoader mImageLoader;
-    private boolean isPagingEnabled = true;
-    private String mValue;
 
     public SearchListViewOnScrollListener(Context context, ListView listView, ImageLoader imageLoader, List data, ArrayAdapter adapter, String value) {
         super.mImageLoader = imageLoader;
@@ -56,8 +46,9 @@ public class SearchListViewOnScrollListener extends AbstractOnScrollListener {
 
     @Override
     public DataSource getDataSource() {
-        return new VkDataSource();
+        return new HttpDataSource();
     }
+
 
     @Override
     public Processor getProcessor() {

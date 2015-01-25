@@ -11,22 +11,23 @@ import android.util.Log;
  * Created by User on 25.11.2014.
  */
 public class GpsLocation implements LocationListener {
-    private LocationManager lm;
+
+    private LocationManager mManager;
     private static String mCoords;
-    private Callbacks callbacks;
+    private Callbacks iCallbacks;
 
     public interface Callbacks {
         void onShowKor (String latitude);
     }
 
     public void getLocation(Callbacks callbacks, Context сontext) {
-        this.callbacks = callbacks;
-        lm = (LocationManager) сontext.getSystemService(Context.LOCATION_SERVICE);
-        if (lm.getAllProviders().contains(LocationManager.NETWORK_PROVIDER))
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        iCallbacks = callbacks;
+        mManager = (LocationManager) сontext.getSystemService(Context.LOCATION_SERVICE);
+        if (mManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER))
+            mManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         else {
-            if (lm.getAllProviders().contains(LocationManager.GPS_PROVIDER))
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            if (mManager.getAllProviders().contains(LocationManager.GPS_PROVIDER))
+                mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
     }
 
@@ -42,7 +43,7 @@ public class GpsLocation implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-     //  showLocation(lm.getLastKnownLocation(provider));
+     //  showLocation(mManager.getLastKnownLocation(provider));
     }
 
     @Override
@@ -59,8 +60,8 @@ public class GpsLocation implements LocationListener {
             mCoords = location.getLatitude()+"|"+location.getLongitude();
         }
         if (mCoords != null) {
-            lm.removeUpdates(this);
-            callbacks.onShowKor(mCoords);
+            mManager.removeUpdates(this);
+            iCallbacks.onShowKor(mCoords);
         }
         Log.d("id", mCoords);
     }

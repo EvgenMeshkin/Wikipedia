@@ -31,15 +31,32 @@
     <string name="auto_sync_summary">Синхронизация через определенные интервалы времени</string>
     <string name="auto_sync_interval">Интервал синхронизации</string>
     <string name="auto_sync_interval_summary">Промежуток времени выполнения синхронизации</string>
-    <string name="news">Новости</string>
-    <string name="lorem_ipsum">Новости</string>
-    <string name="title_template_step">Новости</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="acount_name">Wikipedia</string>
+    <string name="lorem_ipsum">Wikipedia</string>
+    <string name="title_template_step">Wikipedia</string>
+    <string name="title_activity_main">WikiActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+
+    <string name="checkbox1_title">CheckBox 1</string>
+    <string name="checkbox1_summary">Summary of CheckBox 1</string>
+    <string name="edittext1_title">EditText 1</string>
+    <string name="edittext1_summary">Summary of EditText 1</string>
+    <string name="list1_title">List 1</string>
+    <string name="list1_summary">Summary of List 1</string>
+    <string-array name="entries">
+        <item>one</item>
+        <item>two</item>
+        <item>three</item>
+    </string-array>
+    <string-array name="entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
 </resources>

@@ -15,6 +15,7 @@ import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.listener.RecyclerItemClickListener;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
+import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.apiclient.processing.CategoryArrayProcessor;
 import by.evgen.android.apiclient.service.GpsLocation;
@@ -56,7 +57,7 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
 
     @Override
     public DataSource getDataSource() {
-        return VkDataSource.get(getActivity());
+        return HttpDataSource.get(getActivity());
     }
 
     @Override

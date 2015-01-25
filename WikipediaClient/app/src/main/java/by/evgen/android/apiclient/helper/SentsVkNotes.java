@@ -9,6 +9,7 @@ import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.processing.NoteProcessor;
 import by.evgen.android.apiclient.processing.NotesAllProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by evgen on 11.01.2015.
  */
-public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
+public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Callback<List<Category>>{
 
     private String mBaseTitle;
     private Callbacks mCallbacks;
@@ -27,12 +28,13 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
     }
 
     public SentsVkNotes (final Callbacks callbacks, final Context context, final String title){
+        super(context);
         mCallbacks = callbacks;
         mContext = context;
         mBaseTitle = title;
         ManagerDownload.load(this,
                 Api.VKNOTES_ALL_GET,
-                new HttpDataSource(),
+                VkDataSource.get(mContext),
                 new NotesAllProcessor());
    }
 
@@ -67,19 +69,22 @@ public class SentsVkNotes implements ManagerDownload.Callback<List<Category>>{
 
                                      @Override
                                      public void onError(Exception e) {
-                                         onError(e);
+                                         onErrorSent(e);
                                      }
                                  },
                     Api.VKNOTES_GET + mBaseTitle + "&text=" + Api.MAIN_URL + mBaseTitle,
-                    new HttpDataSource(),
+                    VkDataSource.get(mContext),
                     new NoteProcessor());
-
         }
+    }
+
+    private void onErrorSent (Exception e) {
+        super.sentOnError(e);
     }
 
     @Override
     public void onError(Exception e) {
-
+        super.sentOnError(e);
     }
 
 }

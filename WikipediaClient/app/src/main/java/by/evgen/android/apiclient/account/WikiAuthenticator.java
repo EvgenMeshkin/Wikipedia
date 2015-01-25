@@ -3,17 +3,25 @@ package by.evgen.android.apiclient.account;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+
+import by.evgen.android.apiclient.VkLoginActivity;
 
 /**
  * Created by evgen on 22.01.2015.
  */
 public class WikiAuthenticator extends AbstractAccountAuthenticator {
 
+    private final Context mContext;
+
     public WikiAuthenticator(Context context) {
         super(context);
+        mContext = context;
     }
 
     @Override
@@ -23,7 +31,15 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        return null;
+        final Intent intent = new Intent(mContext, VkLoginActivity.class);
+//        intent.putExtra(VkLoginActivity.EXTRA_TOKEN_TYPE, accountType);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        final Bundle bundle = new Bundle();
+        if (options != null) {
+            bundle.putAll(options);
+        }
+        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return bundle;
     }
 
     @Override
@@ -33,7 +49,27 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        return null;
+        final Bundle result = new Bundle();
+        final AccountManager am = AccountManager.get(mContext.getApplicationContext());
+        String authToken = am.peekAuthToken(account, authTokenType);
+        if (TextUtils.isEmpty(authToken)) {
+            final String password = am.getPassword(account);
+//            if (!TextUtils.isEmpty(password)) {
+//                authToken = AuthTokenLoader.signIn(mContext, account.name, password);
+//            }
+        }
+        if (!TextUtils.isEmpty(authToken)) {
+            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+        } else {
+            final Intent intent = new Intent(mContext, VkLoginActivity.class);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+//            intent.putExtra(VkLoginActivity.EXTRA_TOKEN_TYPE, authTokenType);
+            final Bundle bundle = new Bundle();
+            bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        }
+        return result;
     }
 
     @Override

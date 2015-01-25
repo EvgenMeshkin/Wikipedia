@@ -17,6 +17,7 @@ import by.evgen.android.apiclient.listener.SearchListViewOnScrollListener;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
+import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -34,7 +35,7 @@ public class SearchFragment extends AbstractFragment {
     private static String mKor;
     private String mValue;
     private ListView mListView;
-    private VkDataSource mVkDataSource;
+    private DataSource mVkDataSource;
     public static final int COUNT = 50;
     private View footerProgress;
     final static String LOG_TAG = SearchFragment.class.getSimpleName();
@@ -44,7 +45,7 @@ public class SearchFragment extends AbstractFragment {
     public View getViewLayout(LayoutInflater inflater) {
         View content = inflater.inflate(R.layout.fragment_wiki, null);
         mContext = getActivity();
-        mVkDataSource = VkDataSource.get(mContext);
+        mVkDataSource = HttpDataSource.get(mContext);
         mListView = (ListView) content.findViewById(android.R.id.list);
         mValue = getArguments().getString("key");
         mImageLoader = ImageLoader.get(mContext);

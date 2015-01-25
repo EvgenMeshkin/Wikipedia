@@ -1,6 +1,8 @@
 package by.evgen.android.apiclient;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import by.evgen.android.apiclient.account.WikiAccount;
 import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -21,8 +24,6 @@ import by.evgen.android.apiclient.utils.Log;
 public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.Callbacks {
 
     private WebView mWebView;
-
-    public static Account sAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,6 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
         public void onReceivedError(WebView view, int errorCode,
                                     String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-            //showProgress("Error: " + description);
             view.setVisibility(View.VISIBLE);
             dismissProgress();
             Log.text(getClass(), "error " + failingUrl);
@@ -100,12 +100,16 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
         @Override
         public void onReceivedHttpAuthRequest(WebView view,
                                               HttpAuthHandler handler, String host, String realm) {
+            String username = null;
+            String password = null;
 
-
-            Log.text(getClass(), "errorrrrrrrrrrr ");
-
-            //     handler.proceed("me@test.com", "mypassword");
-
+            if (handler.useHttpAuthUsernamePassword()) {
+                String[] credentials = view.getHttpAuthUsernamePassword(host, realm);
+                username = credentials[0];
+                password = credentials[1];
+            }
+            Log.text(getClass(), username + password);
+            handler.proceed(username, password);
         }
 
         @Override
@@ -119,9 +123,7 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
                 return;
             }
             view.setVisibility(View.VISIBLE);
-            //if (!VkOAuthHelper.proceedRedirectURL(VkLoginActivity.this, url, success)) {
             dismissProgress();
-            //}
         }
 
     }

@@ -24,6 +24,9 @@ public class Category extends JSONObjectWrapper {
     private static final String LASTNAME = "last_name";
     private static final String LINE = "line";
     private static final String TEXT = "text";
+    private static final String TEXTP = "*";
+
+
 
 
     //INTERNAL
@@ -66,6 +69,10 @@ public class Category extends JSONObjectWrapper {
 
     public String getText() {
         return getString(TEXT );
+    }
+
+    public String getTextPage() {
+        return getString(TEXTP );
     }
 
     public String getUrl() {

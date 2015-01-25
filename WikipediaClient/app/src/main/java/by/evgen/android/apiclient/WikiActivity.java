@@ -8,6 +8,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 
 
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
@@ -36,13 +40,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.app.*;
-import by.evgen.android.apiclient.auth.VkOAuthHelper;
-import by.evgen.android.apiclient.auth.secure.EncrManager;
+
+import java.io.IOException;
+
+
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.FavouritesFragment;
+import by.evgen.android.apiclient.fragments.MainPageFragment;
 import by.evgen.android.apiclient.fragments.SearchFragment;
+import by.evgen.android.apiclient.fragments.SetingsFragment;
+import by.evgen.android.apiclient.fragments.SettingsFragment;
 import by.evgen.android.apiclient.fragments.WatchListFragment;
 import by.evgen.android.apiclient.fragments.WikiFragment;
 import by.evgen.android.apiclient.helper.RandomPageCallback;
@@ -54,18 +63,9 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    // navigation drawer title
     private CharSequence mDrawerTitle;
-    // used to store app title
     private CharSequence mTitle;
     private String[] viewsNames;
-    public static final String ACCOUNT_TYPE = "https://oauth.vk.com/";
-    public static final String AUTHORITY = "by.evgen.android.apiclient";
-    public static final int requestL = 0;
-    private AccountManager mAm;
-    //TODO why static?
-    public static Account sAccount;
-    private View  mDetailsFrame;
     private View headerDrawer;
     private enum mMenuValue {Home, Random, Nearby, Favourites, Watchlist, Settings, Log_in};
 
@@ -106,20 +106,9 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mAm = AccountManager.get(this);
-//        LoadRandomPage load = new LoadRandomPage();
-//        load.loadingRandomPage(this);
-        if (sAccount == null) {
-            sAccount = new Account(getString(R.string.news), ACCOUNT_TYPE);
-        }
-        if (mAm.addAccountExplicitly(sAccount, getPackageName(), new Bundle())) {
-            ContentResolver.setSyncAutomatically(sAccount, AUTHORITY, true);
-        }
-        try {
-//            mDrawerList.addHeaderView(headerDrawer);
-            mAm.setUserData(sAccount, "Token", EncrManager.encrypt(this, VkOAuthHelper.mAccessToken));
-            LoadVkUserData loadVkUserData = new LoadVkUserData(this);
-        } catch (Exception e) {
+        if (Authorized.isLogged()){
+            Log.text(getClass(), "LoadDataUser  -  " );
+            new LoadVkUserData(this, this);
         }
     }
 
@@ -156,61 +145,49 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         public void onItemClick(
                 AdapterView<?> parent, View view, int position,  long id
         ) {
+
             displayView(position);
         }
     }
 
     private void displayView(int position) {
       if (position != 0) {
+          FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
           switch (mMenuValue.valueOf(viewsNames[position - 1])) {
               case Home:
-                  FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                  SearchFragment fragmentmain = new SearchFragment();
-                  transaction.replace(R.id.framemain, fragmentmain);
-                  transaction.commit();
+                  MainPageFragment fragmentPage = new MainPageFragment();
+                  transactionWiki.replace(R.id.framemain, fragmentPage);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Random:
-                  RandomPageCallback load = new RandomPageCallback();
-                  load.loadingRandomPage(this);
+                  new RandomPageCallback(this, this);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Nearby:
-                  FragmentTransaction transactionwiki = getSupportFragmentManager().beginTransaction();
-                  WikiFragment fragmentwiki = new WikiFragment();
-                  transactionwiki.replace(R.id.framemain, fragmentwiki);
-                  transactionwiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                  transactionwiki.commit();
-                  mDrawerLayout.closeDrawer(mDrawerList);
-                  break;
+                  WikiFragment fragmentWiki = new WikiFragment();
+                  transactionWiki.replace(R.id.framemain, fragmentWiki);
+                   break;
               case Favourites:
-                  FragmentTransaction transactionFavorit = getSupportFragmentManager().beginTransaction();
                   FavouritesFragment fragmentFavor = new FavouritesFragment();
-                  transactionFavorit.replace(R.id.framemain, fragmentFavor);
-                  transactionFavorit.commit();
-                  mDrawerLayout.closeDrawer(mDrawerList);
+                  transactionWiki.replace(R.id.framemain, fragmentFavor);
                   break;
               case Watchlist:
-                  FragmentTransaction transactionwatch = getSupportFragmentManager().beginTransaction();
-                  WatchListFragment fragmentwatch = new WatchListFragment();
-                  transactionwatch.replace(R.id.framemain, fragmentwatch);
-                  transactionwatch.commit();
-                  mDrawerLayout.closeDrawer(mDrawerList);
+                  WatchListFragment fragmentWatch = new WatchListFragment();
+                  transactionWiki.replace(R.id.framemain, fragmentWatch);
                   break;
               case Settings:
-
+                  SettingsFragment settingsFragment = new SettingsFragment();
+                  transactionWiki.replace(R.id.framemain, settingsFragment);
                   break;
-
               case Log_in:
-//                  FragmentTransaction buck = getSupportFragmentManager().beginTransaction();
-//                  SearchFragment fragmentbuck = new SearchFragment();
-//                  buck.replace(R.id.framemain, fragmentbuck);
-//                  buck.commit();
-                  startActivity(new Intent(this, StartActivity.class));
+                startActivity(new Intent(this, StartActivity.class));
               default:
                   mDrawerLayout.closeDrawer(mDrawerList);
-                  break;
+                  return;
           }
+          transactionWiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+          transactionWiki.commit();
+          mDrawerLayout.closeDrawer(mDrawerList);
       }
    }
 

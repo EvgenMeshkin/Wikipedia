@@ -1,5 +1,7 @@
 package by.evgen.android.apiclient.helper;
 
+import android.content.Context;
+
 import java.util.List;
 
 import by.evgen.android.apiclient.bo.Category;
@@ -9,11 +11,12 @@ import by.evgen.android.apiclient.source.HttpDataSource;
 /**
  * Created by evgen on 16.01.2015.
  */
-public class WikiContentPageCallback implements ManagerDownload.Callback<List<Category>>{
+public class WikiContentPageCallback extends OnErrorCallbacks implements ManagerDownload.Callback<List<Category>>{
 
     private Callbacks mCallback;
 
-    public WikiContentPageCallback (Callbacks callbacks, String url){
+    public WikiContentPageCallback (Context context, Callbacks callbacks, String url){
+        super(context);
         mCallback = callbacks;
         ManagerDownload.load(this, url, new HttpDataSource(), new ContentsArrayProcessor());
 
@@ -35,7 +38,7 @@ public class WikiContentPageCallback implements ManagerDownload.Callback<List<Ca
 
     @Override
     public void onError(Exception e) {
-
+        super.sentOnError(e);
     }
 
 }

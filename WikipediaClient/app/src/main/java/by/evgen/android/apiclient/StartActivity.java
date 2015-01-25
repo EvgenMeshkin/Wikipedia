@@ -26,6 +26,7 @@ public class StartActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == requestL && resultCode == RESULT_OK) {
+            Authorized.setLogged(true);
             startMainActivity();
         } else {
             finish();

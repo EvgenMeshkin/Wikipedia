@@ -2,6 +2,8 @@ package by.evgen.android.apiclient.helper;
 
 
 
+import android.content.Context;
+
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
@@ -14,16 +16,16 @@ import java.util.List;
 /**
  * Created by User on 05.01.2015.
  */
-public class RandomPageCallback implements ManagerDownload.Callback<List<Category>>{
+public class RandomPageCallback extends OnErrorCallbacks implements ManagerDownload.Callback<List<Category>>{
 
     private Callbacks mCallback;
 
     public interface Callbacks {
         void onShowDetails(NoteGsonModel note);
-        void onErrorDialog(Exception e);
-    }
+     }
 
-    public void loadingRandomPage (Callbacks callback){
+    public RandomPageCallback (Context context, Callbacks callback){
+        super(context);
         Log.text(this.getClass(), "SrtartLoader");
         mCallback = callback;
         ManagerDownload.load(this,
@@ -48,6 +50,7 @@ public class RandomPageCallback implements ManagerDownload.Callback<List<Categor
     @Override
     public void onError(Exception e) {
         Log.text(this.getClass(), "Error" );
+        super.sentOnError(e);
     }
 
 }

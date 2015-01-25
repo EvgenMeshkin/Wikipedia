@@ -7,24 +7,26 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.processing.LikeIsProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by User on 12.01.2015.
  */
-public class LikeVkNotes implements SentsVkNotes.Callbacks{
+public class LikeVkNotes extends OnErrorCallbacks implements SentsVkNotes.Callbacks{
 
     private Context mContext;
 
     public LikeVkNotes (Context context, String url){
+        super(context);
         mContext = context;
         new SentsVkNotes(this, context, url);
-
     }
 
     @Override
     public void onReturnId(final Long id) {
         ManagerDownload.load(new ManagerDownload.Callback<String>() {
+
                                  @Override
                                  public void onPreExecute() {
                                  }
@@ -42,11 +44,16 @@ public class LikeVkNotes implements SentsVkNotes.Callbacks{
 
                                  @Override
                                  public void onError(Exception e) {
-                                     onError(e);
+                                     onErrorSent(e);
                                  }
                              },
                 Api.VKLIKEIS_GET + id,
-                new HttpDataSource(),
+                VkDataSource.get(mContext),
                 new LikeIsProcessor());
     }
-}
+
+    private void onErrorSent (Exception e){
+        super.sentOnError(e);
+    }
+
+ }

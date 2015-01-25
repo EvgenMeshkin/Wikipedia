@@ -29,6 +29,7 @@ public class CachedHttpDataSource extends HttpDataSource {
     private File mCacheFile;
     private long mSize = 0;
     private long limit = 30000;
+
     public CachedHttpDataSource(Context context) {
         mContext = context;
     }
@@ -39,6 +40,12 @@ public class CachedHttpDataSource extends HttpDataSource {
 
     @Override
     public InputStream getResult(String p) throws Exception {
+        mCacheFile = fileCache(p);
+        return new FileInputStream(mCacheFile);
+        }
+
+
+    public File fileCache(String p) throws Exception  {
         File cacheDir = mContext.getCacheDir();
         File file = new File(cacheDir, "__cache");
         file.mkdirs();
@@ -46,21 +53,21 @@ public class CachedHttpDataSource extends HttpDataSource {
         Log.d(TAG, "directory cache:  " + Arrays.toString(list));
         String path = file.getPath() + File.separator + generateFileName(p);
         mCacheFile = new File(path);
-        if (mCacheFile.exists() && !mLruCache.containsKey(path)){
+        if (mCacheFile.exists() && !mLruCache.containsKey(path)) {
             mLruCache.put(path, mCacheFile);
-            mSize+=mCacheFile.length();
+            mSize += mCacheFile.length();
             checkSize();
         }
         if (mLruCache.containsKey(path)) {
             Log.d(TAG, "load from file");
             mCacheFile = mLruCache.get(path);
-            return new FileInputStream(mCacheFile);
+            return mCacheFile;
         } else {
             Log.d(TAG, "Do not load load from file");
             mCacheFile = new File(path);
             InputStream inputStream = super.getResult(p);
             try {
-              copy(inputStream, mCacheFile);
+                copy(inputStream, mCacheFile);
             } catch (Exception e) {
                 mCacheFile.delete();
                 throw e;
@@ -69,11 +76,11 @@ public class CachedHttpDataSource extends HttpDataSource {
             mSize += mCacheFile.length();
             checkSize();
             Log.d(TAG, "copy stream success get from file");
-            return new FileInputStream(mCacheFile);
+            return mCacheFile;
         }
     }
 
-    private void checkSize() {
+        private void checkSize() {
         Log.i(TAG, "cache size = " + mSize + " length = " + mLruCache.size());
         if(mSize > limit){
             Iterator<Map.Entry<String, File>> iter = mLruCache.entrySet().iterator();

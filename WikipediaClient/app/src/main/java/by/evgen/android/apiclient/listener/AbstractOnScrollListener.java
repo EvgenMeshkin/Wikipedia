@@ -32,19 +32,10 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     public ArrayAdapter mAdapter;
     public View mFooterProgress;
     private boolean isImageLoaderControlledByDataManager = false;
-    public static final int COUNT = 4;
+    public static final int COUNT = 50;
     public ImageLoader mImageLoader;
     private boolean isPagingEnabled = true;
     public String mValue;
-
-//    public AbstractOnScrollListener(Context context, ListView listView, ImageLoader imageLoader, List data, ArrayAdapter adapter, String value) {
-//        mImageLoader = imageLoader;
-//        mListView = listView;
-//        mData = data;
-//        mValue = value;
-//        mAdapter = adapter;
-//        mFooterProgress = View.inflate(context, R.layout.view_footer_progress, null);
-//    }
 
     public abstract String getUrl(int count, int offset);
 
@@ -149,7 +140,6 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     @Override
     public void onError(Exception e) {
         e.printStackTrace();
-        onError(e);
         mImageLoader.resume();
         isImageLoaderControlledByDataManager = false;
     }

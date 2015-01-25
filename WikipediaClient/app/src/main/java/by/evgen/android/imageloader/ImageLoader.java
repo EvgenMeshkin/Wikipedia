@@ -30,13 +30,13 @@ import by.evgen.android.apiclient.processing.ImageUrlProcessor;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
-import by.evgen.android.apiclient.source.VkDataSource;
 
 public class ImageLoader {
+
     private static final String TAG = "ImageLoader";
     private MemoryCache memoryCache = new MemoryCache();
-    private Map<ImageView, String> imageViews = new ConcurrentHashMap<ImageView, String>();
-    private ExecutorService executorService;
+    private Map<ImageView, String> mImageViews = new ConcurrentHashMap<ImageView, String>();
+    private ExecutorService mExecutorService;
     public static final String KEY = "ImageLoader";
     private Context mContext;
     private AtomicBoolean isPause = new AtomicBoolean(false);
@@ -46,7 +46,7 @@ public class ImageLoader {
 
     public ImageLoader(Context context){
     mContext = context;
-    executorService = new ThreadPoolExecutor(5, 5, 0, TimeUnit.MILLISECONDS,
+    mExecutorService = new ThreadPoolExecutor(5, 5, 0, TimeUnit.MILLISECONDS,
             new LIFOLinkedBlockingDeque<Runnable>());
     }
 
@@ -55,7 +55,7 @@ public class ImageLoader {
     }
 
     public void displayImage(final String url,final ImageView imageView){
-        imageViews.put(imageView, url);
+        mImageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null) {
             Log.i(TAG, "FromTheCache");
@@ -86,54 +86,57 @@ public class ImageLoader {
 
     private void queueImage(String url, ImageView imageView){
         MemoryValue p = new MemoryValue(url, imageView, mContext);
-        executorService.submit(new ImagesLoader(p));
+        mExecutorService.submit(new ImagesLoader(p));
     }
 
     private class MemoryValue {
+
         public final String url;
         public final ImageView imageView;
         public final HttpDataSource dataSource;
         public final Processor processor;
         public final HttpDataSource dataUrl;
         public final Processor processUrl;
+
         public MemoryValue(String url, ImageView imageView, Context context){
             this.url = url;
             this.imageView = imageView;
             this.dataSource = new CachedHttpDataSource(context);
             this.processor = new BitmapProcessor();
-            dataUrl = new VkDataSource();
+            dataUrl = new HttpDataSource();
             processUrl = new ImageUrlProcessor();
             }
     }
 
     private class ImagesLoader implements Runnable {
-       private final MemoryValue memoryValue;
-       private Handler handler = new Handler();
-       private ImagesLoader(MemoryValue memoryValue){
-            this.memoryValue = memoryValue;
+
+       private final MemoryValue mMemoryValue;
+       private Handler mHandler = new Handler();
+       private ImagesLoader(MemoryValue mMemoryValue){
+            this.mMemoryValue = mMemoryValue;
         }
 
         @Override
         public void run() {
             try{
-                InputStream dataUrl = memoryValue.dataUrl.getResult(memoryValue.url);
-                Object procesUrl = memoryValue.processUrl.process(dataUrl);
+                InputStream dataUrl = mMemoryValue.dataUrl.getResult(mMemoryValue.url);
+                Object procesUrl = mMemoryValue.processUrl.process(dataUrl);
                 List<Category> data = (List<Category>)procesUrl;
                 String str = data.get(0).getUrlImage();
                 str = str.substring(str.indexOf("px")-2, str.indexOf("px")+2);
                 String url = data.get(0).getUrlImage().replaceAll(str,"100px");
-                InputStream dataSource = memoryValue.dataSource.getResult(url);
-                Object processingResult = memoryValue.processor.process(dataSource);
+                InputStream dataSource = mMemoryValue.dataSource.getResult(url);
+                Object processingResult = mMemoryValue.processor.process(dataSource);
                 Bitmap bmp = (Bitmap) processingResult;
                 bmp = CircleMaskedBitmap.getCircleMaskedBitmapUsingShader(bmp, 100);
                 if (bmp != null) {
-                    memoryCache.put(memoryValue.url, bmp);
+                    memoryCache.put(mMemoryValue.url, bmp);
                 }
-                if (imageViewReused(memoryValue)) {
+                if (imageViewReused(mMemoryValue)) {
                     return;
                 }
-                BitmapDisplayer bd = new BitmapDisplayer(bmp, memoryValue);
-                handler.post(bd);
+                BitmapDisplayer bd = new BitmapDisplayer(bmp, mMemoryValue);
+                mHandler.post(bd);
             }catch(Throwable th){
                 return;
             }
@@ -141,7 +144,7 @@ public class ImageLoader {
     }
 
     synchronized boolean imageViewReused(MemoryValue memoryValue){
-        String tag = imageViews.get(memoryValue.imageView);
+        String tag = mImageViews.get(memoryValue.imageView);
         Log.i(TAG, "Check " + tag);
         if (tag.equals(null) || !tag.equals(memoryValue.url))
             return true;
@@ -149,60 +152,21 @@ public class ImageLoader {
     }
 
     class BitmapDisplayer implements Runnable{
+
         private Bitmap bitmap;
         private MemoryValue memoryValue;
+
         public BitmapDisplayer(Bitmap bitmap, MemoryValue memoryValue){
             this.bitmap = bitmap;
             this.memoryValue = memoryValue;
         }
 
         public void run(){
-
             if (imageViewReused(memoryValue)) {
                 return;
             }
         memoryValue.imageView.setImageBitmap(bitmap);
         }
     }
-
-//    public static Bitmap scaleTo(Bitmap source, int size){
-//        int destWidth = source.getWidth();
-//
-//        int destHeight = source.getHeight();
-//
-//        destHeight = destHeight * size / destWidth;
-//        destWidth = size;
-//
-//        if (destHeight < size){
-//            destWidth = destWidth * size / destHeight;
-//            destHeight = size;
-//        }
-//
-//        Bitmap destBitmap = Bitmap.createBitmap(destWidth, destHeight, Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(destBitmap);
-//        canvas.drawBitmap(source, new Rect(0, 0, source.getWidth(), source.getHeight()), new Rect(0, 0, destWidth, destHeight), new Paint(Paint.ANTI_ALIAS_FLAG));
-//        return destBitmap;
-//    }
-//
-//    public static Bitmap getCircleMaskedBitmapUsingShader(Bitmap source, int radius){
-//        if (source == null){
-//            return null;
-//        }
-//
-//        int diam = radius << 1;
-//
-//        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//
-//        Bitmap scaledBitmap = (Bitmap)scaleTo(source, diam);
-//        final Shader shader = new BitmapShader(scaledBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-//        paint.setShader(shader);
-//
-//        Bitmap targetBitmap = Bitmap.createBitmap(diam, diam, Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(targetBitmap);
-//
-//        canvas.drawCircle(radius, radius, radius, paint);
-//
-//        return targetBitmap;
-//    }
 
  }

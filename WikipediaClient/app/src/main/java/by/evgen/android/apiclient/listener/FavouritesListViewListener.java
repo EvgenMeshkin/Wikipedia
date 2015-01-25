@@ -18,6 +18,7 @@ import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.DataSource;
+import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -26,12 +27,15 @@ import by.evgen.android.imageloader.ImageLoader;
  */
 public class FavouritesListViewListener extends AbstractOnScrollListener {
 
+    private Context mContext;
+
     public FavouritesListViewListener (Context context, ListView listView, ImageLoader imageLoader, List data, ArrayAdapter adapter, String value) {
     super.mImageLoader = imageLoader;
     super.mListView = listView;
     super.mData = data;
     super.mValue = value;
     super.mAdapter = adapter;
+    mContext = context;
     super.mFooterProgress = View.inflate(context, R.layout.view_footer_progress, null);
 }
 
@@ -43,7 +47,7 @@ public class FavouritesListViewListener extends AbstractOnScrollListener {
 
     @Override
     public DataSource getDataSource() {
-        return new VkDataSource();
+        return VkDataSource.get(mContext);
     }
 
     @Override

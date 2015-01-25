@@ -19,6 +19,7 @@ import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -32,7 +33,7 @@ public class FavouritesFragment extends AbstractFragment {
     private static String mKor;
     private String mValue;
     private ListView mListView;
-    public static final int COUNT = 20;
+    public static final int COUNT = 50;
     private View footerProgress;
 
     final static String LOG_TAG = FavouritesFragment.class.getSimpleName();
@@ -49,7 +50,7 @@ public class FavouritesFragment extends AbstractFragment {
 
     @Override
     public DataSource getDataSource() {
-        return new HttpDataSource();
+        return VkDataSource.get(mContext);
     }
 
     @Override
@@ -64,11 +65,11 @@ public class FavouritesFragment extends AbstractFragment {
 
     @Override
     public void onExecute(List data) {
-        footerProgress = View.inflate(mContext, R.layout.view_footer_progress, null);
+     //   footerProgress = View.inflate(mContext, R.layout.view_footer_progress, null);
         if (mAdapter == null) {
             mAdapter = new FavouritesArrayAdapter(mContext, R.layout.adapter_item, data);
             mListView.setFooterDividersEnabled(true);
-            mListView.addFooterView(footerProgress, null, false);
+//            mListView.addFooterView(footerProgress, null, false);
             mListView.setAdapter(mAdapter);
             mListView.setOnScrollListener(new FavouritesListViewListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

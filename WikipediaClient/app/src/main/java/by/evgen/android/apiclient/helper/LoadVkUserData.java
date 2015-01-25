@@ -1,5 +1,6 @@
 package by.evgen.android.apiclient.helper;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 
@@ -8,6 +9,7 @@ import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.processing.BitmapProcessor;
 import by.evgen.android.apiclient.processing.FotoIdUrlProcessor;
+import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.CircleMaskedBitmap;
@@ -17,15 +19,17 @@ import java.util.List;
 /**
  * Created by User on 20.12.2014.
  */
-public class LoadVkUserData implements ManagerDownload.Callback<List<Category>> {
+public class LoadVkUserData extends OnErrorCallbacks implements ManagerDownload.Callback<List<Category>> {
 
-    final static String LOG_TAG = LoadVkUserData.class.getSimpleName();
     private Callbacks mCallbacks;
+    private Context mContext;
 
-    public LoadVkUserData(Callbacks callbacks){
+    public LoadVkUserData(Callbacks callbacks, Context context){
+        super(context);
+        mContext = context;
         ManagerDownload.load(this,
                 Api.VKFOTOS_GET,
-                new VkDataSource(),
+                VkDataSource.get(context),
                 new FotoIdUrlProcessor());
         mCallbacks = callbacks;
     }
@@ -61,17 +65,21 @@ public class LoadVkUserData implements ManagerDownload.Callback<List<Category>> 
 
                                  @Override
                                  public void onError(Exception e) {
-                                     //TODO
+                                     onErrorSent(e);
                                  }
                              },
                 url,
-                new VkDataSource(),
+                HttpDataSource.get(mContext),
                 new BitmapProcessor());
     }
 
    @Override
     public void onError(Exception e) {
-        //TODO
+        onErrorSent(e);
+    }
+
+    private void onErrorSent (Exception e){
+        super.sentOnError(e);
     }
 
 }

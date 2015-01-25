@@ -3,6 +3,7 @@ package by.evgen.android.apiclient.helper;
 import android.content.Context;
 import by.evgen.android.apiclient.processing.StringProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.source.VkDataSource;
 
 /**
  * Created by evgen on 13.01.2015.
@@ -25,7 +26,7 @@ public class SentVkLike {
            public void onError(Exception e) {
 
            }
-       }, url, new HttpDataSource(), new StringProcessor());
+       }, url, VkDataSource.get(context), new StringProcessor());
 
     }
 }

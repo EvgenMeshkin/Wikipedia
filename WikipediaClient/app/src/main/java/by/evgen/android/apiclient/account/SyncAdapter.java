@@ -16,8 +16,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private final AccountManager mAccountManager;
     private final Context mContext;
 
-    //  public static final String KEY_FEED_ID = "sync.KEY_FEED_ID";
-
     public SyncAdapter(Context context) {
         super(context, true);
         mContext = context;
@@ -29,8 +27,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                               SyncResult syncResult) {
         String authtoken = null;
         try {
-            // accountType - тип вашего аккаунта, например "com.google"
-            authtoken = mAccountManager.blockingGetAuthToken(account,
+             authtoken = mAccountManager.blockingGetAuthToken(account,
                     "https://oauth.vk.com/", true);
             String login = account.name;
             String password = mAccountManager.getPassword(account);

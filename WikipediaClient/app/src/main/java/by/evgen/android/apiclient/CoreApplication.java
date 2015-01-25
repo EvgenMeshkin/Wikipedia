@@ -23,7 +23,7 @@ public class CoreApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mGetService.put(HttpDataSource.KEY, new HttpDataSource());
-        mGetService.put(VkDataSource.KEY, new VkDataSource());
+        mGetService.put(VkDataSource.KEY, new VkDataSource(this));
         mGetService.put(CachedHttpDataSource.KEY, new CachedHttpDataSource(this));
         mGetService.put(ImageLoader.KEY, new ImageLoader(this));
   }

@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,9 +23,11 @@ import android.widget.ListView;
 import java.util.List;
 
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.DetailsFragment;
 import by.evgen.android.apiclient.helper.LikeVkNotes;
+import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkStorage;
 import by.evgen.android.apiclient.utils.Log;
@@ -32,7 +35,7 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by User on 13.11.2014.
  */
-public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, SentsVkNotes.Callbacks, DetailsFragment.Callbacks {
+public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, SentsVkNotes.Callbacks, DetailsFragment.Callbacks, OnErrorCallbacks.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -54,7 +57,6 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         if (getIntent().getParcelableExtra("keynote") != null) {
          mNoteGsonModel =  getIntent().getParcelableExtra("keynote");
         }
-        Log.text(getClass(),"activity");
         DetailsFragment details = new DetailsFragment();
         mDrawerListRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -137,7 +139,10 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     @Override
     public void onErrorDialog(Exception e) {
-
+        e.printStackTrace();
+        Log.text(getClass(), "OnError  " + e);
+        DialogFragment newFragment = ErrorDialog.newInstance(e.getMessage());
+        newFragment.show(getSupportFragmentManager(), "dialog");
     }
 
     @Override
