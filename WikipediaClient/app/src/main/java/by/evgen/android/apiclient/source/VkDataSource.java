@@ -25,9 +25,13 @@ public class VkDataSource extends CachedHttpDataSource {
     public VkDataSource(Context context) {
         super(context);
         mContext = context;
+        //TODO init Account
     }
 
+    //TODO add method setAccount(Account );
+
     public static VkDataSource get(Context context) {
+        //TODO remove from this place
         if (!Authorized.isLogged()) {
             Toast.makeText(context, "You must login", Toast.LENGTH_SHORT).show();
             return null;
@@ -44,6 +48,7 @@ public class VkDataSource extends CachedHttpDataSource {
             Log.text(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
             return super.getResult(url);
         } else {
+            //TODO your error!!!
             Toast.makeText(mContext, "You must login", Toast.LENGTH_SHORT).show();
         }
         return null;
