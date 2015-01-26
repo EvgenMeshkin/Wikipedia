@@ -59,4 +59,8 @@
         <item>3</item>
     </string-array>
 
+    <string name="search">Search</string>
+    <string name="add_note">Add note</string>
+    <string name="like">Like</string>
+
 </resources>

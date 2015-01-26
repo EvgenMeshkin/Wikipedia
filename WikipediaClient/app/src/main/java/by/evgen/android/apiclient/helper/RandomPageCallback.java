@@ -26,7 +26,7 @@ public class RandomPageCallback extends OnErrorCallbacks implements ManagerDownl
 
     public RandomPageCallback (Context context, Callbacks callback){
         super(context);
-        Log.text(this.getClass(), "SrtartLoader");
+        Log.text(this.getClass(), "StartLoader");
         mCallback = callback;
         ManagerDownload.load(this,
                 Api.RANDOM_GET,

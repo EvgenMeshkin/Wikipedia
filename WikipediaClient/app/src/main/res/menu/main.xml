@@ -5,7 +5,7 @@
     <item
         android:id="@+id/search"
         android:orderInCategory="1"
-        android:title="search"
+        android:title="@string/search"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
@@ -20,12 +20,12 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item android:id="@+id/action_note"
-        android:title="Add note"
+        android:title="@string/add_note"
         android:onClick="sentNote"
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item android:id="@+id/action_like"
-        android:title="Like"
+        android:title="@string/like"
         android:onClick="sentLike"
         android:orderInCategory="100"
         app:showAsAction="never" />

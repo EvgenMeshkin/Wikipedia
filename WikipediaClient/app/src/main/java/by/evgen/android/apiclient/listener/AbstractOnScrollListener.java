@@ -1,6 +1,5 @@
 package by.evgen.android.apiclient.listener;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -10,14 +9,10 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import by.evgen.android.apiclient.Api;
-import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.processing.Processor;
-import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
-import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -25,13 +20,13 @@ import by.evgen.android.imageloader.ImageLoader;
  */
 public abstract class AbstractOnScrollListener implements AbsListView.OnScrollListener, ManagerDownload.Callback<List<Category>> {
 
-    private int previousTotal = 0;
-    private int visibleThreshold = 5;
+    private int mPreviousTotal = 0;
+    private int mVisibleThreshold = 5;
     public ListView mListView;
     public List<Category> mData;
     public ArrayAdapter mAdapter;
     public View mFooterProgress;
-    private boolean isImageLoaderControlledByDataManager = false;
+    public boolean isImageLoaderControlledByDataManager = false;
     public static final int COUNT = 50;
     public ImageLoader mImageLoader;
     private boolean isPagingEnabled = true;
@@ -71,8 +66,8 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         if (count == 0) {
             return;
         }
-        if (previousTotal != totalItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            previousTotal = totalItemCount;
+        if (mPreviousTotal != totalItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + mVisibleThreshold)) {
+            mPreviousTotal = totalItemCount;
             isImageLoaderControlledByDataManager = true;
             ManagerDownload.load(this,
                     getUrl(COUNT, count),
@@ -87,7 +82,7 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         refreshFooter();
     }
 
-    private void updateAdapter(List<Category> data) {
+    public void updateAdapter(List<Category> data) {
         if (data != null && data.size() == COUNT) {
             isPagingEnabled = true;
             mListView.addFooterView(mFooterProgress, null, false);
@@ -101,7 +96,6 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         mAdapter.notifyDataSetChanged();
     }
 
-
     public static int getRealAdapterCount(ListAdapter adapter) {
         if (adapter == null) {
             return 0;
@@ -114,7 +108,7 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         return count;
     }
 
-    private void refreshFooter() {
+    public void refreshFooter() {
         if (mFooterProgress != null) {
             if (isPagingEnabled) {
                 mFooterProgress.setVisibility(View.VISIBLE);

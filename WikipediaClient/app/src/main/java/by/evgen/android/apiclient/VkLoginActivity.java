@@ -1,8 +1,5 @@
 package by.evgen.android.apiclient;
 
-import android.accounts.Account;
-import android.accounts.AccountAuthenticatorResponse;
-import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -13,7 +10,6 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import by.evgen.android.apiclient.account.WikiAccount;
 import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.utils.Log;
 

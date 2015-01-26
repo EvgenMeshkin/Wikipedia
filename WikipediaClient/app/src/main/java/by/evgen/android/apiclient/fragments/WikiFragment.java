@@ -1,6 +1,7 @@
 package by.evgen.android.apiclient.fragments;
 
 
+import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
     private RecyclerWikiAdapter mAdapter;
     private List<Category> mData;
     private static String mLocation;
+    private Context mContext;
     private CategoryArrayProcessor mCategoryArrayProcessor = new CategoryArrayProcessor();
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -50,6 +52,7 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
         mRecyclerView.setLayoutManager(mLayoutManager);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         mRecyclerView.setItemAnimator(itemAnimator);
+        mContext = getActivity();
         GpsLocation gpsLocation = new GpsLocation();
         gpsLocation.getLocation(this, getActivity());
         return content;
@@ -79,14 +82,14 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
     @Override
     public void onExecute(List data) {
         if (mAdapter == null) {
-            mAdapter = new RecyclerWikiAdapter(getActivity(), data);
+            mAdapter = new RecyclerWikiAdapter(mContext, data);
             mRecyclerView.setAdapter(mAdapter); //      recyclerView.setItemAnimator(itemAnimator);r(mAdapter);
             mData = data;
             mRecyclerView.addOnItemTouchListener(
-                    new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    new RecyclerItemClickListener(mContext, new RecyclerItemClickListener.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                           Category item = (Category) mData.get(position);
+                           Category item = mData.get(position);
                            NoteGsonModel note = new NoteGsonModel(item.getId(), item.getTitle(), item.getNs());
                            showDetails(note);
                         }

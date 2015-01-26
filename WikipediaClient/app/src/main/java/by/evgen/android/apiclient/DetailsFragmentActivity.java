@@ -38,10 +38,10 @@ import by.evgen.android.apiclient.utils.Log;
 public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, SentsVkNotes.Callbacks, DetailsFragment.Callbacks, OnErrorCallbacks.Callbacks {
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
     private ListView mDrawerListRight;
-    private ActionBarDrawerToggle mDrawerToggle;
     private NoteGsonModel mNoteGsonModel;
+    private final String KEY = "key";
+    private final String KEYNOTE = "keynote";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +54,8 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark_material_light));
         mDrawerListRight = (ListView) findViewById(R.id.list_right_menu);
-        if (getIntent().getParcelableExtra("keynote") != null) {
-         mNoteGsonModel =  getIntent().getParcelableExtra("keynote");
+        if (getIntent().getParcelableExtra(KEYNOTE) != null) {
+        mNoteGsonModel =  getIntent().getParcelableExtra(KEYNOTE);
         }
         DetailsFragment details = new DetailsFragment();
         mDrawerListRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,7 +65,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
                 fragment.notifyWebView(position);
             }
         });
-        details.setArguments(getIntent().<Bundle>getParcelableExtra("key"));
+        details.setArguments(getIntent().<Bundle>getParcelableExtra(KEY));
             getSupportFragmentManager().beginTransaction().add(
                     R.id.framemain, details).commit();
     }
@@ -129,11 +129,11 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     public void onShowDetails(NoteGsonModel note) {
         mNoteGsonModel = note;
         Bundle bundle = new Bundle();
-        bundle.putParcelable("key", note);
+        bundle.putParcelable(KEY, note);
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
-        intent.putExtra("key", bundle);
-        intent.putExtra("keynote", note);
+        intent.putExtra(KEY, bundle);
+        intent.putExtra(KEYNOTE, note);
         startActivity(intent);
     }
 

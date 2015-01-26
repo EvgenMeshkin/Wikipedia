@@ -21,13 +21,13 @@ public class SearchArrayAdapter extends ArrayAdapter<Category> {
 
     private TextView mTitle;
     private TextView mContent;
-    private ImageLoader imageLoader;
+    private ImageLoader mImageLoader;
     private Context mContext;
 
     public SearchArrayAdapter(Context context, int resource, List<Category> objects) {
         super(context, resource, objects);
         mContext = context;
-        imageLoader = ImageLoader.get(context);
+        mImageLoader = ImageLoader.get(context);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SearchArrayAdapter extends ArrayAdapter<Category> {
         final ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
         imageView.setImageBitmap(null);
         imageView.setTag(urlImage);
-        imageLoader.displayImage(urlImage, imageView);
+        mImageLoader.displayImage(urlImage, imageView);
         return convertView;
     }
 

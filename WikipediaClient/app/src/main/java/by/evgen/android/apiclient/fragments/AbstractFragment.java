@@ -101,8 +101,9 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
     @Override
     public void onError(Exception e) {
         mProgress.setVisibility(View.GONE);
+        e.printStackTrace();
         Callbacks callbacks = getCallbacks();
-//        callbacks.onErrorDialog(e);
+        callbacks.onErrorDialog(e);
     }
 
 }

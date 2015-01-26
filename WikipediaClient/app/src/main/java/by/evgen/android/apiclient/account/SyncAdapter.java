@@ -31,7 +31,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     "https://oauth.vk.com/", true);
             String login = account.name;
             String password = mAccountManager.getPassword(account);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

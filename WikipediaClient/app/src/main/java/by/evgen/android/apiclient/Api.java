@@ -1,7 +1,5 @@
 package by.evgen.android.apiclient;
 
-import by.evgen.android.apiclient.auth.VkOAuthHelper;
-
 /**
  * Created by evgen on 15.11.2014.
  */

@@ -21,13 +21,12 @@ import java.util.List;
  */
 public class RecyclerWikiAdapter extends RecyclerView.Adapter<RecyclerWikiAdapter.ViewHolder> {
 
-    private List<Category> records;
-    private ImageLoader imageLoader;
-    final static String LOG_TAG = RecyclerWikiAdapter.class.getSimpleName();
+    private List<Category> mRecords;
+    private ImageLoader mImageLoader;
 
     public RecyclerWikiAdapter(Context context, List<Category> records) {
-        imageLoader = ImageLoader.get(context);
-        this.records = records;
+        mImageLoader = ImageLoader.get(context);
+        mRecords = records;
     }
 
     @Override
@@ -40,18 +39,18 @@ public class RecyclerWikiAdapter extends RecyclerView.Adapter<RecyclerWikiAdapte
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         Log.text(this.getClass(), "Bind recycler");
-        Category item = records.get(i);
+        Category item = mRecords.get(i);
         viewHolder.name.setText(item.getTitle());
         viewHolder.content.setText(item.getDist() + " m.");
         final String urlImage = Api.IMAGEVIEW_GET + item.getTitle().replaceAll(" ","%20");
         viewHolder.icon.setImageBitmap(null);
         viewHolder.icon.setTag(urlImage);
-        imageLoader.displayImage(urlImage, viewHolder.icon);
+        mImageLoader.displayImage(urlImage, viewHolder.icon);
     }
 
    @Override
     public int getItemCount() {
-        return records.size();
+        return mRecords.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

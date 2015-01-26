@@ -10,6 +10,7 @@ import android.util.Log;
  * Created by evgen on 13.12.2014.
  */
 public class DBHelper extends SQLiteOpenHelper {
+
     static final String DB_NAME = "wikidb";
     static final int DB_VERSION = 1;
     static final String WIKI_TABLE = "geodata";

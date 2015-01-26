@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -31,16 +32,12 @@ public class MainPageFragment extends AbstractFragment {
     private MainPageProcessor mMainPageProcessor = new MainPageProcessor();
     private HttpDataSource mHttpDataSource;
     private WebView mWebView;
-    private List<Category> mData;
     private View mProgress;
     private Context mContext;
-    private String mTextHtml;
-    private String mHistory;
     private final Uri WIKI_URI = Uri
             .parse("content://by.evgen.android.apiclient.GeoData/geodata");
     private final String WIKI_NAME = "name";
     private final String WIKI_DATE = "wikidate";
-    final String LOG_TAG = MainPageFragment.class.getSimpleName();
 
     @Override
     public void onStop() {
@@ -81,8 +78,8 @@ public class MainPageFragment extends AbstractFragment {
 
     @Override
     public void onExecute(List data) {
-        mData = data;
-        mTextHtml = "";
+        List<Category> mData = data;
+        String mTextHtml = "";
         ContentValues cv = new ContentValues();
         cv.put(WIKI_NAME, "Main Page");
         cv.put(WIKI_DATE, new java.util.Date().getTime());
@@ -116,11 +113,15 @@ public class MainPageFragment extends AbstractFragment {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             Integer position = url.lastIndexOf("/");
-            mHistory = url.substring(position + 1);
+            String mHistory = url.substring(position + 1);
             NoteGsonModel note = new NoteGsonModel(null, mHistory, " ");
             showDetails(note);
             showProgress();
             return true;
+        }
+
+        public void onReceivedError(WebView view, int    errorCode, String description, String failingUrl) {
+            Toast.makeText(mContext, description, Toast.LENGTH_SHORT).show();
         }
 
         @Override

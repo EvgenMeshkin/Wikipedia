@@ -22,13 +22,13 @@ import java.util.Map;
  * Created by User on 04.12.2014.
  */
 public class CachedHttpDataSource extends HttpDataSource {
+
     public static final String KEY = "CachedHttpDataSource";
     public static final String TAG = "cache_http_data_source";
     private Map<String, File> mLruCache= Collections.synchronizedMap(new LinkedHashMap<String, File>());
     private Context mContext;
     private File mCacheFile;
     private long mSize = 0;
-    private long limit = 30000;
 
     public CachedHttpDataSource(Context context) {
         mContext = context;
@@ -82,7 +82,8 @@ public class CachedHttpDataSource extends HttpDataSource {
 
         private void checkSize() {
         Log.i(TAG, "cache size = " + mSize + " length = " + mLruCache.size());
-        if(mSize > limit){
+            long limit = 30000;
+            if(mSize > limit){
             Iterator<Map.Entry<String, File>> iter = mLruCache.entrySet().iterator();
             while(iter.hasNext()){
                 Map.Entry<String, File> entry = iter.next();
@@ -136,7 +137,6 @@ public class CachedHttpDataSource extends HttpDataSource {
                     .getInstance(MD5);
             digest.update(s.getBytes());
             byte messageDigest[] = digest.digest();
-
             // Create Hex String
             StringBuilder hexString = new StringBuilder();
             for (byte aMessageDigest : messageDigest) {

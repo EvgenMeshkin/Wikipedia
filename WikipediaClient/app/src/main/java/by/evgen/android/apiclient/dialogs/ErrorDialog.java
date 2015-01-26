@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
 /**
  * Created by User on 14.11.2014.
@@ -20,7 +20,7 @@ public class ErrorDialog extends DialogFragment implements DialogInterface.OnCli
         return frag;
     }
 
-
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String title = getArguments().getString("Error:");
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())

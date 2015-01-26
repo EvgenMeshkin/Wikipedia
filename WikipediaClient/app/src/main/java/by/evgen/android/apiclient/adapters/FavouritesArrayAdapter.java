@@ -11,7 +11,6 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
-import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -19,15 +18,13 @@ import by.evgen.android.imageloader.ImageLoader;
  */
 public class FavouritesArrayAdapter extends ArrayAdapter<String> {
 
-    private TextView mTitle;
-    private TextView mContent;
-    private ImageLoader imageLoader;
+    private ImageLoader mImageLoader;
     private Context mContext;
 
     public FavouritesArrayAdapter(Context context, int resource, List<String> objects) {
         super(context, resource, objects);
         mContext = context;
-        imageLoader = ImageLoader.get(context);
+        mImageLoader = ImageLoader.get(context);
     }
 
     @Override
@@ -36,14 +33,14 @@ public class FavouritesArrayAdapter extends ArrayAdapter<String> {
             convertView = View.inflate(mContext, R.layout.adapter_item, null);
         }
         String title = getItem(position);
-        mTitle = (TextView) convertView.findViewById(android.R.id.text1);
-        mTitle.setText(title);
+        TextView name = (TextView) convertView.findViewById(android.R.id.text1);
+        name.setText(title);
         final String urlImage = Api.IMAGEVIEW_GET + title.replaceAll(" ", "%20");
         convertView.setTag(title);
         final ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
         imageView.setImageBitmap(null);
         imageView.setTag(urlImage);
-        imageLoader.displayImage(urlImage, imageView);
+        mImageLoader.displayImage(urlImage, imageView);
         return convertView;
     }
 

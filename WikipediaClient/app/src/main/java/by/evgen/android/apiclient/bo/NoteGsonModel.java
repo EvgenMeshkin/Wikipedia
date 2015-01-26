@@ -10,21 +10,15 @@ public class NoteGsonModel implements Parcelable {
 
     private String title;
     private String content;
-  //  private Long id;
 
     public NoteGsonModel(Long id, String title, String content) {
         this.title = title;
         this.content = content;
-     //   this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
-
-//    public Long getId() {
-//        return id;
-//    }
 
     public String getContent() {
         return content;
@@ -40,8 +34,7 @@ public class NoteGsonModel implements Parcelable {
         parcel.writeStringArray(new String[] {  title, content });
 
     }
-   public static final Parcelable.Creator<NoteGsonModel> CREATOR = new Parcelable.Creator<NoteGsonModel>() {
-    // распаковываем объект из Parcel
+    public static final Parcelable.Creator<NoteGsonModel> CREATOR = new Parcelable.Creator<NoteGsonModel>() {
     public NoteGsonModel createFromParcel(Parcel in) {
         return new NoteGsonModel(in);
     }
@@ -50,7 +43,6 @@ public class NoteGsonModel implements Parcelable {
     }
 };
 
-    // конструктор, считывающий данные из Parcel
     private NoteGsonModel(Parcel parcel) {
         String[] data = new String[2];
         parcel.readStringArray(data);

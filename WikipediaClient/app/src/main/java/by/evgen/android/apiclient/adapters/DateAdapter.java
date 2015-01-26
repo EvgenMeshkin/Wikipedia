@@ -17,16 +17,16 @@ import by.evgen.android.imageloader.ImageLoader;
  */
 public class DateAdapter extends SimpleCursorAdapter {
 
-    private Cursor dataCursor;
+    private Cursor mDataCursor;
     private LayoutInflater mInflater;
-    private ImageLoader imageLoader;
-    String prevDate = null;
+    private ImageLoader mImageLoader;
+    private String mPrevDate = null;
 
     public DateAdapter(Context context, int layout, Cursor dataCursor, String[] from,
                          int[] to) {
         super(context, layout, dataCursor, from, to);
-        imageLoader = ImageLoader.get(context);
-        this.dataCursor = dataCursor;
+        mImageLoader = ImageLoader.get(context);
+        this.mDataCursor = dataCursor;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -38,20 +38,20 @@ public class DateAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        dataCursor.moveToPosition(position);
+        mDataCursor.moveToPosition(position);
         if (position > 0 ) {
-            dataCursor.moveToPrevious();
-            prevDate = (new java.sql.Date(dataCursor.getLong(dataCursor.getColumnIndex("wikidate")))).toString();
-            dataCursor.moveToNext();
+            mDataCursor.moveToPrevious();
+            mPrevDate = (new java.sql.Date(mDataCursor.getLong(mDataCursor.getColumnIndex("wikidate")))).toString();
+            mDataCursor.moveToNext();
         }
-        int title = dataCursor.getColumnIndex("name");
-        String task_title = dataCursor.getString(title);
-        int title_date = dataCursor.getColumnIndex("wikidate");
-        Long task_day = dataCursor.getLong(title_date);
+        int title = mDataCursor.getColumnIndex("name");
+        String task_title = mDataCursor.getString(title);
+        int title_date = mDataCursor.getColumnIndex("wikidate");
+        Long task_day = mDataCursor.getLong(title_date);
         String dt = (new java.sql.Date(task_day)).toString();
         holder = new ViewHolder();
         if (convertView == null) {
-            if (!dt.equals(prevDate)) {
+            if (!dt.equals(mPrevDate)) {
                 convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.view_separator, null);
                 holder.sec_hr = (TextView) convertView.findViewById(android.R.id.text2);
                 holder.sec_hr.setVisibility(View.VISIBLE);
@@ -66,10 +66,10 @@ public class DateAdapter extends SimpleCursorAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.sec_hr.setText(dt.toString());
+        holder.sec_hr.setText(dt);
         final String urlImage = Api.IMAGEVIEW_GET + task_title.replaceAll(" ", "%20");
         holder.name.setText(task_title);
-        imageLoader.displayImage(urlImage, holder.img);
+        mImageLoader.displayImage(urlImage, holder.img);
         return convertView;
     }
 

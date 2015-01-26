@@ -41,7 +41,6 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     private HttpDataSource mHttpDataSource;
     private NoteGsonModel mObj;
     private WebView mWebView;
-    private List<Category> mData;
     private List mContent;
     private View mProgress;
     private Context mContext;
@@ -110,18 +109,18 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
 
     @Override
     public void onExecute(List data) {
-        mData = data;
-        mTextHtml = "";
-        ContentValues cv = new ContentValues();
-        cv.put(WIKI_NAME, mHistory);
-        cv.put(WIKI_DATE, new java.util.Date().getTime());
-        if (!cv.equals(null)&& !mContext.equals(null)) {
-            mContext.getContentResolver().insert(WIKI_URI, cv);
-        }
-        new WikiContentPageCallback(mContext, this, Api.CONTENTS_GET + mHistory);
+        List<Category> mData = data;
         if (data == null || data.isEmpty()) {
             Toast.makeText(mContext, "Note added", Toast.LENGTH_SHORT).show();
         } else {
+            mTextHtml = "";
+            ContentValues cv = new ContentValues();
+            cv.put(WIKI_NAME, mHistory);
+            cv.put(WIKI_DATE, new java.util.Date().getTime());
+            if (!cv.equals(null) && !mContext.equals(null)) {
+                mContext.getContentResolver().insert(WIKI_URI, cv);
+            }
+            new WikiContentPageCallback(mContext, this, Api.CONTENTS_GET + mHistory);
             for (int i = 0; i < data.size(); i++) {
                 mTextHtml = mTextHtml + mData.get(i).getText();
             }
@@ -168,6 +167,10 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+        }
+
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            Toast.makeText(mContext, description, Toast.LENGTH_SHORT).show();
         }
 
         @Override

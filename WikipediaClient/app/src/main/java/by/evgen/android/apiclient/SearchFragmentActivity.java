@@ -23,7 +23,9 @@ import by.evgen.android.apiclient.fragments.SearchFragment;
  */
 public class SearchFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel> {
 
-    private NoteGsonModel mNoteGsonModel;// = (NoteGsonModel) getIntent().<Bundle>getParcelableExtra("key");
+    public NoteGsonModel mNoteGsonModel;// = (NoteGsonModel) getIntent().<Bundle>getParcelableExtra("key");
+    private final String KEY = "key";
+    private final String KEYNOTE = "keynote";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         SearchFragment fragmentmain = new SearchFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("key", search);
+        bundle.putString(KEY, search);
         fragmentmain.setArguments(bundle);
         transaction.replace(R.id.framemain, fragmentmain);
         transaction.commit();
@@ -80,13 +82,13 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
 
     @Override
     public void onShowDetails(NoteGsonModel note) {
-        mNoteGsonModel = (NoteGsonModel) note;
+        mNoteGsonModel = note;
         Bundle bundle = new Bundle();
-        bundle.putParcelable("key", note);
+        bundle.putParcelable(KEY, note);
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
-        intent.putExtra("key", bundle);
-        intent.putExtra("keynote", note);
+        intent.putExtra(KEY, bundle);
+        intent.putExtra(KEYNOTE, note);
         startActivity(intent);
     }
 

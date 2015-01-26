@@ -50,7 +50,7 @@ public class WatchListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mContent = inflater.inflate(R.layout.fragment_wiki, null);
+        mContent = inflater.inflate(R.layout.fragment_list_search, null);
         mEmpty = (TextView) mContent.findViewById(android.R.id.empty);
         mEmpty.setVisibility(View.GONE);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mContent.findViewById(by.evgen.android.apiclient.R.id.swipe_container);

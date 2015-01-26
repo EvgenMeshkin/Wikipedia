@@ -26,7 +26,6 @@ public class SentsVkStorage extends OnErrorCallbacks implements ManagerDownload.
 
     public SentsVkStorage(final Context context, final String url) {
         super(context);
-        Log.text(this.getClass(), "Url " + VkOAuthHelper.mAccessToken);
         mContext = context;
         mBaseUrl = url;
         Log.text(this.getClass(), "Url " + Api.STORAGE_SET + mBaseUrl +"&value=" + mBaseUrl);
@@ -57,11 +56,11 @@ public class SentsVkStorage extends OnErrorCallbacks implements ManagerDownload.
         String pageName = "";
         Log.text(getClass(), "Storage" + data);
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).indexOf(mBaseUrl) != -1) {
+            if (data.get(i).contains(mBaseUrl)) {
                 pageName = data.get(i);
             }
         }
-        if (pageName != "") {
+        if (!pageName.equals("")) {
             Toast.makeText(mContext, "You already added this note", Toast.LENGTH_SHORT).show();
         } else {
             ManagerDownload.load(this,

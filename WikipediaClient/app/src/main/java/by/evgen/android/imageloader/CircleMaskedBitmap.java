@@ -34,7 +34,7 @@ public class CircleMaskedBitmap {
         }
         int diam = radius << 1;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        Bitmap scaledBitmap = (Bitmap)scaleTo(source, diam);
+        Bitmap scaledBitmap = scaleTo(source, diam);
         final Shader shader = new BitmapShader(scaledBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         paint.setShader(shader);
         Bitmap targetBitmap = Bitmap.createBitmap(diam, diam, Bitmap.Config.ARGB_8888);
@@ -42,4 +42,5 @@ public class CircleMaskedBitmap {
         canvas.drawCircle(radius, radius, radius, paint);
         return targetBitmap;
     }
+
 }

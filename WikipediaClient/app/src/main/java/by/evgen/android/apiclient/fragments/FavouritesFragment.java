@@ -30,21 +30,17 @@ public class FavouritesFragment extends AbstractFragment {
     private ArrayAdapter mAdapter;
     private ImageLoader mImageLoader;
     private Context mContext = getActivity();
-    private static String mKor;
-    private String mValue;
     private ListView mListView;
     public static final int COUNT = 50;
-    private View footerProgress;
 
     final static String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
     @Override
     public View getViewLayout(LayoutInflater inflater) {
-        View content = inflater.inflate(R.layout.fragment_wiki, null);
+        View content = inflater.inflate(R.layout.fragment_list_search, null);
         mContext = getActivity();
         mListView = (ListView) content.findViewById(android.R.id.list);
         mImageLoader = ImageLoader.get(mContext);
-//        mValue = getArguments().getString("key");
         return content;
     }
 
@@ -65,13 +61,11 @@ public class FavouritesFragment extends AbstractFragment {
 
     @Override
     public void onExecute(List data) {
-     //   footerProgress = View.inflate(mContext, R.layout.view_footer_progress, null);
         if (mAdapter == null) {
             mAdapter = new FavouritesArrayAdapter(mContext, R.layout.adapter_item, data);
             mListView.setFooterDividersEnabled(true);
-//            mListView.addFooterView(footerProgress, null, false);
             mListView.setAdapter(mAdapter);
-            mListView.setOnScrollListener(new FavouritesListViewListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
+            mListView.setOnScrollListener(new FavouritesListViewListener(getActivity(), mListView, mImageLoader, data, mAdapter, null)); //{
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,9 +80,9 @@ public class FavouritesFragment extends AbstractFragment {
     }
 
     private String getUrl(int count, int offset) {
-        mKor = Api.STORAGE_KEYS_GET + "&count="+count+"&sroffset="+offset;
-        Log.d(LOG_TAG, "mKor=" + mKor);
-        return mKor;
+        String stor = Api.STORAGE_KEYS_GET + "&count=" + count + "&sroffset=" + offset;
+        Log.d(LOG_TAG, "mKor=" + stor);
+        return stor;
     }
 
 }

@@ -68,6 +68,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private String[] viewsNames;
     private View headerDrawer;
     private enum mMenuValue {Home, Random, Nearby, Favourites, Watchlist, Settings, Log_in};
+    private final String KEY = "key";
+    private final String KEYNOTE = "keynote";
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -126,11 +128,11 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     @Override
     public void onShowDetails(NoteGsonModel note) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("key", note);
+        bundle.putParcelable(KEY, note);
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
-        intent.putExtra("key", bundle);
-        intent.putExtra("keynote", note);
+        intent.putExtra(KEY, bundle);
+        intent.putExtra(KEYNOTE, note);
         startActivity(intent);
     }
 
