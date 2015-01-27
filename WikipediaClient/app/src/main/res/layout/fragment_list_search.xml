@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/button"
-        android:text="Ничего нет!"
+        android:text="@string/nodata"
         android:visibility="gone"/>
 
     <EditText
@@ -35,7 +35,7 @@
         android:paddingLeft="16dip"
         android:paddingRight="16dip"
         android:id="@+id/editText"
-        android:hint="Search:"
+        android:hint="@string/text_search"
         android:textColorHint="#B6B6B6"
         android:textColor="#212121"
         android:background="@color/background_material_light"
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Ничего нет!"
+        android:text="@string/nodata"
         android:visibility="gone" />
 
 
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Что-то пошло не так!"
+        android:text="@string/exception"
         android:visibility="gone" />
 
     <ProgressBar

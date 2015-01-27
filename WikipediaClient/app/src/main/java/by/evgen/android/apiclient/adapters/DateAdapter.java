@@ -26,7 +26,7 @@ public class DateAdapter extends SimpleCursorAdapter {
                          int[] to) {
         super(context, layout, dataCursor, from, to);
         mImageLoader = ImageLoader.get(context);
-        this.mDataCursor = dataCursor;
+        mDataCursor = dataCursor;
         mInflater = LayoutInflater.from(context);
     }
 
