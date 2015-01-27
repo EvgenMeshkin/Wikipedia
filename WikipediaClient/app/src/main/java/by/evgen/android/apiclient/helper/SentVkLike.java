@@ -1,8 +1,8 @@
 package by.evgen.android.apiclient.helper;
 
 import android.content.Context;
+
 import by.evgen.android.apiclient.processing.StringProcessor;
-import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 
 /**

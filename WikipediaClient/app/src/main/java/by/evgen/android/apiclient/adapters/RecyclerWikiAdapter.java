@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
-
-import java.util.List;
 
 /**
  * Created by User on 13.01.2015.

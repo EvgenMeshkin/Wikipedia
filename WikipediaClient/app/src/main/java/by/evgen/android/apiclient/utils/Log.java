@@ -1,8 +1,5 @@
 package by.evgen.android.apiclient.utils;
 
-import android.app.Activity;
-import android.content.Context;
-
 import by.evgen.android.apiclient.BuildConfig;
 
 

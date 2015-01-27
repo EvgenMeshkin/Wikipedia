@@ -1,7 +1,6 @@
 package by.evgen.android.apiclient.fragments;
 
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,9 +11,9 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
@@ -24,11 +23,7 @@ import by.evgen.android.apiclient.helper.WikiContentPageCallback;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
-import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.FindResponder;
-
-
-import java.util.List;
 
 /**
  * Created by User on 22.10.2014.

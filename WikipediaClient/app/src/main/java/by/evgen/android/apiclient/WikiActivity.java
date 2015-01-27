@@ -4,30 +4,21 @@ package by.evgen.android.apiclient;
  * Created by User on 30.10.2014.
  */
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-
-
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
-import android.content.ContentResolver;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.content.res.Configuration;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -39,23 +30,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.support.v7.app.*;
-
-import java.io.IOException;
-
 
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.FavouritesFragment;
 import by.evgen.android.apiclient.fragments.MainPageFragment;
-import by.evgen.android.apiclient.fragments.SearchFragment;
-import by.evgen.android.apiclient.fragments.SetingsFragment;
 import by.evgen.android.apiclient.fragments.SettingsFragment;
 import by.evgen.android.apiclient.fragments.WatchListFragment;
 import by.evgen.android.apiclient.fragments.WikiFragment;
-import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
+import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.utils.Log;
 
 public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks {

@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.List;
+
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.SearchArrayAdapter;
@@ -18,8 +20,6 @@ import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.imageloader.ImageLoader;
-
-import java.util.List;
 
 /**
  * Created by User on 18.12.2014.

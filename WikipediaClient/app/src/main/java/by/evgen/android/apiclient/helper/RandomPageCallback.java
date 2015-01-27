@@ -1,8 +1,9 @@
 package by.evgen.android.apiclient.helper;
 
 
-
 import android.content.Context;
+
+import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.bo.Category;
@@ -10,8 +11,6 @@ import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.processing.RandomProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.utils.Log;
-
-import java.util.List;
 
 /**
  * Created by User on 05.01.2015.

@@ -3,7 +3,6 @@ package by.evgen.android.apiclient.source;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -33,7 +32,7 @@ public class VkDataSource extends CachedHttpDataSource {
     public static VkDataSource get(Context context) {
         //TODO remove from this place
         if (!Authorized.isLogged()) {
-            Toast.makeText(context, "You must login", Toast.LENGTH_SHORT).show();
+ //           Toast.makeText(context, "You must login", Toast.LENGTH_SHORT).show();
             return null;
         }
         return CoreApplication.get(context, KEY);
@@ -49,7 +48,7 @@ public class VkDataSource extends CachedHttpDataSource {
             return super.getResult(url);
         } else {
             //TODO your error!!!
-            Toast.makeText(mContext, "You must login", Toast.LENGTH_SHORT).show();
+   //         Toast.makeText(mContext, "You must login", Toast.LENGTH_SHORT).show();
         }
         return null;
     }

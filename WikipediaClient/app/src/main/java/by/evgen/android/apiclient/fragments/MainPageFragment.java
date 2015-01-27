@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,7 +18,6 @@ import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.processing.MainPageProcessor;
-import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 

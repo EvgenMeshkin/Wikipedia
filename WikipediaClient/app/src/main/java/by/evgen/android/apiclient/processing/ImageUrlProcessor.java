@@ -1,13 +1,13 @@
 package by.evgen.android.apiclient.processing;
 
-import by.evgen.android.apiclient.bo.Category;
-
 import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import by.evgen.android.apiclient.bo.Category;
 
 /**
  * Created by User on 19.11.2014.

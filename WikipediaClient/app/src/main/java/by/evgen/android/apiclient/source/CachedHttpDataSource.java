@@ -1,8 +1,7 @@
 package by.evgen.android.apiclient.source;
+
 import android.content.Context;
 import android.util.Log;
-
-import by.evgen.android.apiclient.CoreApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +16,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import by.evgen.android.apiclient.CoreApplication;
 
 /**
  * Created by User on 04.12.2014.

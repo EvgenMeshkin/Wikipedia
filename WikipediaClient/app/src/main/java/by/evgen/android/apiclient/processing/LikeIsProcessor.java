@@ -1,7 +1,5 @@
 package by.evgen.android.apiclient.processing;
 
-import android.util.Log;
-
 import org.json.JSONObject;
 
 import java.io.InputStream;

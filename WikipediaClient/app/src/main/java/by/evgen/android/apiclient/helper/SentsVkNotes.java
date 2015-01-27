@@ -3,16 +3,13 @@ package by.evgen.android.apiclient.helper;
 import android.content.Context;
 import android.widget.Toast;
 
+import java.util.List;
+
 import by.evgen.android.apiclient.Api;
-import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.processing.NoteProcessor;
 import by.evgen.android.apiclient.processing.NotesAllProcessor;
-import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
-import by.evgen.android.apiclient.utils.Log;
-
-import java.util.List;
 
 /**
  * Created by evgen on 11.01.2015.

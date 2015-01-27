@@ -6,10 +6,10 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.evgen.android.imageloader.ImageLoader;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.imageloader.ImageLoader;
 
 /**
  * Created by evgen on 18.10.2014.

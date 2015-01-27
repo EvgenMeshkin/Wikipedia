@@ -1,7 +1,5 @@
 package by.evgen.android.apiclient.processing;
 
-import by.evgen.android.apiclient.bo.JSONObjectWrapper;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

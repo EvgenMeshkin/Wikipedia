@@ -6,13 +6,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import by.evgen.android.apiclient.Api;
-import by.evgen.android.apiclient.auth.VkOAuthHelper;
-import by.evgen.android.apiclient.bo.Category;
-import by.evgen.android.apiclient.processing.NoteProcessor;
-import by.evgen.android.apiclient.processing.NotesAllProcessor;
-import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.processing.StorageSetProcessor;
-import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 

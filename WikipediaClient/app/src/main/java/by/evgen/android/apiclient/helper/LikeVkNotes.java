@@ -4,9 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import by.evgen.android.apiclient.Api;
-import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.processing.LikeIsProcessor;
-import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 

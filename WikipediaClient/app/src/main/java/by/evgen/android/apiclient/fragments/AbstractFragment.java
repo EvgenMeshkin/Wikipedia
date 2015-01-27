@@ -2,7 +2,6 @@ package by.evgen.android.apiclient.fragments;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import by.evgen.android.apiclient.bo.Category;
-import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
