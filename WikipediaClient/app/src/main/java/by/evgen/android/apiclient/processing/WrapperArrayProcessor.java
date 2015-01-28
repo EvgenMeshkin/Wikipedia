@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.evgen.android.apiclient.utils.Log;
+
 /**
  * Created by User on 22.10.2014.
  */
@@ -20,9 +22,10 @@ public abstract class WrapperArrayProcessor <T> implements Processor<List<T>,Inp
         JSONArray array = createArray(jsonObject);
         List<T> noteArray = new ArrayList<T>(array.length());
         for (int i = 0; i < array.length(); i++) {
-            JSONObject jsonObject2 = array.getJSONObject(i);
-            noteArray.add(createObject(jsonObject2));
+            JSONObject object = array.getJSONObject(i);
+            noteArray.add(createObject(object));
         }
+        Log.text(getClass(), noteArray.toString());
         return noteArray;
     }
 

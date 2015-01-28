@@ -33,7 +33,7 @@ public class SearchArrayAdapter extends ArrayAdapter<Category> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(mContext, R.layout.adapter_item, null);
+            convertView = View.inflate(mContext, R.layout.adapter_item_cardview, null);
         }
         Category item = getItem(position);
         mTitle = (TextView) convertView.findViewById(android.R.id.text1);

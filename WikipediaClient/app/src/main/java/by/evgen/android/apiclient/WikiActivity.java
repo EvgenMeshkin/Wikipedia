@@ -36,6 +36,7 @@ import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.FavouritesFragment;
 import by.evgen.android.apiclient.fragments.MainPageFragment;
+import by.evgen.android.apiclient.fragments.RandomCategoryFragment;
 import by.evgen.android.apiclient.fragments.SettingsFragment;
 import by.evgen.android.apiclient.fragments.WatchListFragment;
 import by.evgen.android.apiclient.fragments.WikiFragment;
@@ -147,7 +148,9 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Random:
-                  new RandomPageCallback(this, this);
+                 // new RandomPageCallback(this, this);
+                  RandomCategoryFragment categoryFragment = new RandomCategoryFragment();
+                  transactionWiki.replace(R.id.framemain, categoryFragment);
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Nearby:

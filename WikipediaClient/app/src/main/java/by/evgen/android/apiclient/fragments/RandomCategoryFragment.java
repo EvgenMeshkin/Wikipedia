@@ -15,46 +15,46 @@ import by.evgen.android.apiclient.adapters.SearchArrayAdapter;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.listener.SearchListViewOnScrollListener;
+import by.evgen.android.apiclient.processing.CategoryMembersProcessor;
 import by.evgen.android.apiclient.processing.Processor;
-import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
- * Created by User on 18.12.2014.
+ * Created by User on 28.01.2015.
  */
-
-public class SearchFragment extends AbstractFragment {
+public class RandomCategoryFragment extends AbstractFragment {
 
     private ArrayAdapter mAdapter;
     private ImageLoader mImageLoader;
     private Context mContext;
     private String mValue;
     private ListView mListView;
-    private DataSource mVkDataSource;
+    private DataSource mHttpDataSource;
     private final int COUNT = 50;
-    private SearchPagesProcessor mSearchPagesProcessor = new SearchPagesProcessor();
+    private CategoryMembersProcessor mCategoryProcessor = new CategoryMembersProcessor();
 
     @Override
     public View getViewLayout(LayoutInflater inflater) {
         View content = inflater.inflate(R.layout.fragment_wiki, null);
         mContext = getActivity();
-        mVkDataSource = HttpDataSource.get(mContext);
+        mHttpDataSource = HttpDataSource.get(mContext);
         mListView = (ListView) content.findViewById(android.R.id.list);
-        mValue = getArguments().getString("key");
+        //mValue = getArguments().getString("key");
         mImageLoader = ImageLoader.get(mContext);
         return content;
     }
 
     @Override
     public DataSource getDataSource() {
-        return mVkDataSource;
+        return mHttpDataSource;
     }
 
     @Override
     public Processor getProcessor() {
-        return mSearchPagesProcessor;
+        return mCategoryProcessor;
     }
 
     @Override
@@ -64,11 +64,12 @@ public class SearchFragment extends AbstractFragment {
 
     @Override
     public void onExecute(List data) {
+        Log.text(getClass(), data.toString());
         if (mAdapter == null) {
             mAdapter = new SearchArrayAdapter(mContext, R.layout.adapter_item_cardview, data);
             mListView.setFooterDividersEnabled(true);
             mListView.setAdapter(mAdapter);
-            mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
+           // mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -83,8 +84,9 @@ public class SearchFragment extends AbstractFragment {
     }
 
     private String getUrl(int count, int offset) {
-        String search = Api.SEARCH_GET + "srlimit=" + count + "&sroffset=" + offset + "&srsearch=" + mValue;
+        String search = Api.RANDOM_PAGE_GET;
         return search;
     }
 
 }
+
