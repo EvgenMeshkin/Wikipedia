@@ -12,6 +12,8 @@ import android.graphics.Shader;
  */
 public class CircleMaskedBitmap {
 
+    public static boolean CIRCLE = true;
+
     public static synchronized Bitmap scaleTo(Bitmap source, int size){
 
         int destWidth = source.getWidth();
@@ -32,15 +34,19 @@ public class CircleMaskedBitmap {
         if (source == null){
             return null;
         }
-        int diam = radius << 1;
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        Bitmap scaledBitmap = scaleTo(source, diam);
-        final Shader shader = new BitmapShader(scaledBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        paint.setShader(shader);
-        Bitmap targetBitmap = Bitmap.createBitmap(diam, diam, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(targetBitmap);
-        canvas.drawCircle(radius, radius, radius, paint);
-        return targetBitmap;
+        if (CIRCLE) {
+            int diam = radius << 1;
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            Bitmap scaledBitmap = scaleTo(source, diam);
+            final Shader shader = new BitmapShader(scaledBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            paint.setShader(shader);
+            Bitmap targetBitmap = Bitmap.createBitmap(diam, diam, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(targetBitmap);
+            canvas.drawCircle(radius, radius, radius, paint);
+            return targetBitmap;
+        } else {
+            return source;
+        }
     }
 
 }

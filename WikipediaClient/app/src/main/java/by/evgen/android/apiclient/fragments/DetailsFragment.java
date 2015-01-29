@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -20,6 +21,9 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.helper.LikeVkNotes;
+import by.evgen.android.apiclient.helper.SentsVkNotes;
+import by.evgen.android.apiclient.helper.SentsVkStorage;
 import by.evgen.android.apiclient.helper.WikiContentPageCallback;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
@@ -32,7 +36,7 @@ import by.evgen.android.apiclient.utils.Log;
  */
 
 
-public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks {
+public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks, SentsVkNotes.Callbacks {
 
     private MobileViewProcessor mMobileViewProcessor = new MobileViewProcessor();
     private HttpDataSource mHttpDataSource;
@@ -44,16 +48,22 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     private String mTextHtml;
     private String mHistory;
     public ImageButton mImageButton;
+    public ImageButton mNoteButton;
+    public ImageButton mStorageButton;
     private final Uri WIKI_URI = Uri
             .parse("content://by.evgen.android.apiclient.GeoData/geodata");
     private final String WIKI_NAME = "name";
     private final String WIKI_DATE = "wikidate";
-    final String LOG_TAG = DetailsFragment.class.getSimpleName();
 
     @Override
     public void onStop() {
         dismissProgress();
         super.onStop();
+    }
+
+    @Override
+    public void onReturnId(Long id) {
+
     }
 
     public interface Callbacks {
@@ -82,11 +92,33 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         mHttpDataSource = HttpDataSource.get(mContext);
         mObj = getArguments().getParcelable("key");
         if (mObj != null) {
+            mHistory = mObj.getTitle();
             mWebView = (WebView) content.findViewById(R.id.webView);
             mProgress = content.findViewById(android.R.id.progress);
             mImageButton = (ImageButton)content.findViewById(R.id.imageButton);
+            mImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new LikeVkNotes(mContext, mHistory.replaceAll(" ", "_"));
+                }
+            });
+            mNoteButton = (ImageButton)content.findViewById(R.id.noteButton);
+            mNoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.text(getClass(), "noteButton click");
+                    new SentsVkNotes(DetailsFragment.this, mContext, mHistory.replaceAll(" ", "_"));
+                }
+            });
+            mStorageButton = (ImageButton)content.findViewById(R.id.storageButton);
+            mStorageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.text(getClass(), "sentStorage");
+                    new SentsVkStorage(mContext, mHistory.replaceAll(" ", "_"));
+                }
+            });
             mWebView.setWebViewClient(new WikiWebViewClient());
-            mHistory = mObj.getTitle().replaceAll(" ", "_");
             content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
         }
         return content;
@@ -132,6 +164,8 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
                 public boolean onLongClick(View v) {
                     Log.text(getClass(), "Long Click");
                     mImageButton.setVisibility(View.VISIBLE);
+                    mNoteButton.setVisibility(View.VISIBLE);
+                    mStorageButton.setVisibility(View.VISIBLE);
                     return false;
                 }
             });

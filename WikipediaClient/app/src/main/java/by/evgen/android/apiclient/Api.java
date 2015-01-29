@@ -32,6 +32,4 @@ public class Api {
     public static final String STORAGE_SET = BASE_PATH_VK + "storage.set?v=5.27&key=";
     public static final String STORAGE_KEYS_GET = BASE_PATH_VK + "storage.getKeys?v=5.27";
 
-
-
 }

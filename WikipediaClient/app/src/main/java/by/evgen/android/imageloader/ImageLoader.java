@@ -124,7 +124,7 @@ public class ImageLoader {
                 List<Category> data = (List<Category>)procesUrl;
                 String str = data.get(0).getUrlImage();
                 str = str.substring(str.indexOf("px")-2, str.indexOf("px")+2);
-                String url = data.get(0).getUrlImage().replaceAll(str,"100px");
+                String url = data.get(0).getUrlImage().replaceAll(str,"300px");
                 InputStream dataSource = mMemoryValue.dataSource.getResult(url);
                 Object processingResult = mMemoryValue.processor.process(dataSource);
                 Bitmap bmp = (Bitmap) processingResult;

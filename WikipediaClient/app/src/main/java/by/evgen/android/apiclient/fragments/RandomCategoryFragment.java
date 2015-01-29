@@ -21,6 +21,7 @@ import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.utils.Log;
+import by.evgen.android.imageloader.CircleMaskedBitmap;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -29,9 +30,7 @@ import by.evgen.android.imageloader.ImageLoader;
 public class RandomCategoryFragment extends AbstractFragment {
 
     private ArrayAdapter mAdapter;
-    private ImageLoader mImageLoader;
     private Context mContext;
-    private String mValue;
     private ListView mListView;
     private DataSource mHttpDataSource;
     private final int COUNT = 50;
@@ -43,8 +42,6 @@ public class RandomCategoryFragment extends AbstractFragment {
         mContext = getActivity();
         mHttpDataSource = HttpDataSource.get(mContext);
         mListView = (ListView) content.findViewById(android.R.id.list);
-        //mValue = getArguments().getString("key");
-        mImageLoader = ImageLoader.get(mContext);
         return content;
     }
 
@@ -67,13 +64,10 @@ public class RandomCategoryFragment extends AbstractFragment {
     public void onExecute(List data) {
         Log.text(getClass(), data.toString());
         if (mAdapter == null) {
+            CircleMaskedBitmap.CIRCLE = false;
             mAdapter = new RandomArrayAdapter(mContext, R.layout.adapter_item_cardview, data);
             mListView.setFooterDividersEnabled(true);
             mListView.setAdapter(mAdapter);
-
-
-
-           // mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,5 +86,10 @@ public class RandomCategoryFragment extends AbstractFragment {
         return search;
     }
 
+    @Override
+    public void onStop() {
+        CircleMaskedBitmap.CIRCLE = true;
+        super.onStop();
+    }
 }
 

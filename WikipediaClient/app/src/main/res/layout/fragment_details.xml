@@ -45,7 +45,31 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         android:scaleType="fitXY"
+        android:onClick="onLikeClick"
         android:visibility="gone"
         android:src="@drawable/vkbutton"/>
+    <ImageButton
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:id="@+id/noteButton"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/imageButton"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:onClick="onNoteClick"
+        android:visibility="gone"
+        android:src="@drawable/vk_note"/>
+    <ImageButton
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:id="@+id/storageButton"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/noteButton"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:onClick="onStorageClick"
+        android:visibility="gone"
+        android:src="@drawable/vk_storage"/>
+
 
 </RelativeLayout>
