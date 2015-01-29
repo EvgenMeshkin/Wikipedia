@@ -25,6 +25,7 @@ public class Category extends JSONObjectWrapper {
     private static final String LINE = "line";
     private static final String TEXT = "text";
     private static final String TEXTP = "*";
+    private static final String EXTRACT = "extract";
 
     private static final String NAME = "NAME";
 
@@ -93,6 +94,10 @@ public class Category extends JSONObjectWrapper {
 
     public String getDist() {
         return getString(DIST);
+    }
+
+    public String getExtract() {
+        return getString(EXTRACT);
     }
 
     public Long getId() {

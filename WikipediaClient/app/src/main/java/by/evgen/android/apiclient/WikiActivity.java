@@ -76,6 +76,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, viewsNames));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
+        displayView(1);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar,
                 R.string.app_name, // nav drawer open - description for accessibility

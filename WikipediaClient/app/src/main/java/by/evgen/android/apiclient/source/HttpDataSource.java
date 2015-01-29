@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by evgen on 18.10.2014.
@@ -17,6 +18,7 @@ public class HttpDataSource implements DataSource<InputStream, String> {
     public static final String KEY = "HttpDataSource";
 
     public static HttpDataSource get(Context context) {
+        Log.text(HttpDataSource.class, "getContext");
         return CoreApplication.get(context, KEY);
     }
 

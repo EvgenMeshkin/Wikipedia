@@ -6,6 +6,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
+import by.evgen.android.apiclient.helper.LoaderRandomArray;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
@@ -26,6 +27,7 @@ public class CoreApplication extends Application {
         mGetService.put(VkDataSource.KEY, new VkDataSource(this));
         mGetService.put(CachedHttpDataSource.KEY, new CachedHttpDataSource(this));
         mGetService.put(ImageLoader.KEY, new ImageLoader(this));
+        mGetService.put(LoaderRandomArray.KEY, new LoaderRandomArray(this));
   }
 
     @Override

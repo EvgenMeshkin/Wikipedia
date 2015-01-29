@@ -19,7 +19,7 @@ public class Api {
     public static final String MOBILE_GET = BASE_PATH + "action=mobileview&sections=all&format=json&page=";
     public static final String MAIN_PAGE_GET = BASE_PATH + "action=parse&page=Main%20Page&mobileformat=html&prop=text&format=json";
     public static final String RANDOM_PAGE_GET = BASE_PATH + "action=query&list=categorymembers&format=json&cmnamespace=0&cmlimit=100&cmtitle=Category:Physics";
-    public static final String EXTRAS_PAGE_GET = BASE_PATH + "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=1&explaintext=1&titles=";
+    public static final String EXTRAS_PAGE_GET = BASE_PATH + "action=query&prop=extracts&format=json&exintro=1&explaintext=1&titles=";
     public static final String MAIN_URL = "https://http://en.wikipedia.org/wiki/";
 
 

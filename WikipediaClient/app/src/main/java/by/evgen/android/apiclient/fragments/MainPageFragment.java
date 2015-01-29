@@ -18,15 +18,17 @@ import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.processing.MainPageProcessor;
+import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by evgen on 24.01.2015.
  */
 public class MainPageFragment extends AbstractFragment {
 
-    private MainPageProcessor mMainPageProcessor = new MainPageProcessor();
+    private MobileViewProcessor mMobileProcessor = new MobileViewProcessor();
     private HttpDataSource mHttpDataSource;
     private WebView mWebView;
     private View mProgress;
@@ -64,12 +66,12 @@ public class MainPageFragment extends AbstractFragment {
         return mHttpDataSource;
     }
 
-    public MainPageProcessor getProcessor() {
-        return mMainPageProcessor;
+    public MobileViewProcessor getProcessor() {
+        return mMobileProcessor;
     }
 
     public String getUrl() {
-        String url = Api.MAIN_PAGE_GET;
+        String url = Api.MOBILE_GET + Uri.encode("Main page");
         return url;
     }
 
@@ -87,8 +89,9 @@ public class MainPageFragment extends AbstractFragment {
             Toast.makeText(mContext, "No data", Toast.LENGTH_SHORT).show();
         } else {
             for (int i = 0; i < data.size(); i++) {
-                mTextHtml = mTextHtml + mData.get(i).getTextPage();
+                mTextHtml = mTextHtml + mData.get(i).getText();
             }
+            Log.text(getClass(), mTextHtml);
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setLoadWithOverviewMode(true);

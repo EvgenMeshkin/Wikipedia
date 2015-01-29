@@ -5,12 +5,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.utils.FindResponder;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by User on 22.10.2014.
@@ -41,6 +43,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     private Context mContext;
     private String mTextHtml;
     private String mHistory;
+    public ImageButton mImageButton;
     private final Uri WIKI_URI = Uri
             .parse("content://by.evgen.android.apiclient.GeoData/geodata");
     private final String WIKI_NAME = "name";
@@ -81,6 +84,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         if (mObj != null) {
             mWebView = (WebView) content.findViewById(R.id.webView);
             mProgress = content.findViewById(android.R.id.progress);
+            mImageButton = (ImageButton)content.findViewById(R.id.imageButton);
             mWebView.setWebViewClient(new WikiWebViewClient());
             mHistory = mObj.getTitle().replaceAll(" ", "_");
             content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
@@ -122,14 +126,21 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setLoadWithOverviewMode(true);
-            webSettings.setBuiltInZoomControls(true);
+            mWebView.setLongClickable(true);
+            mWebView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.text(getClass(), "Long Click");
+                    mImageButton.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            });
             mWebView.loadDataWithBaseURL("https://en.wikipedia.org/", mTextHtml, "text/html", "utf-8", null);
         }
     }
 
     public void notifyWebView(Integer position) {
         mWebView.loadDataWithBaseURL("https://en.wikipedia.org/" + "#" + mContent.get(position).toString().replaceAll(" ", "_"), mTextHtml, "text/html", "utf-8", null);
-        Log.i(LOG_TAG, mContent.get(position).toString().replaceAll(" ", "_"));
     }
 
     private void dismissProgress() {
@@ -154,7 +165,6 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             mHistory = url.substring(position + 1);
             NoteGsonModel note = new NoteGsonModel(null, mHistory, mObj.getContent());
             showDetails(note);
-            Log.i(LOG_TAG, mHistory + mObj.getContent());
             showProgress();
             return true;
         }

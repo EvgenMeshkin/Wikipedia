@@ -11,6 +11,7 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.adapters.RandomArrayAdapter;
 import by.evgen.android.apiclient.adapters.SearchArrayAdapter;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
@@ -66,9 +67,12 @@ public class RandomCategoryFragment extends AbstractFragment {
     public void onExecute(List data) {
         Log.text(getClass(), data.toString());
         if (mAdapter == null) {
-            mAdapter = new SearchArrayAdapter(mContext, R.layout.adapter_item_cardview, data);
+            mAdapter = new RandomArrayAdapter(mContext, R.layout.adapter_item_cardview, data);
             mListView.setFooterDividersEnabled(true);
             mListView.setAdapter(mAdapter);
+
+
+
            // mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
