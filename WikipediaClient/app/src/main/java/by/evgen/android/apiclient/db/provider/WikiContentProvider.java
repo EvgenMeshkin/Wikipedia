@@ -26,6 +26,7 @@ public class WikiContentProvider extends ContentProvider {
     static final String WIKI_DATE = "wikidate";
     // Uri
     // authority
+    //TODO why GeoData equals WIKI_PATH and usedin WatchList ?
     static final String AUTHORITY = "by.evgen.android.apiclient.GeoData";
     static final String WIKI_PATH = "geodata";
     public static final Uri WIKI_CONTENT_URI = Uri.parse("content://"
@@ -95,6 +96,8 @@ public class WikiContentProvider extends ContentProvider {
         return resultUri;
     }
 
+    //TODO add overides to all overrided methods
+    @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.d(LOG_TAG, "delete, " + uri.toString());
         switch (uriMatcher.match(uri)) {
@@ -114,7 +117,8 @@ public class WikiContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
         db = dbHelper.getWritableDatabase();
-        int cnt = db.delete(WIKI_TABLE, null, null);
+        //TODO
+        int cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
     }

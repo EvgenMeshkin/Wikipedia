@@ -5,7 +5,8 @@ package by.evgen.android.apiclient.utils;
  */
 public class Constant {
 
-    private static final String GEOSEARCH = "geosearch";
+    //TODO
+    public static final String GEOSEARCH = "geosearch";
     private static final String QUERY = "query";
     private static final String PAGES = "pages";
     private static final String KEY = "key";

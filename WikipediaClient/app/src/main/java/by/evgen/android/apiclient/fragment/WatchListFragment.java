@@ -11,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.DateAdapter;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.FindResponder;
 import by.evgen.android.apiclient.utils.Log;
@@ -38,10 +40,10 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
     public  String str;
     public String[] mFrom;
     public int[] mTo;
+    //TODO
     public LoaderManager mLoadermanager;
     public CursorLoader mCursorLoader;
-    final Uri WIKI_URI = Uri
-            .parse("content://by.evgen.android.apiclient.GeoData/geodata");
+
     private final String KEY = "key";
 
     public interface Callbacks {
@@ -59,7 +61,8 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
             Log.text(getClass(), "Loader create" + val);
         }
         if (context != null) {
-            mCursorLoader = new CursorLoader(getActivity(), WIKI_URI, mFrom, "name LIKE  '%" + val + "%'", null, null);
+            //TODO make ? params
+            mCursorLoader = new CursorLoader(getActivity(), WikiContentProvider.WIKI_CONTENT_URI, mFrom, "name LIKE  '%" + val + "%'", null, null);
             Log.text(getClass(), mCursorLoader.toString());
             return mCursorLoader;
         } else {
@@ -73,6 +76,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         Context context = getActivity();
         if (context != null) {
             mFrom = new String[]{Constant.getDbid(), Constant.getDbName(), Constant.getDbDate()};
+            //TODO
             mTo = new int[]{R.id.text1, R.id.text2};
             mAdapter = new DateAdapter(context, R.layout.adapter_item, data, mFrom, mTo);
             mListView.setAdapter(mAdapter);
@@ -111,6 +115,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         return mContent;
     }
 
+    //TODO rename to something else
     private void setData (){
         mLoadermanager = getLoaderManager();
         mLoadermanager.initLoader(1, null, this);
@@ -153,6 +158,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
     public void refreshSearch (Bundle bundle){
         Log.text(getClass(), "refresz");
         mLoadermanager = getLoaderManager();
+        //TODO 2 why not 3 or 5? Let make it 8
         mLoadermanager.initLoader(2, bundle, this);
     }
 
