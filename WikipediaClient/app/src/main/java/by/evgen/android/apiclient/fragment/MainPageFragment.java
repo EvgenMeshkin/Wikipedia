@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.fragments;
+package by.evgen.android.apiclient.fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +17,6 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.processing.MainPageProcessor;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;

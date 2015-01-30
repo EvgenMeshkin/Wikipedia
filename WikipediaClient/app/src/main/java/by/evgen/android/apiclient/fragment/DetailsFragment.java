@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.fragments;
+package by.evgen.android.apiclient.fragment;
 
 
 import android.content.ContentValues;
@@ -6,8 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -78,9 +76,11 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     public void setListData(List<Category> data) {
-        mContent = data;
-        Callbacks callbacks = getCallbacks();
-        callbacks.onSetContents(data);
+        if (data != null) {
+            mContent = data;
+            Callbacks callbacks = getCallbacks();
+            callbacks.onSetContents(data);
+        }
     }
 
     private Callbacks getCallbacks() {

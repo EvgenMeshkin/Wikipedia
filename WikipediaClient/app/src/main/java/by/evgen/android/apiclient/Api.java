@@ -6,18 +6,12 @@ package by.evgen.android.apiclient;
 public class Api {
 
     public static final String BASE_PATH = "https://en.wikipedia.org/w/api.php?";
-    public static final String VERSION_VALUE = "5.8";
-    public static final String VERSION_PARAM = "v";
-
-    public static final String CATEGORY_GET = BASE_PATH + "action=query&prop=categories&format=json&titles=Albert%20Einstein";
     public static final String GEOSEARCH_GET = BASE_PATH + "action=query&list=geosearch&format=json&gslimit=100&gsradius=10000&gscoord=";
-    public static final String URLVIEW_GET = BASE_PATH + "action=query&prop=info&format=json&inprop=protection&inprop=url&titles=";
     public static final String IMAGEVIEW_GET = BASE_PATH + "action=query&prop=pageimages&piprop=thumbnail&format=json&titles=";
     public static final String SEARCH_GET = BASE_PATH + "action=query&list=search&format=json&";//"https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrlimit=50&prop=info&gsrsearch=meaning";
     public static final String CONTENTS_GET = BASE_PATH + "action=mobileview&format=json&page=";
     public static final String RANDOM_GET = BASE_PATH + "action=query&format=json&list=wikigrokrandom";
     public static final String MOBILE_GET = BASE_PATH + "action=mobileview&sections=all&format=json&page=";
-    public static final String MAIN_PAGE_GET = BASE_PATH + "action=parse&page=Main%20Page&mobileformat=html&prop=text&format=json";
     public static final String RANDOM_PAGE_GET = BASE_PATH + "action=query&list=categorymembers&format=json&cmnamespace=0&cmlimit=100&cmtitle=Category:Physics";
     public static final String EXTRAS_PAGE_GET = BASE_PATH + "action=query&prop=extracts&format=json&exintro=1&explaintext=1&titles=";
     public static final String MAIN_URL_HTML = "https://en.wikipedia.org/wiki/";
@@ -30,8 +24,8 @@ public class Api {
     public static final String VKNOTES_ALL_GET =  BASE_PATH_VK + "notes.get?fields=notes$count=100&sort=0&v=5.26";
     public static final String VKLIKEIS_GET = BASE_PATH_VK + "likes.isLiked?type=note&v=5.26&item_id=";
     public static final String VKLIKE_GET = BASE_PATH_VK + "likes.add?type=note&v=5.26&item_id=";
-    public static final String STORAGE_SET = BASE_PATH_VK + "storage.set?v=5.27&key=";
-    public static final String STORAGE_KEYS_GET = BASE_PATH_VK + "storage.getKeys?v=5.27";
+    public static final String STORAGE_SET = BASE_PATH_VK + "storage.set?v=5.28&key=";
+    public static final String STORAGE_KEYS_GET = BASE_PATH_VK + "storage.getKeys?v=5.28";
 
     public static String getStorageKeysGet(int count, int offset) {
         String stor = STORAGE_KEYS_GET + "&count=" + count + "&sroffset=" + offset;
@@ -44,8 +38,14 @@ public class Api {
     }
 
     public static String getStorage(String value) {
+        String str = Api.STORAGE_SET + value +"&value=" + value;
+        return str;
+    }
+
+    public static String getNotes(String value) {
         String str = Api.VKNOTES_GET + value + "&text=" + Api.MAIN_URL_HTML + value;
         return str;
     }
+
 
 }

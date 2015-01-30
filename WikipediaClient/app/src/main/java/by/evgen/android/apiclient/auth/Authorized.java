@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient;
+package by.evgen.android.apiclient.auth;
 
 
 /**

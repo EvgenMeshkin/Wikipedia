@@ -8,8 +8,8 @@ import org.apache.http.auth.AuthenticationException;
 
 import java.io.InputStream;
 
-import by.evgen.android.apiclient.Authorized;
-import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.auth.Authorized;
+import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.auth.secure.EncrManager;
 import by.evgen.android.apiclient.utils.Log;
@@ -26,18 +26,10 @@ public class VkDataSource extends CachedHttpDataSource {
     public VkDataSource(Context context) {
         super(context);
         mContext = context;
-        //TODO init Account
     }
 
-    //TODO add method setAccount(Account );
-
     public static VkDataSource get(Context context) {
-        //TODO remove from this place
-        if (!Authorized.isLogged()) {
-            new AuthenticationException();
-            return null;
-        }
-        return CoreApplication.get(context, KEY);
+        return WikiApplication.get(context, KEY);
     }
 
     @Override
@@ -49,9 +41,8 @@ public class VkDataSource extends CachedHttpDataSource {
             Log.text(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
             return super.getResult(url);
         } else {
-            //new AuthenticationException();
+            throw new AuthenticationException("You must login");
         }
-        return null;
-    }
+   }
 
 }

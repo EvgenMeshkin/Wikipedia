@@ -69,7 +69,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
                                          onErrorSent(e);
                                      }
                                  },
-                    Api.getStorage(mBaseTitle),
+                    Api.getNotes(mBaseTitle),
                     VkDataSource.get(mContext),
                     new NoteProcessor());
         }

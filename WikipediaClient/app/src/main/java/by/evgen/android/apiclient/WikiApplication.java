@@ -16,7 +16,7 @@ import by.evgen.android.imageloader.ImageLoader;
  * Created by evgen on 18.10.2014.
  */
 
-public class CoreApplication extends Application {
+public class WikiApplication extends Application {
 
      private final Map<String, Object> mGetService = new HashMap<String, Object>();
 

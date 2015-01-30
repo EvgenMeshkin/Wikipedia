@@ -13,31 +13,31 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
    <application
-        android:name="by.evgen.android.apiclient.CoreApplication"
+        android:name=".WikiApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name="by.evgen.android.apiclient.StartActivity"
+            android:name=".activity.StartActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="by.evgen.android.apiclient.DetailsFragmentActivity"
-            android:parentActivityName="by.evgen.android.apiclient.WikiActivity"
+            android:name=".activity.DetailsFragmentActivity"
+            android:parentActivityName=".activity.WikiActivity"
             android:label="@string/app_name" >
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value="by.evgen.android.apiclient.WikiActivity" />
+            android:value=".activity.WikiActivity" />
             <meta-data android:name="android.app.default_searchable"
-            android:value="by.evgen.android.apiclient.SearchFragmentActivity" />
+            android:value="by.evgen.android.apiclient.activity.SearchFragmentActivity" />
         </activity>
         <activity
-            android:name="by.evgen.android.apiclient.VkLoginActivity"
+            android:name=".activity.VkLoginActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="by.evgen.android.apiclient.WikiActivity"
+            android:name=".activity.WikiActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:label="@string/app_name">
@@ -46,19 +46,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data android:name="android.app.default_searchable"
-            android:value="by.evgen.android.apiclient.SearchFragmentActivity" />
+            android:value="by.evgen.android.apiclient.activity.SearchFragmentActivity" />
         </activity>
 
         <activity
-            android:name="by.evgen.android.apiclient.SearchFragmentActivity"
-            android:parentActivityName="by.evgen.android.apiclient.WikiActivity"
+            android:name=".activity.SearchFragmentActivity"
+            android:parentActivityName=".activity.WikiActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.evgen.android.apiclient.WikiActivity" />
+                android:value=".activity.WikiActivity" />
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />

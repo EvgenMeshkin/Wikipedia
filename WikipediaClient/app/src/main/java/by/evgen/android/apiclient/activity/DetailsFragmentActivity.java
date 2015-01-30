@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient;
+package by.evgen.android.apiclient.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -15,20 +15,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
+import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
-import by.evgen.android.apiclient.fragments.AbstractFragment;
-import by.evgen.android.apiclient.fragments.DetailsFragment;
+import by.evgen.android.apiclient.fragment.AbstractFragment;
+import by.evgen.android.apiclient.fragment.DetailsFragment;
 import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkStorage;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -41,6 +46,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     private NoteGsonModel mNoteGsonModel;
     private final String KEY = "key";
     private final String KEYNOTE = "keynote";
+    private final int stub_id = R.drawable.strel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DetailsFragment fragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.framemain);
                 fragment.notifyWebView(position);
+                mDrawerLayout.closeDrawer(mDrawerListRight);
             }
         });
         details.setArguments(getIntent().<Bundle>getParcelableExtra(KEY));
@@ -90,18 +97,18 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     public void sentStorage (MenuItem item) {
         Log.text(getClass(), "sentStorage");
-        new SentsVkStorage(this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
+        new SentsVkStorage(this, Decoder.getTitle(mNoteGsonModel.getTitle()));
     }
 
 
     public void sentNote(MenuItem item) {
         Log.text(getClass(), "sentNote");
-        new SentsVkNotes(this, this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
+        new SentsVkNotes(this, this, Decoder.getTitle(mNoteGsonModel.getTitle()));
     }
 
     public void sentLike(MenuItem item) {
         Log.text(getClass(), "sentLike");
-              new LikeVkNotes(this, mNoteGsonModel.getTitle().replaceAll(" ", "_"));
+              new LikeVkNotes(this, Decoder.getTitle(mNoteGsonModel.getTitle()));
     }
 
     @Override
@@ -151,7 +158,25 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     @Override
     public void onSetContents(List data) {
-        mDrawerListRight.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item,android.R.id.text2, data));
+        if (data != null) {
+            mDrawerListRight.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, data) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    if (convertView == null) {
+                        convertView = View.inflate(DetailsFragmentActivity.this, R.layout.adapter_item, null);
+                    }
+                    ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
+                    imageView.setImageResource(stub_id);
+                    TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+                    textView.setText(getItem(position));
+                    if (position == 0){
+                        textView.setText(mNoteGsonModel.getTitle());
+                    }
+                    convertView.setTag(position);
+                    return convertView;
+                }
+            });
+        }
     }
 
 }

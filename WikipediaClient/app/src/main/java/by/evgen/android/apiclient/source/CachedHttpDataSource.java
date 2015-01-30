@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -36,7 +36,7 @@ public class CachedHttpDataSource extends HttpDataSource {
     }
 
     public static CachedHttpDataSource get(Context context) {
-        return CoreApplication.get(context, KEY);
+        return WikiApplication.get(context, KEY);
     }
 
     @Override

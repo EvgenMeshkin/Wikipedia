@@ -22,7 +22,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
 
-import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.os.assist.LIFOLinkedBlockingDeque;
 import by.evgen.android.apiclient.processing.BitmapProcessor;
@@ -40,7 +40,7 @@ public class ImageLoader {
     public static final String KEY = "ImageLoader";
     private Context mContext;
     private AtomicBoolean isPause = new AtomicBoolean(false);
-    final int stub_id = by.evgen.android.apiclient.R.drawable.stub;
+    private final int stub_id = by.evgen.android.apiclient.R.drawable.stub;
     private Set<ImageView> mImagesViews = new HashSet<ImageView>();
     private final Object mLock = new Object();
 
@@ -51,7 +51,7 @@ public class ImageLoader {
     }
 
     public static ImageLoader get(Context context) {
-        return CoreApplication.get(context, KEY);
+        return WikiApplication.get(context, KEY);
     }
 
     public void displayImage(final String url,final ImageView imageView){

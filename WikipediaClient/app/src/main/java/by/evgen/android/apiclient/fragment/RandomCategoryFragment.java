@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.fragments;
+package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,17 +12,14 @@ import java.util.List;
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.RandomArrayAdapter;
-import by.evgen.android.apiclient.adapters.SearchArrayAdapter;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.listener.SearchListViewOnScrollListener;
 import by.evgen.android.apiclient.processing.CategoryMembersProcessor;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.CircleMaskedBitmap;
-import by.evgen.android.imageloader.ImageLoader;
 
 /**
  * Created by User on 28.01.2015.

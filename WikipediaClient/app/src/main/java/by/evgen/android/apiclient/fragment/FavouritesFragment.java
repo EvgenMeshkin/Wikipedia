@@ -1,10 +1,9 @@
-package by.evgen.android.apiclient.fragments;
+package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +23,7 @@ import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -39,8 +39,6 @@ public class FavouritesFragment extends AbstractFragment {
     public List<String> mData;
     public static final int COUNT = 50;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    final static String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
     @Override
     public View getViewLayout(LayoutInflater inflater) {
@@ -118,8 +116,12 @@ public class FavouritesFragment extends AbstractFragment {
     }
 
     public void refreshAdapter(List<String> list) {
-        mAdapter = new FavouritesArrayAdapter(mContext, R.layout.adapter_item, list);
-        mListView.setAdapter(mAdapter);
+        Context context = getActivity();
+        if (context != null) {
+            Log.text(getClass(), "refresh adapter");
+            mAdapter = new FavouritesArrayAdapter(mContext, R.layout.adapter_item, list);
+            mListView.setAdapter(mAdapter);
+        }
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -127,7 +129,6 @@ public class FavouritesFragment extends AbstractFragment {
 
     private String getUrl(int count, int offset) {
         String stor = Api.getStorageKeysGet(count, offset);
-        Log.d(LOG_TAG, "mKor=" + stor);
         return stor;
     }
 

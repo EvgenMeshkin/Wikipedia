@@ -2,7 +2,6 @@ package by.evgen.android.apiclient.helper;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,14 +15,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import by.evgen.android.apiclient.Api;
-import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.os.assist.LIFOLinkedBlockingDeque;
 import by.evgen.android.apiclient.processing.ExtrasProcessor;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
-import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -44,7 +42,7 @@ public class LoaderRandomArray {
     }
 
     public static LoaderRandomArray get(Context context) {
-        return CoreApplication.get(context, KEY);
+        return WikiApplication.get(context, KEY);
     }
 
     public void displayView(final String title, final View convertView){

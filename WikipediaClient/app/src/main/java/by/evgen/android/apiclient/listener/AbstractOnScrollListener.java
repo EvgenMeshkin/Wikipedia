@@ -27,7 +27,7 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     public ArrayAdapter mAdapter;
     public View mFooterProgress;
     public boolean isImageLoaderControlledByDataManager = false;
-    public static final int COUNT = 50;
+    public static final int COUNT = 100;
     public ImageLoader mImageLoader;
     private boolean isPagingEnabled = true;
     public String mValue;
@@ -125,10 +125,15 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
 
     @Override
     public void onPostExecute(List<Category> data) {
-        updateAdapter(data);
+            if (mAdapter == null) {
+                updateAdapter(data);
+            mImageLoader.resume();
+            isImageLoaderControlledByDataManager = false;
+        } else {
+            data.clear();
+            updateAdapter(data);
+        }
         refreshFooter();
-        mImageLoader.resume();
-        isImageLoaderControlledByDataManager = false;
     }
 
     @Override

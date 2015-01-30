@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.fragments;
+package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -34,7 +34,7 @@ public class SearchFragment extends AbstractFragment {
     private String mValue;
     private ListView mListView;
     private DataSource mVkDataSource;
-    private final int COUNT = 50;
+    private final int COUNT = 100;
     private SearchPagesProcessor mSearchPagesProcessor = new SearchPagesProcessor();
 
     @Override

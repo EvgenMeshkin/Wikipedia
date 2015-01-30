@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.os.assist.LIFOLinkedBlockingDeque;
 import by.evgen.android.apiclient.processing.BitmapProcessor;
@@ -49,7 +49,7 @@ public class AbstractLoader {
     }
 
     public static AbstractLoader get(Context context) {
-        return CoreApplication.get(context, KEY);
+        return WikiApplication.get(context, KEY);
     }
 
     public void displayImage(final String url,final ImageView imageView){

@@ -62,6 +62,7 @@ public class SentsVkStorage extends OnErrorCallbacks implements ManagerDownload.
                     Api.getStorage(mBaseUrl),
                     VkDataSource.get(mContext),
                     new StorageSetProcessor());
+            Log.text(getClass(), Api.getStorage(mBaseUrl));
         }
     }
 }

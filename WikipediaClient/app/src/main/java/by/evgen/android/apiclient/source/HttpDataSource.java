@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -19,7 +19,7 @@ public class HttpDataSource implements DataSource<InputStream, String> {
 
     public static HttpDataSource get(Context context) {
         Log.text(HttpDataSource.class, "getContext");
-        return CoreApplication.get(context, KEY);
+        return WikiApplication.get(context, KEY);
     }
 
     @Override

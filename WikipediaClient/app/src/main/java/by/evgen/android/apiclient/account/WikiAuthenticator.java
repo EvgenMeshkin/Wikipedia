@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import by.evgen.android.apiclient.VkLoginActivity;
+import by.evgen.android.apiclient.activity.VkLoginActivity;
 
 /**
  * Created by evgen on 22.01.2015.

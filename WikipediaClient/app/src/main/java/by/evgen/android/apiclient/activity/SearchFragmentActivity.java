@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient;
+package by.evgen.android.apiclient.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -14,9 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.fragments.AbstractFragment;
-import by.evgen.android.apiclient.fragments.SearchFragment;
+import by.evgen.android.apiclient.fragment.AbstractFragment;
+import by.evgen.android.apiclient.fragment.SearchFragment;
 import by.evgen.android.apiclient.utils.Log;
 
 /**

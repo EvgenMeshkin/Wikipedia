@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient;
+package by.evgen.android.apiclient.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -6,10 +6,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.webkit.HttpAuthHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.utils.Log;
 

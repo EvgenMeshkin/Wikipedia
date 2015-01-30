@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient;
+package by.evgen.android.apiclient.activity;
 
 /**
  * Created by User on 30.10.2014.
@@ -32,15 +32,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
-import by.evgen.android.apiclient.fragments.AbstractFragment;
-import by.evgen.android.apiclient.fragments.FavouritesFragment;
-import by.evgen.android.apiclient.fragments.MainPageFragment;
-import by.evgen.android.apiclient.fragments.RandomCategoryFragment;
-import by.evgen.android.apiclient.fragments.SettingsFragment;
-import by.evgen.android.apiclient.fragments.WatchListFragment;
-import by.evgen.android.apiclient.fragments.WikiFragment;
+import by.evgen.android.apiclient.fragment.AbstractFragment;
+import by.evgen.android.apiclient.fragment.FavouritesFragment;
+import by.evgen.android.apiclient.fragment.MainPageFragment;
+import by.evgen.android.apiclient.fragment.RandomCategoryFragment;
+import by.evgen.android.apiclient.fragment.SettingsFragment;
+import by.evgen.android.apiclient.fragment.WatchListFragment;
+import by.evgen.android.apiclient.fragment.WikiFragment;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.utils.Log;

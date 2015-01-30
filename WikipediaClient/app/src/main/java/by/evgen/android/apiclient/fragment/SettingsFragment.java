@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.fragments;
+package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.net.Uri;
