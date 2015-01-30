@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import by.evgen.android.apiclient.Api;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -44,12 +46,12 @@ public class DateAdapter extends SimpleCursorAdapter {
             mDataCursor.moveToPosition(position);
             if (position > 0) {
                 mDataCursor.moveToPrevious();
-                mPrevDate = (new java.sql.Date(mDataCursor.getLong(mDataCursor.getColumnIndex("wikidate")))).toString();
+                mPrevDate = (new java.sql.Date(mDataCursor.getLong(mDataCursor.getColumnIndex(Constant.getDbDate())))).toString();
                 mDataCursor.moveToNext();
             }
-            int title = mDataCursor.getColumnIndex("name");
+            int title = mDataCursor.getColumnIndex(Constant.getDbName());
             String task_title = mDataCursor.getString(title);
-            int title_date = mDataCursor.getColumnIndex("wikidate");
+            int title_date = mDataCursor.getColumnIndex(Constant.getDbDate());
             Long task_day = mDataCursor.getLong(title_date);
             String dt = (new java.sql.Date(task_day)).toString();
             holder = new ViewHolder();
@@ -70,7 +72,7 @@ public class DateAdapter extends SimpleCursorAdapter {
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.sec_hr.setText(dt);
-            final String urlImage = Api.IMAGEVIEW_GET + task_title.replaceAll(" ", "%20");
+            final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(task_title);
             holder.name.setText(task_title);
             mImageLoader.displayImage(urlImage, holder.img);
             return convertView;

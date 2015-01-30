@@ -23,6 +23,8 @@ import by.evgen.android.apiclient.processing.ExtrasProcessor;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -125,7 +127,7 @@ public class LoaderRandomArray {
             if (category != null) {
                 title.setText(category.getTitle());
                 content.setText(category.getExtract());
-                final String urlImage = Api.IMAGEVIEW_GET + category.getTitle().replaceAll(" ", "%20");
+                final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(category.getTitle());
                 imageView.setImageBitmap(null);
                 imageView.setTag(urlImage);
                 ImageLoader imageLoader = ImageLoader.get(mContext);

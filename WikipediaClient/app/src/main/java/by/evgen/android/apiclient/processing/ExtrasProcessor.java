@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import by.evgen.android.apiclient.bo.Category;
-import by.evgen.android.apiclient.bo.Constant;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
 /**

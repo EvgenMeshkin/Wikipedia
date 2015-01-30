@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.evgen.android.apiclient.utils.Constant;
+
 /**
  * Created by User on 21.01.2015.
  */
@@ -16,7 +18,7 @@ public class StorageGetKeysProcessor implements Processor<List<String>,InputStre
     public List<String> process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        JSONArray array = (JSONArray) jsonObject.get("response");
+        JSONArray array = (JSONArray) jsonObject.get(Constant.getResponse());
         List<String> noteArray = new ArrayList<String>(array.length());
         for (int i = 0; i < array.length(); i++) {
             String stringValue = array.getString(i);

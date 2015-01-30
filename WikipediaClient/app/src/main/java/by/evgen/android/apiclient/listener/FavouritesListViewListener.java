@@ -34,7 +34,7 @@ public class FavouritesListViewListener extends AbstractOnScrollListener {
 
     @Override
     public String getUrl(int count, int offset) {
-        String url = Api.STORAGE_KEYS_GET + "&count="+count+"&sroffset="+offset;
+        String url = Api.getStorageKeysGet(count, offset);
         return url;
     }
 

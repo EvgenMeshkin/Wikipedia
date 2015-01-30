@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -51,11 +52,15 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] viewsNames;
-    private View headerDrawer;
+    private String[] mViewsNames;
+    private View mHeaderDrawer;
     private enum mMenuValue {Home, Random, Nearby, Favourites, Watchlist, Settings, Log_in};
     private final String KEY = "key";
     private final String KEYNOTE = "keynote";
+    private final Uri WIKI_URI = Uri
+            .parse("content://by.evgen.android.apiclient.GeoData/geodata");
+    private MenuItem mClearHist;
+    private boolean mVisible = false;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -65,15 +70,21 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         mTitle = getTitle();
+        if (Authorized.isLogged()){
+            Log.text(getClass(), "LoadDataUser  -  " );
+            new LoadVkUserData(this, this);
+            mHeaderDrawer = View.inflate(this, R.layout.view_header, null);
+        } else {
+            mHeaderDrawer = View.inflate(this, R.layout.view_header_start, null);
+        }
         mDrawerTitle = getResources().getString(R.string.menu);
-        viewsNames = getResources().getStringArray(R.array.views_array);
+        mViewsNames = getResources().getStringArray(R.array.views_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark_material_light));
-        headerDrawer = View.inflate(this, R.layout.view_header, null);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.addHeaderView(headerDrawer);
+        mDrawerList.addHeaderView(mHeaderDrawer);
         mDrawerList.setHeaderDividersEnabled(true);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, viewsNames));
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, mViewsNames));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
         displayView(1);
@@ -95,18 +106,14 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        if (Authorized.isLogged()){
-            Log.text(getClass(), "LoadDataUser  -  " );
-            new LoadVkUserData(this, this);
-        }
     }
 
     @Override
     public void onUserData(Bitmap foto, String first, String last) {
         Log.text(this.getClass(), "FirstName" + first);
-        TextView firstname = (TextView) headerDrawer.findViewById(R.id.text1);
-        TextView lastname = (TextView) headerDrawer.findViewById(R.id.text2);
-        ImageView fotos = (ImageView) headerDrawer.findViewById(R.id.icon);
+        TextView firstname = (TextView) mHeaderDrawer.findViewById(R.id.text1);
+        TextView lastname = (TextView) mHeaderDrawer.findViewById(R.id.text2);
+        ImageView fotos = (ImageView) mHeaderDrawer.findViewById(R.id.icon);
         fotos.setImageBitmap(foto);
         firstname.setText(first);
         lastname.setText(last);
@@ -142,29 +149,33 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private void displayView(int position) {
       if (position != 0) {
           FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
-          switch (mMenuValue.valueOf(viewsNames[position - 1])) {
+          switch (mMenuValue.valueOf(mViewsNames[position - 1])) {
               case Home:
                   MainPageFragment fragmentPage = new MainPageFragment();
                   transactionWiki.replace(R.id.framemain, fragmentPage);
+                  mVisible = false;
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Random:
-                 // new RandomPageCallback(this, this);
                   RandomCategoryFragment categoryFragment = new RandomCategoryFragment();
                   transactionWiki.replace(R.id.framemain, categoryFragment);
+                  mVisible = false;
                   mDrawerLayout.closeDrawer(mDrawerList);
                   break;
               case Nearby:
                   WikiFragment fragmentWiki = new WikiFragment();
                   transactionWiki.replace(R.id.framemain, fragmentWiki);
-                   break;
+                  mVisible = false;
+                  break;
               case Favourites:
                   FavouritesFragment fragmentFavor = new FavouritesFragment();
                   transactionWiki.replace(R.id.framemain, fragmentFavor);
+                  mVisible = true;
                   break;
               case Watchlist:
                   WatchListFragment fragmentWatch = new WatchListFragment();
                   transactionWiki.replace(R.id.framemain, fragmentWatch);
+                  mVisible = true;
                   break;
               case Settings:
                   SettingsFragment settingsFragment = new SettingsFragment();
@@ -190,7 +201,14 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         MenuItem search =  menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mClearHist =  menu.findItem(R.id.clearHist);
+        mClearHist.setVisible(mVisible);
         return true;
+    }
+
+    public void clearHist (MenuItem item) {
+        Log.text(getClass(), "Clear history");
+        this.getContentResolver().delete(WIKI_URI, null, null);
     }
 
     @Override

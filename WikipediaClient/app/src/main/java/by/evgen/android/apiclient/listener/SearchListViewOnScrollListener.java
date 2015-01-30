@@ -31,7 +31,7 @@ public class SearchListViewOnScrollListener extends AbstractOnScrollListener {
 
     @Override
     public String getUrl(int count, int offset) {
-            String url = Api.SEARCH_GET + "srlimit="+count+"&sroffset="+offset + "&srsearch=" + mValue;
+            String url = Api.getSearchGet(count, offset) + mValue;
             return url;
     }
 

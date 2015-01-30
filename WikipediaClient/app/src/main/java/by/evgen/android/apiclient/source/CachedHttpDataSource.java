@@ -1,8 +1,6 @@
 package by.evgen.android.apiclient.source;
 
 import android.content.Context;
-import android.util.Log;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import by.evgen.android.apiclient.CoreApplication;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by User on 04.12.2014.
@@ -51,7 +51,7 @@ public class CachedHttpDataSource extends HttpDataSource {
         File file = new File(cacheDir, "__cache");
         file.mkdirs();
         String[] list = file.list();
-        Log.d(TAG, "directory cache:  " + Arrays.toString(list));
+        Log.text(getClass(), "directory cache:  " + Arrays.toString(list));
         String path = file.getPath() + File.separator + generateFileName(p);
         mCacheFile = new File(path);
         if (mCacheFile.exists() && !mLruCache.containsKey(path)) {
@@ -60,11 +60,11 @@ public class CachedHttpDataSource extends HttpDataSource {
             checkSize();
         }
         if (mLruCache.containsKey(path)) {
-            Log.d(TAG, "load from file");
+            Log.text(getClass(), "load from file");
             mCacheFile = mLruCache.get(path);
             return mCacheFile;
         } else {
-            Log.d(TAG, "Do not load load from file");
+            Log.text(getClass(), "Do not load load from file");
             mCacheFile = new File(path);
             InputStream inputStream = super.getResult(p);
             try {
@@ -76,13 +76,13 @@ public class CachedHttpDataSource extends HttpDataSource {
             mLruCache.put(path, mCacheFile);
             mSize += mCacheFile.length();
             checkSize();
-            Log.d(TAG, "copy stream success get from file");
+            Log.text(getClass(), "copy stream success get from file");
             return mCacheFile;
         }
     }
 
         private void checkSize() {
-        Log.i(TAG, "cache size = " + mSize + " length = " + mLruCache.size());
+        Log.text(getClass(), "cache size = " + mSize + " length = " + mLruCache.size());
             long limit = 30000;
             if(mSize > limit){
             Iterator<Map.Entry<String, File>> iter = mLruCache.entrySet().iterator();
@@ -90,12 +90,12 @@ public class CachedHttpDataSource extends HttpDataSource {
                 Map.Entry<String, File> entry = iter.next();
                 mSize -= entry.getValue().length();
                 entry.getValue().delete();
-                Log.d(TAG, "delete file:   " + entry.getKey());
+                Log.text(getClass(), "delete file:   " + entry.getKey());
                 iter.remove();
                 if (mSize <= limit)
                     break;
             }
-            Log.i(TAG, "Clean cache. New size " + mLruCache.size());
+            Log.text(getClass(), "Clean cache. New size " + mLruCache.size());
         }
     }
 
@@ -151,7 +151,7 @@ public class CachedHttpDataSource extends HttpDataSource {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return "";
+        return Constant.getEmpty();
     }
 
 

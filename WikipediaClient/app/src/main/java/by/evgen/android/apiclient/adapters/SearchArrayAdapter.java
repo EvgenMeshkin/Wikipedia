@@ -12,6 +12,7 @@ import java.util.List;
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -33,14 +34,14 @@ public class SearchArrayAdapter extends ArrayAdapter<Category> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(mContext, R.layout.adapter_item_cardview, null);
+            convertView = View.inflate(mContext, R.layout.adapter_item, null);
         }
         Category item = getItem(position);
         mTitle = (TextView) convertView.findViewById(android.R.id.text1);
         mTitle.setText(item.getTitle());
         mContent = (TextView) convertView.findViewById(android.R.id.text2);
         mContent.setText(item.getDist());
-        final String urlImage = Api.IMAGEVIEW_GET + item.getTitle().replaceAll(" ", "%20");
+        final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(item.getTitle());
         convertView.setTag(item.getId());
         final ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
         imageView.setImageBitmap(null);

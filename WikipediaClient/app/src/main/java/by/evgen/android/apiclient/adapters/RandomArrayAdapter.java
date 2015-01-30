@@ -18,6 +18,8 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.helper.LoaderRandomArray;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.CircleMaskedBitmap;
 
@@ -30,11 +32,7 @@ public class RandomArrayAdapter extends ArrayAdapter<Category> {
     public TextView mContent;
     private LoaderRandomArray mLoader;
     private Context mContext;
-    public View mConvertView;
     public ImageView mImageView;
-    public int mFinalHeight;
-    public int mFinalWidth;
-
 
     public RandomArrayAdapter(Context context, int resource, List<Category> objects) {
         super(context, resource, objects);
@@ -49,14 +47,14 @@ public class RandomArrayAdapter extends ArrayAdapter<Category> {
         }
         Category item = getItem(position);
         Log.text(getClass(), item.getTitle());
-        TextView title = (TextView) convertView.findViewById(android.R.id.text1);
-        title.setText("");
+        mTitle = (TextView) convertView.findViewById(android.R.id.text1);
+        mTitle.setText(Constant.getEmpty());
         mContent = (TextView) convertView.findViewById(android.R.id.text2);
-        mContent.setText("");
+        mContent.setText(Constant.getLoad());
         mImageView = (ImageView) convertView.findViewById(android.R.id.icon);
         mImageView.setImageBitmap(null);
-        convertView.setTag(Api.EXTRAS_PAGE_GET + item.getTitle().replaceAll(" ", "%20"));
-        mLoader.displayView(Api.EXTRAS_PAGE_GET + item.getTitle().replaceAll(" ", "%20"), convertView);
+        convertView.setTag(Api.EXTRAS_PAGE_GET + Decoder.getHtml(item.getTitle()));
+        mLoader.displayView(Api.EXTRAS_PAGE_GET + Decoder.getHtml(item.getTitle()), convertView);
     return convertView;
     }
 

@@ -21,6 +21,7 @@ import android.widget.ListView;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.DateAdapter;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.FindResponder;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -52,7 +53,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.text(getClass(), "Loader create");
         Context context = getActivity();
-        String val = "";
+        String val = Constant.getEmpty();
         if (args != null) {
             val = args.getString(KEY);
             Log.text(getClass(), "Loader create" + val);
@@ -71,7 +72,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         Log.text(getClass(), "Loader finish" + data.toString());
         Context context = getActivity();
         if (context != null) {
-            mFrom = new String[]{"_id", "name", "wikidate"};
+            mFrom = new String[]{Constant.getDbid(), Constant.getDbName(), Constant.getDbDate()};
             mTo = new int[]{R.id.text1, R.id.text2};
             mAdapter = new DateAdapter(context, R.layout.adapter_item, data, mFrom, mTo);
             mListView.setAdapter(mAdapter);
@@ -138,7 +139,9 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) mListView.getAdapter().getItem(position);
-                NoteGsonModel note = new NoteGsonModel(cursor.getLong(cursor.getColumnIndex("_id")), cursor.getString(cursor.getColumnIndex("name")), cursor.getString(cursor.getColumnIndex("wikidate")));
+                NoteGsonModel note = new NoteGsonModel(cursor.getLong(cursor.getColumnIndex(Constant.getDbid())),
+                        cursor.getString(cursor.getColumnIndex(Constant.getDbName())),
+                        cursor.getString(cursor.getColumnIndex(Constant.getDbDate())));
                 showDetails(note);
             }
         });

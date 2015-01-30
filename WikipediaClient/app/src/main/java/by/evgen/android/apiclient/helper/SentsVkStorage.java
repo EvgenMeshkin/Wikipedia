@@ -8,6 +8,7 @@ import java.util.List;
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.processing.StorageSetProcessor;
 import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -47,18 +48,18 @@ public class SentsVkStorage extends OnErrorCallbacks implements ManagerDownload.
 
     @Override
     public void onAllVkStorage(List<String> data) {
-        String pageName = "";
+        String pageName = Constant.getEmpty();
         Log.text(getClass(), "Storage" + data);
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).contains(mBaseUrl)) {
                 pageName = data.get(i);
             }
         }
-        if (!pageName.equals("")) {
+        if (!pageName.equals(Constant.getEmpty())) {
             Toast.makeText(mContext, "You already added this note", Toast.LENGTH_SHORT).show();
         } else {
             ManagerDownload.load(this,
-                    Api.STORAGE_SET + mBaseUrl +"&value=" + mBaseUrl,
+                    Api.getStorage(mBaseUrl),
                     VkDataSource.get(mContext),
                     new StorageSetProcessor());
         }

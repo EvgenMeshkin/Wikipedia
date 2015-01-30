@@ -19,6 +19,7 @@ import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -42,7 +43,7 @@ public class SearchFragment extends AbstractFragment {
         mContext = getActivity();
         mVkDataSource = HttpDataSource.get(mContext);
         mListView = (ListView) content.findViewById(android.R.id.list);
-        mValue = getArguments().getString("key");
+        mValue = getArguments().getString(Constant.getKey());
         mImageLoader = ImageLoader.get(mContext);
         return content;
     }
@@ -65,7 +66,7 @@ public class SearchFragment extends AbstractFragment {
     @Override
     public void onExecute(List data) {
         if (mAdapter == null) {
-            mAdapter = new SearchArrayAdapter(mContext, R.layout.adapter_item_cardview, data);
+            mAdapter = new SearchArrayAdapter(mContext, R.layout.adapter_item, data);
             mListView.setFooterDividersEnabled(true);
             mListView.setAdapter(mAdapter);
             mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
@@ -83,7 +84,7 @@ public class SearchFragment extends AbstractFragment {
     }
 
     private String getUrl(int count, int offset) {
-        String search = Api.SEARCH_GET + "srlimit=" + count + "&sroffset=" + offset + "&srsearch=" + mValue;
+        String search = Api.getSearchGet(count, offset) + mValue;
         return search;
     }
 

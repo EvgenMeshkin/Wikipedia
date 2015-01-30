@@ -45,7 +45,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
 
         Long id = null;
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getTitle().indexOf(mBaseTitle) != -1) {
+            if (data.get(i).getTitle().contains(mBaseTitle)) {
                 id = data.get(i).getId();
             }
         }
@@ -69,7 +69,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
                                          onErrorSent(e);
                                      }
                                  },
-                    Api.VKNOTES_GET + mBaseTitle + "&text=" + Api.MAIN_URL + mBaseTitle,
+                    Api.getStorage(mBaseTitle),
                     VkDataSource.get(mContext),
                     new NoteProcessor());
         }

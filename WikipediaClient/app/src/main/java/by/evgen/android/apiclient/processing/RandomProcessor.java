@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import by.evgen.android.apiclient.bo.Category;
+import by.evgen.android.apiclient.utils.Constant;
 
 /**
  * Created by User on 05.01.2015.
@@ -18,8 +19,8 @@ public class RandomProcessor extends WrapperArrayProcessor<Category> {
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONObject query = jsonObject.getJSONObject("query");
-        JSONArray array = (JSONArray)query.get("wikigrokrandom");
+        JSONObject query = jsonObject.getJSONObject(Constant.getQuery());
+        JSONArray array = (JSONArray)query.get(Constant.getWikirandom());
         return array;
     }
 

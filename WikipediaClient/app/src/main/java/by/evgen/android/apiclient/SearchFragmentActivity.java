@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.fragments.AbstractFragment;
 import by.evgen.android.apiclient.fragments.SearchFragment;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by evgen on 20.01.2015.
@@ -53,7 +54,13 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
         MenuItem search =  menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        MenuItem clearHist =  menu.findItem(R.id.clearHist);
+        clearHist.setVisible(false);
         return true;
+    }
+
+    public void clearHist (MenuItem item) {
+        Log.text(getClass(), "Clear history");
     }
 
     @Override

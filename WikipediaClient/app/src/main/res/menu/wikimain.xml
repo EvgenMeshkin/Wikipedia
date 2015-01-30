@@ -10,9 +10,17 @@
         android:icon="@android:drawable/ic_menu_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+    <item
+        android:id="@+id/clearHist"
+        android:orderInCategory="2"
+        android:title="Clear history"
+        app:showAsAction="always"
+        android:onClick="clearHist"
+        android:icon="@android:drawable/ic_menu_delete"
+        />
+    <!--<item android:id="@+id/action_settings"-->
+        <!--android:title="@string/action_settings"-->
+        <!--android:orderInCategory="100"-->
+        <!--app:showAsAction="never" />-->
 
 </menu>

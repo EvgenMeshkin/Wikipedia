@@ -5,7 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import by.evgen.android.apiclient.bo.Category;
-import by.evgen.android.apiclient.bo.Constant;
+import by.evgen.android.apiclient.utils.Constant;
 
 /**
  * Created by evgen on 15.11.2014.

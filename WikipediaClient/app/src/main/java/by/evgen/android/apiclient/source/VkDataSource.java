@@ -4,6 +4,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
+import org.apache.http.auth.AuthenticationException;
+
 import java.io.InputStream;
 
 import by.evgen.android.apiclient.Authorized;
@@ -32,7 +34,7 @@ public class VkDataSource extends CachedHttpDataSource {
     public static VkDataSource get(Context context) {
         //TODO remove from this place
         if (!Authorized.isLogged()) {
- //           Toast.makeText(context, "You must login", Toast.LENGTH_SHORT).show();
+            new AuthenticationException();
             return null;
         }
         return CoreApplication.get(context, KEY);
@@ -47,8 +49,7 @@ public class VkDataSource extends CachedHttpDataSource {
             Log.text(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
             return super.getResult(url);
         } else {
-            //TODO your error!!!
-   //         Toast.makeText(mContext, "You must login", Toast.LENGTH_SHORT).show();
+            //new AuthenticationException();
         }
         return null;
     }

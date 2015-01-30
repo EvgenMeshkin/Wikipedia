@@ -126,7 +126,7 @@ public class FavouritesFragment extends AbstractFragment {
     }
 
     private String getUrl(int count, int offset) {
-        String stor = Api.STORAGE_KEYS_GET + "&count=" + count + "&sroffset=" + offset;
+        String stor = Api.getStorageKeysGet(count, offset);
         Log.d(LOG_TAG, "mKor=" + stor);
         return stor;
     }

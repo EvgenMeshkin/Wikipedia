@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 
+import by.evgen.android.apiclient.utils.Constant;
+
 /**
  * Created by evgen on 13.01.2015.
  */
@@ -13,7 +15,7 @@ public class NoteProcessor implements Processor<Long,InputStream>{
     public Long process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        Long id = jsonObject.getLong("response");
+        Long id = jsonObject.getLong(Constant.getResponse());
         return id;
     }
 

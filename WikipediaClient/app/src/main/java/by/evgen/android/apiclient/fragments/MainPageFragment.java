@@ -21,6 +21,8 @@ import by.evgen.android.apiclient.processing.MainPageProcessor;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -71,14 +73,14 @@ public class MainPageFragment extends AbstractFragment {
     }
 
     public String getUrl() {
-        String url = Api.MOBILE_GET + Uri.encode("Main page");
+        String url = Api.MOBILE_GET + Decoder.getHtml("Main page");
         return url;
     }
 
     @Override
     public void onExecute(List data) {
         List<Category> mData = data;
-        String mTextHtml = "";
+        String mTextHtml = Constant.getEmpty();
         ContentValues cv = new ContentValues();
         cv.put(WIKI_NAME, "Main Page");
         cv.put(WIKI_DATE, new java.util.Date().getTime());
@@ -96,7 +98,11 @@ public class MainPageFragment extends AbstractFragment {
             webSettings.setJavaScriptEnabled(true);
             webSettings.setLoadWithOverviewMode(true);
             webSettings.setBuiltInZoomControls(true);
-            mWebView.loadDataWithBaseURL("https://en.wikipedia.org/", mTextHtml, "text/html", "utf-8", null);
+            mWebView.loadDataWithBaseURL(Api.MAIN_URL,
+                    mTextHtml,
+                    Constant.getType(),
+                    Constant.getUtf(),
+                    null);
         }
     }
 
@@ -112,8 +118,7 @@ public class MainPageFragment extends AbstractFragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Integer position = url.lastIndexOf("/");
-            String mHistory = url.substring(position + 1);
+            String mHistory = Decoder.getUrlTitle(url);
             NoteGsonModel note = new NoteGsonModel(null, mHistory, " ");
             showDetails(note);
             showProgress();

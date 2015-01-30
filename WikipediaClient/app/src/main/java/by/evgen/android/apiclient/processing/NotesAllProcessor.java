@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import by.evgen.android.apiclient.bo.Category;
+import by.evgen.android.apiclient.utils.Constant;
 
 /**
  * Created by User on 12.01.2015.
@@ -18,8 +19,8 @@ public class NotesAllProcessor extends WrapperArrayProcessor<Category>{
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONObject query = jsonObject.getJSONObject("response");
-        JSONArray array = (JSONArray)query.get("items");
+        JSONObject query = jsonObject.getJSONObject(Constant.getResponse());
+        JSONArray array = (JSONArray)query.get(Constant.getItems());
         return array;
     }
 

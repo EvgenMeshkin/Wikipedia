@@ -11,6 +11,7 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -35,7 +36,7 @@ public class FavouritesArrayAdapter extends ArrayAdapter<String> {
         String title = getItem(position);
         TextView name = (TextView) convertView.findViewById(android.R.id.text1);
         name.setText(title);
-        final String urlImage = Api.IMAGEVIEW_GET + title.replaceAll(" ", "%20");
+        final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(title);
         convertView.setTag(title);
         final ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
         imageView.setImageBitmap(null);

@@ -20,7 +20,8 @@ public class Api {
     public static final String MAIN_PAGE_GET = BASE_PATH + "action=parse&page=Main%20Page&mobileformat=html&prop=text&format=json";
     public static final String RANDOM_PAGE_GET = BASE_PATH + "action=query&list=categorymembers&format=json&cmnamespace=0&cmlimit=100&cmtitle=Category:Physics";
     public static final String EXTRAS_PAGE_GET = BASE_PATH + "action=query&prop=extracts&format=json&exintro=1&explaintext=1&titles=";
-    public static final String MAIN_URL = "https://http://en.wikipedia.org/wiki/";
+    public static final String MAIN_URL_HTML = "https://en.wikipedia.org/wiki/";
+    public static final String MAIN_URL = "https://en.wikipedia.org/";
 
 
     public static final String BASE_PATH_VK = "https://api.vk.com/method/";
@@ -31,5 +32,20 @@ public class Api {
     public static final String VKLIKE_GET = BASE_PATH_VK + "likes.add?type=note&v=5.26&item_id=";
     public static final String STORAGE_SET = BASE_PATH_VK + "storage.set?v=5.27&key=";
     public static final String STORAGE_KEYS_GET = BASE_PATH_VK + "storage.getKeys?v=5.27";
+
+    public static String getStorageKeysGet(int count, int offset) {
+        String stor = STORAGE_KEYS_GET + "&count=" + count + "&sroffset=" + offset;
+        return stor;
+    }
+
+    public static String getSearchGet(int count, int offset) {
+        String search = Api.SEARCH_GET + "srlimit=" + count + "&sroffset=" + offset + "&srsearch=";
+        return search;
+    }
+
+    public static String getStorage(String value) {
+        String str = Api.VKNOTES_GET + value + "&text=" + Api.MAIN_URL_HTML + value;
+        return str;
+    }
 
 }

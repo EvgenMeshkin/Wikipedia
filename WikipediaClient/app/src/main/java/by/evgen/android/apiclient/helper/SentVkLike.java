@@ -8,9 +8,10 @@ import by.evgen.android.apiclient.source.VkDataSource;
 /**
  * Created by evgen on 13.01.2015.
  */
-public class SentVkLike {
+public class SentVkLike extends OnErrorCallbacks{
 
     public SentVkLike (final Context context, final String url){
+       super(context);
        ManagerDownload.load(new ManagerDownload.Callback() {
            @Override
            public void onPreExecute() {
@@ -24,9 +25,14 @@ public class SentVkLike {
 
            @Override
            public void onError(Exception e) {
-
+               onErrorSent(e);
            }
        }, url, VkDataSource.get(context), new StringProcessor());
 
     }
+
+    private void onErrorSent(Exception e){
+        super.sentOnError(e);
+    }
+
 }

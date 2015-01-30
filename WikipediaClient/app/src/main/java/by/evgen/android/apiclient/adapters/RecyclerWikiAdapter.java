@@ -13,6 +13,8 @@ import java.util.List;
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -42,7 +44,7 @@ public class RecyclerWikiAdapter extends RecyclerView.Adapter<RecyclerWikiAdapte
         Category item = mRecords.get(i);
         viewHolder.name.setText(item.getTitle());
         viewHolder.content.setText(item.getDist() + " m.");
-        final String urlImage = Api.IMAGEVIEW_GET + item.getTitle().replaceAll(" ","%20");
+        final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(item.getTitle());
         viewHolder.icon.setImageBitmap(null);
         viewHolder.icon.setTag(urlImage);
         mImageLoader.displayImage(urlImage, viewHolder.icon);

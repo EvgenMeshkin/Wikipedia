@@ -28,6 +28,8 @@ import by.evgen.android.apiclient.helper.WikiContentPageCallback;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.FindResponder;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -90,7 +92,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         View content = inflater.inflate(R.layout.fragment_details, null);
         mContext = getActivity();
         mHttpDataSource = HttpDataSource.get(mContext);
-        mObj = getArguments().getParcelable("key");
+        mObj = getArguments().getParcelable(Constant.getKey());
         if (mObj != null) {
             mHistory = mObj.getTitle();
             mWebView = (WebView) content.findViewById(R.id.webView);
@@ -134,7 +136,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     public String getUrl() {
-        String url = Api.MOBILE_GET + Uri.encode(mObj.getTitle());
+        String url = Api.MOBILE_GET + Decoder.getHtml(mObj.getTitle());
         return url;
     }
 
@@ -169,12 +171,20 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
                     return false;
                 }
             });
-            mWebView.loadDataWithBaseURL("https://en.wikipedia.org/", mTextHtml, "text/html", "utf-8", null);
+            mWebView.loadDataWithBaseURL(Api.MAIN_URL,
+                    mTextHtml,
+                    Constant.getType(),
+                    Constant.getUtf(),
+                    null);
         }
     }
 
     public void notifyWebView(Integer position) {
-        mWebView.loadDataWithBaseURL("https://en.wikipedia.org/" + "#" + mContent.get(position).toString().replaceAll(" ", "_"), mTextHtml, "text/html", "utf-8", null);
+        mWebView.loadDataWithBaseURL(Api.MAIN_URL + "#" + Decoder.getTitle(mContent.get(position).toString()),
+                mTextHtml,
+                Constant.getType(),
+                Constant.getUtf(),
+                null);
     }
 
     private void dismissProgress() {
@@ -195,8 +205,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Integer position = url.lastIndexOf("/");
-            mHistory = url.substring(position + 1);
+            mHistory = Decoder.getUrlTitle(url);
             NoteGsonModel note = new NoteGsonModel(null, mHistory, mObj.getContent());
             showDetails(note);
             showProgress();
