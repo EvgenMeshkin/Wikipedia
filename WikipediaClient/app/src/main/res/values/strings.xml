@@ -13,6 +13,13 @@
         <item>Log_in</item>
     </string-array>
 
+    <string name="home">Home</string>
+    <string name="random">Random</string>
+    <string name="nearby">Nearby</string>
+    <string name="favourites">Favourites</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="log_in">Log in</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="saving_pages">Saving pages</string>

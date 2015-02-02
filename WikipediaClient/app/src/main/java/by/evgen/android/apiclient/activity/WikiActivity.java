@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.adapters.MenuAdapter;
 import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
@@ -45,6 +46,7 @@ import by.evgen.android.apiclient.fragment.WatchListFragment;
 import by.evgen.android.apiclient.fragment.WikiFragment;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.helper.RandomPageCallback;
+import by.evgen.android.apiclient.utils.EnumMenuItems;
 import by.evgen.android.apiclient.utils.Log;
 
 public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks {
@@ -56,7 +58,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private CharSequence mTitle;
     private String[] mViewsNames;
     private View mHeaderDrawer;
-    private enum mMenuValue {Home, Random, Nearby, Favourites, Watchlist, Settings, Log_in};
     private final String KEY = "key";
     private final String KEYNOTE = "keynote";
     private final Uri WIKI_URI = Uri
@@ -86,7 +87,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.addHeaderView(mHeaderDrawer);
         mDrawerList.setHeaderDividersEnabled(true);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, mViewsNames));
+        mDrawerList.setAdapter(new MenuAdapter(this, EnumMenuItems.values()));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
         displayView(1);
@@ -143,15 +144,16 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         public void onItemClick(
                 AdapterView<?> parent, View view, int position,  long id
         ) {
-
             displayView(position);
         }
     }
 
     private void displayView(int position) {
+      String name = getResources().getString(EnumMenuItems.values()[position-1].getTitle());
+      Log.text(getClass(), name);
       if (position != 0) {
           FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
-          switch (mMenuValue.valueOf(mViewsNames[position - 1])) {
+          switch (EnumMenuItems.values()[position].valueOf(name)) {
               case Home:
                   MainPageFragment fragmentPage = new MainPageFragment();
                   transactionWiki.replace(R.id.framemain, fragmentPage);
@@ -179,10 +181,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   transactionWiki.replace(R.id.framemain, fragmentWatch);
                   mVisible = true;
                   break;
-              case Settings:
-                  SettingsFragment settingsFragment = new SettingsFragment();
-                  transactionWiki.replace(R.id.framemain, settingsFragment);
-                  break;
               case Log_in:
                 startActivity(new Intent(this, StartActivity.class));
               default:
@@ -191,6 +189,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
           }
           transactionWiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
           transactionWiki.commit();
+          mTitle = name;
           mDrawerLayout.closeDrawer(mDrawerList);
       }
    }

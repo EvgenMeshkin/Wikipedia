@@ -46,7 +46,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     private NoteGsonModel mNoteGsonModel;
     private final String KEY = "key";
     private final String KEYNOTE = "keynote";
-    private final int stub_id = R.drawable.strel;
+    private final int stub_id = R.drawable.right_drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,11 +163,11 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null) {
-                        convertView = View.inflate(DetailsFragmentActivity.this, R.layout.adapter_item, null);
+                        convertView = View.inflate(DetailsFragmentActivity.this, R.layout.drawer_list_item, null);
                     }
                     ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
                     imageView.setImageResource(stub_id);
-                    TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+                    TextView textView = (TextView) convertView.findViewById(android.R.id.text2);
                     textView.setText(getItem(position));
                     if (position == 0){
                         textView.setText(mNoteGsonModel.getTitle());
