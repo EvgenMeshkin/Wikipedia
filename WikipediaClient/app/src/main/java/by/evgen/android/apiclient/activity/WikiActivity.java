@@ -26,6 +26,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -87,7 +89,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.addHeaderView(mHeaderDrawer);
         mDrawerList.setHeaderDividersEnabled(true);
-        mDrawerList.setAdapter(new MenuAdapter(this, EnumMenuItems.values()));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
         displayView(1);
@@ -98,10 +99,12 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         ) {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
+                mDrawerList.setAdapter(null);
                 supportInvalidateOptionsMenu();
             }
             public void onDrawerOpened(View drawerView) {
                 getSupportActionBar().setTitle(mDrawerTitle);
+                mDrawerList.setAdapter(new MenuAdapter(WikiActivity.this, EnumMenuItems.values()));
                 supportInvalidateOptionsMenu();
             }
         };
@@ -149,11 +152,11 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     }
 
     private void displayView(int position) {
+      if (position <= EnumMenuItems.values().length) {
       String name = getResources().getString(EnumMenuItems.values()[position-1].getTitle());
       Log.text(getClass(), name);
-      if (position != 0) {
           FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
-          switch (EnumMenuItems.values()[position].valueOf(name)) {
+          switch (EnumMenuItems.values()[position-1].valueOf(name)) {
               case Home:
                   MainPageFragment fragmentPage = new MainPageFragment();
                   transactionWiki.replace(R.id.framemain, fragmentPage);
@@ -182,7 +185,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   mVisible = true;
                   break;
               case Log_in:
-                startActivity(new Intent(this, StartActivity.class));
+                  startActivity(new Intent(this, StartActivity.class));
               default:
                   mDrawerLayout.closeDrawer(mDrawerList);
                   return;
@@ -192,7 +195,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
           mTitle = name;
           mDrawerLayout.closeDrawer(mDrawerList);
       }
-   }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

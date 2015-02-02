@@ -3,6 +3,9 @@ package by.evgen.android.apiclient.adapters;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +52,9 @@ public class MenuAdapter extends BaseAdapter {
         title.setText(mItems[position].getTitle());
         ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
         imageView.setImageResource(mItems[position].getIcon());
+        TranslateAnimation anim = new TranslateAnimation(-300, 0, 0, 0);
+        anim.setDuration(100 + position * 200);
+        convertView.startAnimation(anim);
         convertView.setTag(position);
         return convertView;
     }

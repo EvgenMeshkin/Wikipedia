@@ -16,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -172,6 +175,10 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
                     if (position == 0){
                         textView.setText(mNoteGsonModel.getTitle());
                     }
+                   // Animation anim = AnimationUtils.loadAnimation(DetailsFragmentActivity.this, R.anim.anim);
+                    TranslateAnimation anim = new TranslateAnimation(150, 0, 0, 0);
+                    anim.setDuration(1000 + position*100);
+                    convertView.startAnimation(anim);
                     convertView.setTag(position);
                     return convertView;
                 }
