@@ -41,15 +41,17 @@ import by.evgen.android.apiclient.fragment.AbstractFragment;
 import by.evgen.android.apiclient.fragment.FavouritesFragment;
 import by.evgen.android.apiclient.fragment.MainPageFragment;
 import by.evgen.android.apiclient.fragment.RandomCategoryFragment;
+import by.evgen.android.apiclient.fragment.StorageFragment;
 import by.evgen.android.apiclient.fragment.WatchListFragment;
 import by.evgen.android.apiclient.fragment.WikiFragment;
 import by.evgen.android.apiclient.helper.ClearVkStorage;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
+import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.utils.EnumMenuItems;
 import by.evgen.android.apiclient.utils.Log;
 
-public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks {
+public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks, OnErrorCallbacks.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -170,7 +172,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   mVisible = false;
                   break;
               case Favourites:
-                  FavouritesFragment fragmentFavor = new FavouritesFragment();
+                  StorageFragment fragmentFavor = new StorageFragment();
                   transactionWiki.replace(R.id.framemain, fragmentFavor);
                   mVisible = true;
                   break;

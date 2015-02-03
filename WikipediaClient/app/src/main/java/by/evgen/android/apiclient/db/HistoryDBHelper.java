@@ -11,13 +11,13 @@ import android.util.Log;
 public class HistoryDBHelper extends SQLiteOpenHelper {
 
     static final String DB_NAME = "wikidb";
-    static final int DB_VERSION = 1;
+    static final int DB_VERSION = 2;
     static final String WIKI_TABLE = "history";
     static final String WIKI_ID = "_id";
-    static final String WIKI_NAME = "name";
+    public static final String WIKI_NAME = "name";
     static final String WIKI_EMAIL = "koordinaty";
     static final String WIKI_CONTENT = "content";
-    static final String WIKI_DATE = "wikidate";
+    public static final String WIKI_DATE = "wikidate";
 
     static final String DB_CREATE = "create table " + WIKI_TABLE + "("
             + WIKI_ID + " integer primary key autoincrement, "

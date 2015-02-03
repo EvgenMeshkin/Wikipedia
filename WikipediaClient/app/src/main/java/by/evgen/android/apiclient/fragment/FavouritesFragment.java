@@ -60,7 +60,7 @@ public class FavouritesFragment extends AbstractFragment {
 
     @Override
     public Processor getProcessor() {
-        return new StorageGetKeysProcessor();
+        return new StorageGetKeysProcessor(mContext);
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import by.evgen.android.apiclient.db.HistoryDBHelper;
+import by.evgen.android.apiclient.db.StorageDBHelper;
 
 /**
  * Created by evgen on 13.12.2014.
@@ -60,10 +61,12 @@ public class WikiContentProvider extends ContentProvider {
     }
 
     private HistoryDBHelper historyDbHelper;
+    private StorageDBHelper storageDBHelper;
     private SQLiteDatabase db;
 
     public boolean onCreate() {
         Log.d(LOG_TAG, "onCreate");
+        storageDBHelper = new StorageDBHelper(getContext());
         historyDbHelper = new HistoryDBHelper(getContext());
         return true;
     }
@@ -71,12 +74,18 @@ public class WikiContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Log.d(LOG_TAG, "query, " + uri.toString());
+        Cursor cursor = null;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 Log.d(LOG_TAG, "URI_HISTORY");
                 if (TextUtils.isEmpty(sortOrder)) {
                     sortOrder = "date(" + WIKI_DATE + ") DESC";
                 }
+                db = historyDbHelper.getWritableDatabase();
+                cursor = db.query(WIKI_TABLE, projection, selection,
+                        selectionArgs, null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(),
+                        WIKI_HISTORY_URI);
                 break;
             case URI_HISTORY_ID: // Uri с ID
                 String id = uri.getLastPathSegment();
@@ -87,24 +96,46 @@ public class WikiContentProvider extends ContentProvider {
                     selection = selection + " AND " + WIKI_ID + " = " + id;
                 }
                 break;
+            case URI_STORAGE:
+                Log.d(LOG_TAG, "QUERY URI_STORAGE");
+//                if (TextUtils.isEmpty(sortOrder)) {
+//                    sortOrder = "title(" + StorageDBHelper.WIKI_NAME + ") DESC";
+//                }
+                db = storageDBHelper.getWritableDatabase();
+                cursor = db.query(StorageDBHelper.WIKI_TABLE, projection, selection,
+                        selectionArgs, null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(),
+                        WIKI_STORAGE_URI);
+                break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        db = historyDbHelper.getWritableDatabase();
-        Cursor cursor = db.query(WIKI_TABLE, projection, selection,
-                selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(),
-                WIKI_HISTORY_URI);
+
         return cursor;
     }
 
     public Uri insert(Uri uri, ContentValues values) {
         Log.d(LOG_TAG, "insert, " + uri.toString());
-        if (uriMatcher.match(uri) != URI_HISTORY)
-            throw new IllegalArgumentException("Wrong URI: " + uri);
-        db = historyDbHelper.getWritableDatabase();
-        long rowID = db.insert(WIKI_TABLE, null, values);
-        Uri resultUri = ContentUris.withAppendedId(WIKI_HISTORY_URI, rowID);
+        Uri resultUri = null;
+        switch (uriMatcher.match(uri)) {
+            case URI_HISTORY:
+                Log.d(LOG_TAG, "URI_HISTORY");
+                db = historyDbHelper.getWritableDatabase();
+                long rowID = db.insert(WIKI_TABLE, null, values);
+                resultUri = ContentUris.withAppendedId(WIKI_HISTORY_URI, rowID);
+                break;
+            case URI_HISTORY_ID:
+                Log.d(LOG_TAG, "URI_HISTORY_ID, " );
+                break;
+            case URI_STORAGE:
+                Log.d(LOG_TAG, "INSERT URI_STORAGE");
+                db = storageDBHelper.getWritableDatabase();
+                long storID = db.insert(StorageDBHelper.WIKI_TABLE, null, values);
+                resultUri = ContentUris.withAppendedId(WIKI_STORAGE_URI, storID);
+                break;
+            default:
+                throw new IllegalArgumentException("Wrong URI: " + uri);
+        }
         getContext().getContentResolver().notifyChange(resultUri, null);
         return resultUri;
     }
@@ -125,6 +156,10 @@ public class WikiContentProvider extends ContentProvider {
                 } else {
                     selection = selection + " AND " + WIKI_ID + " = " + id;
                 }
+                break;
+            case URI_STORAGE:
+                Log.d(LOG_TAG, "DELETE URI_STORAGE");
+
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
@@ -168,6 +203,11 @@ public class WikiContentProvider extends ContentProvider {
                 return WIKI_HISTORY_TYPE;
             case URI_HISTORY_ID:
                 return WIKI_HISTORY_ITEM_TYPE;
+            case URI_STORAGE:
+                Log.d(LOG_TAG, "GETTYPE URI_STORAGE");
+                return WIKI_STORAGE_TYPE;
+            case URI_STORAGE_ID:
+                return WIKI_STORAGE_ITEM_TYPE;
         }
         return null;
     }

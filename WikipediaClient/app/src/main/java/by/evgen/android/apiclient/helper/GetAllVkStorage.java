@@ -21,7 +21,7 @@ public class GetAllVkStorage extends OnErrorCallbacks implements ManagerDownload
         ManagerDownload.load(this,
                 Api.STORAGE_KEYS_GET,
                 VkCachedDataSource.get(context),
-                new StorageGetKeysProcessor());
+                new StorageGetKeysProcessor(context));
     }
 
     public interface Callbacks {

@@ -30,7 +30,7 @@ import by.evgen.android.apiclient.utils.Log;
  */
 public class MainPageFragment extends AbstractFragment {
 
-    private MobileViewProcessor mMobileProcessor = new MobileViewProcessor();
+    private MobileViewProcessor mMobileProcessor;
     private HttpDataSource mHttpDataSource;
     private WebView mWebView;
     private View mProgress;
@@ -53,11 +53,12 @@ public class MainPageFragment extends AbstractFragment {
     public View getViewLayout(LayoutInflater inflater) {
         View content = inflater.inflate(R.layout.fragment_details, null);
         mContext = getActivity();
+        mMobileProcessor = new MobileViewProcessor(mContext, "Main Page");
         mHttpDataSource = HttpDataSource.get(mContext);
-            mWebView = (WebView) content.findViewById(R.id.webView);
-            mProgress = content.findViewById(android.R.id.progress);
-            mWebView.setWebViewClient(new WikiWebViewClient());
-            content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
+        mWebView = (WebView) content.findViewById(R.id.webView);
+        mProgress = content.findViewById(android.R.id.progress);
+        mWebView.setWebViewClient(new WikiWebViewClient());
+        content.findViewById(android.R.id.progress).setVisibility(View.VISIBLE);
         return content;
     }
 
@@ -79,12 +80,12 @@ public class MainPageFragment extends AbstractFragment {
     public void onExecute(List data) {
         List<Category> mData = data;
         String mTextHtml = Constant.getEmpty();
-        ContentValues cv = new ContentValues();
-        cv.put(WIKI_NAME, "Main Page");
-        cv.put(WIKI_DATE, new java.util.Date().getTime());
-        if (!cv.equals(null)&& !mContext.equals(null)) {
-            mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
-        }
+//        ContentValues cv = new ContentValues();
+//        cv.put(WIKI_NAME, "Main Page");
+//        cv.put(WIKI_DATE, new java.util.Date().getTime());
+//        if (!cv.equals(null)&& !mContext.equals(null)) {
+//            mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
+//        }
         if (data == null || data.isEmpty()) {
             Toast.makeText(mContext, "No data", Toast.LENGTH_SHORT).show();
         } else {

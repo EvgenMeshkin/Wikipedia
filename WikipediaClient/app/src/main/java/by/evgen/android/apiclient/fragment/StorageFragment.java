@@ -17,21 +17,26 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.List;
+
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.DateAdapter;
+import by.evgen.android.apiclient.adapters.StorageCursorAdapter;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.db.StorageDBHelper;
 import by.evgen.android.apiclient.db.provider.WikiContentProvider;
+import by.evgen.android.apiclient.helper.GetAllVkStorage;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.FindResponder;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
- * Created by evgen on 06.01.2015.
+ * Created by evgen on 03.02.2015.
  */
-public class WatchListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class StorageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, GetAllVkStorage.Callbacks {
 
     private View mContent;
-    private DateAdapter mAdapter;
+    private StorageCursorAdapter mAdapter;
     public ListView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private EditText mEditSearch;
@@ -43,6 +48,11 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
     public CursorLoader mCursorLoader;
 
     private final String KEY = "key";
+
+    @Override
+    public void onAllVkStorage(List<String> data) {
+
+    }
 
     public interface Callbacks {
         void onShowDetails(NoteGsonModel note);
@@ -60,7 +70,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         }
         if (context != null) {
             //TODO make ? params
-            mCursorLoader = new CursorLoader(getActivity(), WikiContentProvider.WIKI_HISTORY_URI, mFrom, "name LIKE  '%" + val + "%'", null, null);
+            mCursorLoader = new CursorLoader(getActivity(), WikiContentProvider.WIKI_STORAGE_URI, mFrom, "title LIKE  '%" + val + "%'", null, null);
             Log.text(getClass(), mCursorLoader.toString());
             return mCursorLoader;
         } else {
@@ -73,10 +83,10 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         Log.text(getClass(), "Loader finish" + data.toString());
         Context context = getActivity();
         if (context != null) {
-            mFrom = new String[]{Constant.getDbid(), Constant.getDbName(), Constant.getDbDate()};
+            mFrom = new String[]{StorageDBHelper.WIKI_ID, StorageDBHelper.WIKI_NAME};
             //TODO
             mTo = new int[]{R.id.text1, R.id.text2};
-            mAdapter = new DateAdapter(context, R.layout.adapter_item, data, mFrom, mTo, 0);
+            mAdapter = new StorageCursorAdapter(context, R.layout.adapter_item, data, mFrom, mTo, 0);
             mListView.setAdapter(mAdapter);
         }
     }
@@ -88,7 +98,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         }
     }
 
-      void showDetails(NoteGsonModel note) {
+    void showDetails(NoteGsonModel note) {
         Callbacks callbacks = getCallbacks();
         callbacks.onShowDetails(note);
     }
@@ -101,6 +111,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContent = inflater.inflate(R.layout.fragment_list_search, null);
+        new GetAllVkStorage(this, getActivity());
         mEditSearch = (EditText) mContent.findViewById(R.id.editText);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mContent.findViewById(by.evgen.android.apiclient.R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -142,8 +153,8 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) mListView.getAdapter().getItem(position);
-                NoteGsonModel note = new NoteGsonModel(cursor.getLong(cursor.getColumnIndex(Constant.getDbid())),
-                        cursor.getString(cursor.getColumnIndex(Constant.getDbName())),
+                NoteGsonModel note = new NoteGsonModel(cursor.getLong(cursor.getColumnIndex(StorageDBHelper.WIKI_ID)),
+                        cursor.getString(cursor.getColumnIndex(StorageDBHelper.WIKI_NAME)),
                         cursor.getString(cursor.getColumnIndex(Constant.getDbDate())));
                 showDetails(note);
             }
@@ -165,3 +176,4 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
 }
+

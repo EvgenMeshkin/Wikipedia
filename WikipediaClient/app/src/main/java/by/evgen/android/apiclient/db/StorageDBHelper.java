@@ -10,11 +10,11 @@ import android.util.Log;
  */
 public class StorageDBHelper extends SQLiteOpenHelper {
 
-    static final String DB_NAME = "wikidb";
-    static final int DB_VERSION = 1;
-    static final String WIKI_TABLE = "storage";
-    static final String WIKI_ID = "_id";
-    static final String WIKI_NAME = "title";
+    static final String DB_NAME = "wikdb";
+    static final int DB_VERSION = 2;
+    public static final String WIKI_TABLE = "storage";
+    public static final String WIKI_ID = "_id";
+    public static final String WIKI_NAME = "title";
     static final String WIKI_EMAIL = "tag";
     static final String WIKI_CONTENT = "content";
     static final String WIKI_DATE = "wikidate";
@@ -22,7 +22,7 @@ public class StorageDBHelper extends SQLiteOpenHelper {
     static final String DB_CREATE = "create table " + WIKI_TABLE + "("
             + WIKI_ID + " integer primary key autoincrement, "
             + WIKI_NAME + " text, " + WIKI_EMAIL + " text, " + WIKI_CONTENT + " text, " + WIKI_DATE + " integer" + ");";
-    final static String LOG_TAG = HistoryDBHelper.class.getSimpleName();
+    final static String LOG_TAG = StorageDBHelper.class.getSimpleName();
 
     public StorageDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

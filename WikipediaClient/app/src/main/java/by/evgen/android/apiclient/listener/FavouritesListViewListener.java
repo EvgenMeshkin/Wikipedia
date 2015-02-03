@@ -45,6 +45,6 @@ public class FavouritesListViewListener extends AbstractOnScrollListener {
 
     @Override
     public Processor getProcessor() {
-        return new StorageGetKeysProcessor();
+        return new StorageGetKeysProcessor(mContext);
     }
 }

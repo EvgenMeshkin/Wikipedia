@@ -39,7 +39,7 @@ import by.evgen.android.apiclient.utils.Log;
 
 public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks, SentsVkNotes.Callbacks {
 
-    private MobileViewProcessor mMobileViewProcessor = new MobileViewProcessor();
+    private MobileViewProcessor mMobileViewProcessor;
     private HttpDataSource mHttpDataSource;
     private NoteGsonModel mObj;
     private WebView mWebView;
@@ -95,6 +95,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         if (mObj != null) {
             mHistory = mObj.getTitle();
             mWebView = (WebView) content.findViewById(R.id.webView);
+            mMobileViewProcessor = new MobileViewProcessor(mContext, mHistory);
             mProgress = content.findViewById(android.R.id.progress);
             mImageButton = (ImageButton)content.findViewById(R.id.imageButton);
             mImageButton.setOnClickListener(new View.OnClickListener() {
@@ -146,12 +147,12 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             Toast.makeText(mContext, "Note added", Toast.LENGTH_SHORT).show();
         } else {
             mTextHtml = "";
-            ContentValues cv = new ContentValues();
-            cv.put(WIKI_NAME, mHistory);
-            cv.put(WIKI_DATE, new java.util.Date().getTime());
-            if (!cv.equals(null) && !mContext.equals(null)) {
-                mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
-            }
+//            ContentValues cv = new ContentValues();
+//            cv.put(WIKI_NAME, mHistory);
+//            cv.put(WIKI_DATE, new java.util.Date().getTime());
+//            if (!cv.equals(null) && !mContext.equals(null)) {
+//                mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
+//            }
             new WikiContentPageCallback(mContext, this, Api.CONTENTS_GET + mHistory);
             for (int i = 0; i < data.size(); i++) {
                 mTextHtml = mTextHtml + mData.get(i).getText();
