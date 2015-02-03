@@ -2,7 +2,6 @@ package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -11,7 +10,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +60,7 @@ public class WatchListFragment extends Fragment implements LoaderManager.LoaderC
         }
         if (context != null) {
             //TODO make ? params
-            mCursorLoader = new CursorLoader(getActivity(), WikiContentProvider.WIKI_CONTENT_URI, mFrom, "name LIKE  '%" + val + "%'", null, null);
+            mCursorLoader = new CursorLoader(getActivity(), WikiContentProvider.WIKI_HISTORY_URI, mFrom, "name LIKE  '%" + val + "%'", null, null);
             Log.text(getClass(), mCursorLoader.toString());
             return mCursorLoader;
         } else {

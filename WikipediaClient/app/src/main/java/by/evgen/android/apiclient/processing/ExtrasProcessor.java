@@ -21,7 +21,7 @@ public class ExtrasProcessor implements Processor<List<Category>,InputStream>{
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
         Log.text(getClass(), "run");
-        JSONObject query = jsonObject.getJSONObject(Constant.getQuery());
+        JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
         JSONObject pages = query.getJSONObject(Constant.getPages());
         Iterator<?> i = pages.keys();
         JSONObject pagesId = pages.getJSONObject(i.next().toString());

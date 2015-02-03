@@ -19,7 +19,7 @@ public class ImageUrlProcessor implements Processor<List<Category>,InputStream>{
     public List<Category> process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        JSONObject query = jsonObject.getJSONObject(Constant.getQuery());
+        JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
         JSONObject pages = query.getJSONObject(Constant.getPages());
         Iterator<?> i = pages.keys();
         JSONObject pagesId = pages.getJSONObject(i.next().toString());

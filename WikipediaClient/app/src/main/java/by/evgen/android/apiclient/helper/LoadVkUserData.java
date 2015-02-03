@@ -10,7 +10,7 @@ import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.processing.BitmapProcessor;
 import by.evgen.android.apiclient.processing.FotoIdUrlProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
-import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.CircleMaskedBitmap;
 
@@ -27,7 +27,7 @@ public class LoadVkUserData extends OnErrorCallbacks implements ManagerDownload.
         mContext = context;
         ManagerDownload.load(this,
                 Api.VKFOTOS_GET,
-                VkDataSource.get(context),
+                VkCachedDataSource.get(context),
                 new FotoIdUrlProcessor());
         mCallbacks = callbacks;
     }

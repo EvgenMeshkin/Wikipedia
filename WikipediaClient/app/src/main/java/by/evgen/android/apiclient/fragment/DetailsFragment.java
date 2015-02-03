@@ -19,6 +19,7 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkStorage;
@@ -50,8 +51,6 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     public ImageButton mImageButton;
     public ImageButton mNoteButton;
     public ImageButton mStorageButton;
-    private final Uri WIKI_URI = Uri
-            .parse("content://by.evgen.android.apiclient.GeoData/geodata");
     private final String WIKI_NAME = "name";
     private final String WIKI_DATE = "wikidate";
 
@@ -151,7 +150,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             cv.put(WIKI_NAME, mHistory);
             cv.put(WIKI_DATE, new java.util.Date().getTime());
             if (!cv.equals(null) && !mContext.equals(null)) {
-                mContext.getContentResolver().insert(WIKI_URI, cv);
+                mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
             }
             new WikiContentPageCallback(mContext, this, Api.CONTENTS_GET + mHistory);
             for (int i = 0; i < data.size(); i++) {

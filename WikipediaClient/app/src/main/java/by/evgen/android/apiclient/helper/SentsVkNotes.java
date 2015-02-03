@@ -9,7 +9,7 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.processing.NoteProcessor;
 import by.evgen.android.apiclient.processing.NotesAllProcessor;
-import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 
 /**
  * Created by evgen on 11.01.2015.
@@ -31,7 +31,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
         mBaseTitle = title;
         ManagerDownload.load(this,
                 Api.VKNOTES_ALL_GET,
-                VkDataSource.get(mContext),
+                VkCachedDataSource.get(mContext),
                 new NotesAllProcessor());
    }
 
@@ -70,7 +70,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
                                      }
                                  },
                     Api.getNotes(mBaseTitle),
-                    VkDataSource.get(mContext),
+                    VkCachedDataSource.get(mContext),
                     new NoteProcessor());
         }
     }

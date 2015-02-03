@@ -9,6 +9,7 @@ import java.util.Map;
 import by.evgen.android.apiclient.helper.LoaderRandomArray;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -24,6 +25,7 @@ public class WikiApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mGetService.put(HttpDataSource.KEY, new HttpDataSource());
+        mGetService.put(VkCachedDataSource.KEY, new VkCachedDataSource(this));
         mGetService.put(VkDataSource.KEY, new VkDataSource(this));
         mGetService.put(CachedHttpDataSource.KEY, new CachedHttpDataSource(this));
         mGetService.put(ImageLoader.KEY, new ImageLoader(this));

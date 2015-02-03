@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.processing.LikeIsProcessor;
-import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -46,7 +46,7 @@ public class LikeVkNotes extends OnErrorCallbacks implements SentsVkNotes.Callba
                                  }
                              },
                 Api.VKLIKEIS_GET + id,
-                VkDataSource.get(mContext),
+                VkCachedDataSource.get(mContext),
                 new LikeIsProcessor());
     }
 

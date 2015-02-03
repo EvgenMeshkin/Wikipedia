@@ -19,7 +19,7 @@ public class SearchPagesProcessor extends WrapperArrayProcessor<Category>{
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONObject query = jsonObject.getJSONObject(Constant.getQuery());
+        JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
         JSONArray array = (JSONArray)query.get(Constant.getSearch());
         return array;
     }

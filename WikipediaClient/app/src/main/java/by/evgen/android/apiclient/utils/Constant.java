@@ -7,7 +7,7 @@ public class Constant {
 
     //TODO
     public static final String GEOSEARCH = "geosearch";
-    private static final String QUERY = "query";
+    public static final String QUERY = "query";
     private static final String PAGES = "pages";
     private static final String KEY = "key";
     private static final String UTF = "utf-8";
@@ -28,13 +28,9 @@ public class Constant {
     private static final String PARSE = "parse";
     private static final String WIKIRANDOM = "wikigrokrandom";
     private static final String SEARCH = "search";
+    public static final String ACCOUNT_TYPE = "by.evgen.android.apiclient";
 
-    public static String getGeosearch() {
-        return GEOSEARCH;
-    }
-    public static String getQuery() {
-        return QUERY;
-    }
+
     public static String getPages() {
         return PAGES;
     }

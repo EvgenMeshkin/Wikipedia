@@ -17,6 +17,7 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
@@ -34,8 +35,6 @@ public class MainPageFragment extends AbstractFragment {
     private WebView mWebView;
     private View mProgress;
     private Context mContext;
-    private final Uri WIKI_URI = Uri
-            .parse("content://by.evgen.android.apiclient.GeoData/geodata");
     private final String WIKI_NAME = "name";
     private final String WIKI_DATE = "wikidate";
 
@@ -84,7 +83,7 @@ public class MainPageFragment extends AbstractFragment {
         cv.put(WIKI_NAME, "Main Page");
         cv.put(WIKI_DATE, new java.util.Date().getTime());
         if (!cv.equals(null)&& !mContext.equals(null)) {
-            mContext.getContentResolver().insert(WIKI_URI, cv);
+            mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
         }
         if (data == null || data.isEmpty()) {
             Toast.makeText(mContext, "No data", Toast.LENGTH_SHORT).show();

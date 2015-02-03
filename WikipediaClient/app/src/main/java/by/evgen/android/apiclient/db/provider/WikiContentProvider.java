@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import by.evgen.android.apiclient.db.DBHelper;
+import by.evgen.android.apiclient.db.HistoryDBHelper;
 
 /**
  * Created by evgen on 13.12.2014.
@@ -19,39 +19,52 @@ public class WikiContentProvider extends ContentProvider {
 
     final String LOG_TAG = WikiContentProvider.class.getSimpleName();
     // Table
-    static final String WIKI_TABLE = "geodata";
+    static final String WIKI_TABLE = "history";
     // Items
     static final String WIKI_ID = "_id";
-    static final String WIKI_NAME = "name";
     static final String WIKI_DATE = "wikidate";
     // Uri
     // authority
-    //TODO why GeoData equals WIKI_PATH and usedin WatchList ?
-    static final String AUTHORITY = "by.evgen.android.apiclient.GeoData";
-    static final String WIKI_PATH = "geodata";
-    public static final Uri WIKI_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + WIKI_PATH);
-    static final String WIKI_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
-            + AUTHORITY + "." + WIKI_PATH;
-    static final String WIKI_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd."
-            + AUTHORITY + "." + WIKI_PATH;
+    //TODO why GeoData equals HISTORY and usedin WatchList ?
+    static final String AUTHORITY = "by.evgen.android.apiclient.WikiData";
+    static final String HISTORY = "history";
+    static final String STORAGE = "storage";
+
+    public static final Uri WIKI_HISTORY_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + HISTORY);
+    static final String WIKI_HISTORY_TYPE = "vnd.android.cursor.dir/vnd."
+            + AUTHORITY + "." + HISTORY;
+    static final String WIKI_HISTORY_ITEM_TYPE = "vnd.android.cursor.item/vnd."
+            + AUTHORITY + "." + HISTORY;
+
+    public static final Uri WIKI_STORAGE_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + STORAGE);
+    static final String WIKI_STORAGE_TYPE = "vnd.android.cursor.dir/vnd."
+            + AUTHORITY + "." + STORAGE;
+    static final String WIKI_STORAGE_ITEM_TYPE = "vnd.android.cursor.item/vnd."
+            + AUTHORITY + "." + STORAGE;
     // UriMatcher
-    static final int URI_DATA = 1;
-    static final int URI_DATA_ID = 2;
+    static final int URI_HISTORY = 1;
+    static final int URI_HISTORY_ID = 2;
+    static final int URI_STORAGE = 3;
+    static final int URI_STORAGE_ID = 4;
+
     private static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, WIKI_PATH, URI_DATA);
-        uriMatcher.addURI(AUTHORITY, WIKI_PATH + "/#", URI_DATA_ID);
+        uriMatcher.addURI(AUTHORITY, HISTORY, URI_HISTORY);
+        uriMatcher.addURI(AUTHORITY, HISTORY + "/#", URI_HISTORY_ID);
+        uriMatcher.addURI(AUTHORITY, STORAGE, URI_STORAGE);
+        uriMatcher.addURI(AUTHORITY, STORAGE + "/#", URI_STORAGE_ID);
     }
 
-    private DBHelper dbHelper;
+    private HistoryDBHelper historyDbHelper;
     private SQLiteDatabase db;
 
     public boolean onCreate() {
         Log.d(LOG_TAG, "onCreate");
-        dbHelper = new DBHelper(getContext());
+        historyDbHelper = new HistoryDBHelper(getContext());
         return true;
     }
 
@@ -59,15 +72,15 @@ public class WikiContentProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         Log.d(LOG_TAG, "query, " + uri.toString());
         switch (uriMatcher.match(uri)) {
-            case URI_DATA:
-                Log.d(LOG_TAG, "URI_DATA");
+            case URI_HISTORY:
+                Log.d(LOG_TAG, "URI_HISTORY");
                 if (TextUtils.isEmpty(sortOrder)) {
                     sortOrder = "date(" + WIKI_DATE + ") DESC";
                 }
                 break;
-            case URI_DATA_ID: // Uri с ID
+            case URI_HISTORY_ID: // Uri с ID
                 String id = uri.getLastPathSegment();
-                Log.d(LOG_TAG, "URI_DATA_ID, " + id);
+                Log.d(LOG_TAG, "URI_HISTORY_ID, " + id);
                 if (TextUtils.isEmpty(selection)) {
                     selection = WIKI_ID + " = " + id;
                 } else {
@@ -77,21 +90,21 @@ public class WikiContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        db = dbHelper.getWritableDatabase();
+        db = historyDbHelper.getWritableDatabase();
         Cursor cursor = db.query(WIKI_TABLE, projection, selection,
                 selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(),
-                WIKI_CONTENT_URI);
+                WIKI_HISTORY_URI);
         return cursor;
     }
 
     public Uri insert(Uri uri, ContentValues values) {
         Log.d(LOG_TAG, "insert, " + uri.toString());
-        if (uriMatcher.match(uri) != URI_DATA)
+        if (uriMatcher.match(uri) != URI_HISTORY)
             throw new IllegalArgumentException("Wrong URI: " + uri);
-        db = dbHelper.getWritableDatabase();
+        db = historyDbHelper.getWritableDatabase();
         long rowID = db.insert(WIKI_TABLE, null, values);
-        Uri resultUri = ContentUris.withAppendedId(WIKI_CONTENT_URI, rowID);
+        Uri resultUri = ContentUris.withAppendedId(WIKI_HISTORY_URI, rowID);
         getContext().getContentResolver().notifyChange(resultUri, null);
         return resultUri;
     }
@@ -101,12 +114,12 @@ public class WikiContentProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.d(LOG_TAG, "delete, " + uri.toString());
         switch (uriMatcher.match(uri)) {
-            case URI_DATA:
-                Log.d(LOG_TAG, "URI_DATA");
+            case URI_HISTORY:
+                Log.d(LOG_TAG, "URI_HISTORY");
                 break;
-            case URI_DATA_ID:
+            case URI_HISTORY_ID:
                 String id = uri.getLastPathSegment();
-                Log.d(LOG_TAG, "URI_DATA_ID, " + id);
+                Log.d(LOG_TAG, "URI_HISTORY_ID, " + id);
                 if (TextUtils.isEmpty(selection)) {
                     selection = WIKI_ID + " = " + id;
                 } else {
@@ -116,7 +129,7 @@ public class WikiContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        db = dbHelper.getWritableDatabase();
+        db = historyDbHelper.getWritableDatabase();
         //TODO
         int cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
@@ -127,12 +140,12 @@ public class WikiContentProvider extends ContentProvider {
                       String[] selectionArgs) {
         Log.d(LOG_TAG, "update, " + uri.toString());
         switch (uriMatcher.match(uri)) {
-            case URI_DATA:
-                Log.d(LOG_TAG, "URI_DATA");
+            case URI_HISTORY:
+                Log.d(LOG_TAG, "URI_HISTORY");
                 break;
-            case URI_DATA_ID:
+            case URI_HISTORY_ID:
                 String id = uri.getLastPathSegment();
-                Log.d(LOG_TAG, "URI_DATA_ID, " + id);
+                Log.d(LOG_TAG, "URI_HISTORY_ID, " + id);
                 if (TextUtils.isEmpty(selection)) {
                     selection = WIKI_ID + " = " + id;
                 } else {
@@ -142,7 +155,7 @@ public class WikiContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        db = dbHelper.getWritableDatabase();
+        db = historyDbHelper.getWritableDatabase();
         int cnt = db.update(WIKI_TABLE, values, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
@@ -151,10 +164,10 @@ public class WikiContentProvider extends ContentProvider {
     public String getType(Uri uri) {
         Log.d(LOG_TAG, "getType, " + uri.toString());
         switch (uriMatcher.match(uri)) {
-            case URI_DATA:
-                return WIKI_CONTENT_TYPE;
-            case URI_DATA_ID:
-                return WIKI_CONTENT_ITEM_TYPE;
+            case URI_HISTORY:
+                return WIKI_HISTORY_TYPE;
+            case URI_HISTORY_ID:
+                return WIKI_HISTORY_ITEM_TYPE;
         }
         return null;
     }

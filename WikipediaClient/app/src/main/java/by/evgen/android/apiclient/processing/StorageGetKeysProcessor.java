@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.evgen.android.apiclient.utils.Constant;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by User on 21.01.2015.
@@ -23,6 +24,7 @@ public class StorageGetKeysProcessor implements Processor<List<String>,InputStre
         for (int i = 0; i < array.length(); i++) {
             String stringValue = array.getString(i);
             noteArray.add(stringValue);
+            Log.text(getClass(), stringValue);
         }
         return noteArray;
     }

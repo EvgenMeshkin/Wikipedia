@@ -18,10 +18,12 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.FavouritesArrayAdapter;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.helper.ClearVkStorage;
 import by.evgen.android.apiclient.listener.FavouritesListViewListener;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.DataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
@@ -130,6 +132,10 @@ public class FavouritesFragment extends AbstractFragment {
     private String getUrl(int count, int offset) {
         String stor = Api.getStorageKeysGet(count, offset);
         return stor;
+    }
+
+    public void clearStorage(){
+        new ClearVkStorage(mContext);
     }
 
 }

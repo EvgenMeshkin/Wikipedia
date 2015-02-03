@@ -89,7 +89,7 @@
 
         <provider
             android:name="by.evgen.android.apiclient.db.provider.WikiContentProvider"
-            android:authorities="by.evgen.android.apiclient.GeoData"
+            android:authorities="by.evgen.android.apiclient.WikiData"
             android:exported="true"
             android:syncable="true"
             android:multiprocess="true" >

@@ -7,7 +7,7 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.processing.StorageSetProcessor;
-import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -60,7 +60,7 @@ public class SentsVkStorage extends OnErrorCallbacks implements ManagerDownload.
         } else {
             ManagerDownload.load(this,
                     Api.getStorage(mBaseUrl),
-                    VkDataSource.get(mContext),
+                    VkCachedDataSource.get(mContext),
                     new StorageSetProcessor());
             Log.text(getClass(), Api.getStorage(mBaseUrl));
         }

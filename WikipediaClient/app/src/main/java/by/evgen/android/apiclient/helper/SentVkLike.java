@@ -3,7 +3,7 @@ package by.evgen.android.apiclient.helper;
 import android.content.Context;
 
 import by.evgen.android.apiclient.processing.StringProcessor;
-import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 
 /**
  * Created by evgen on 13.01.2015.
@@ -27,7 +27,7 @@ public class SentVkLike extends OnErrorCallbacks{
            public void onError(Exception e) {
                onErrorSent(e);
            }
-       }, url, VkDataSource.get(context), new StringProcessor());
+       }, url, VkCachedDataSource.get(context), new StringProcessor());
 
     }
 

@@ -12,7 +12,7 @@ import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.DataSource;
-import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -40,7 +40,7 @@ public class FavouritesListViewListener extends AbstractOnScrollListener {
 
     @Override
     public DataSource getDataSource() {
-        return VkDataSource.get(mContext);
+        return VkCachedDataSource.get(mContext);
     }
 
     @Override
