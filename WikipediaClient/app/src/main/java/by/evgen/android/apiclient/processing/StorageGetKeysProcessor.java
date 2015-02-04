@@ -33,15 +33,18 @@ public class StorageGetKeysProcessor implements Processor<List<String>,InputStre
         JSONObject jsonObject = new JSONObject(string);
         JSONArray array = (JSONArray) jsonObject.get(Constant.getResponse());
         List<String> noteArray = new ArrayList<String>(array.length());
-        ContentValues cv = new ContentValues();
+        mContext.getContentResolver().delete(WikiContentProvider.WIKI_STORAGE_URI, null, null);
+        ContentValues[] valueses = new ContentValues[array.length()];
         for (int i = 0; i < array.length(); i++) {
             String stringValue = array.getString(i);
+            ContentValues cv = new ContentValues();
             cv.put(StorageDBHelper.WIKI_NAME, stringValue);
+            valueses[i] = cv;
             noteArray.add(stringValue);
             Log.text(getClass(), stringValue);
         }
-        if (!cv.equals(null) && !mContext.equals(null)) {
-            mContext.getContentResolver().insert(WikiContentProvider.WIKI_STORAGE_URI, cv);
+        if (!mContext.equals(null)) {
+            mContext.getContentResolver().bulkInsert(WikiContentProvider.WIKI_STORAGE_URI, valueses);
         }
         return noteArray;
     }

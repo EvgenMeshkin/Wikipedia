@@ -1,5 +1,6 @@
 package by.evgen.android.apiclient.fragment;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -111,7 +112,7 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContent = inflater.inflate(R.layout.fragment_list_search, null);
-        new GetAllVkStorage(this, getActivity());
+       // new GetAllVkStorage(this, getActivity());
         mEditSearch = (EditText) mContent.findViewById(R.id.editText);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mContent.findViewById(by.evgen.android.apiclient.R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -126,6 +127,8 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
 
     //TODO rename to something else
     private void setData (){
+        final Bundle extras = new Bundle();
+        ContentResolver.requestSync(null, WikiContentProvider.AUTHORITY, extras);
         mLoadermanager = getLoaderManager();
         mLoadermanager.initLoader(1, null, this);
         mListView = (ListView) mContent.findViewById(android.R.id.list);

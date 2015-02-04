@@ -99,8 +99,8 @@ public class MainPageFragment extends AbstractFragment {
             webSettings.setBuiltInZoomControls(true);
             mWebView.loadDataWithBaseURL(Api.MAIN_URL,
                     mTextHtml,
-                    Constant.getType(),
-                    Constant.getUtf(),
+                    Constant.TYPE,
+                    Constant.UTF,
                     null);
         }
     }

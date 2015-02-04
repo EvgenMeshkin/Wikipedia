@@ -8,10 +8,10 @@ public class Constant {
     //TODO
     public static final String GEOSEARCH = "geosearch";
     public static final String QUERY = "query";
-    private static final String PAGES = "pages";
-    private static final String KEY = "key";
-    private static final String UTF = "utf-8";
-    private static final String TYPE = "text/html";
+    public static final String PAGES = "pages";
+    public static final String KEY = "key";
+    public static final String UTF = "utf-8";
+    public static final String TYPE = "text/html";
     private static final String LOAD = "Loading...";
     private static final String DBDATE = "wikidate";
     private static final String DBNAME = "name";
@@ -31,18 +31,6 @@ public class Constant {
     public static final String ACCOUNT_TYPE = "by.evgen.android.apiclient";
 
 
-    public static String getPages() {
-        return PAGES;
-    }
-    public static String getKey() {
-        return KEY;
-    }
-    public static String getUtf() {
-        return UTF;
-    }
-    public static String getType() {
-        return TYPE;
-    }
     public static String getEmpty() {
         return EMPTY;
     }

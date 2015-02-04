@@ -8,10 +8,15 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
+import java.util.List;
+
+import by.evgen.android.apiclient.helper.GetAllVkStorage;
+import by.evgen.android.apiclient.utils.Log;
+
 /**
  * Created by evgen on 05.11.2014.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
+public class SyncAdapter extends AbstractThreadedSyncAdapter implements GetAllVkStorage.Callbacks{
 
     private final AccountManager mAccountManager;
     private final Context mContext;
@@ -25,15 +30,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
                               SyncResult syncResult) {
-        String authtoken = null;
-        try {
-             authtoken = mAccountManager.blockingGetAuthToken(account,
-                    "https://oauth.vk.com/", true);
-            String login = account.name;
-            String password = mAccountManager.getPassword(account);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new GetAllVkStorage(this, mContext);
+        Log.text(getClass(), "Start sync adapter");
+//        String authtoken = null;
+//        try {
+//             authtoken = mAccountManager.blockingGetAuthToken(account,
+//                    "https://oauth.vk.com/", true);
+//            String login = account.name;
+//            String password = mAccountManager.getPassword(account);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -46,5 +53,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
 
+    @Override
+    public void onAllVkStorage(List<String> data) {
 
+    }
 }

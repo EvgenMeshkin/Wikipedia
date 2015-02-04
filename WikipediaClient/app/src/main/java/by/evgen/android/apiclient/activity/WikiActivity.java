@@ -6,6 +6,7 @@ package by.evgen.android.apiclient.activity;
 
 import android.annotation.TargetApi;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -51,7 +52,7 @@ import by.evgen.android.apiclient.helper.RandomPageCallback;
 import by.evgen.android.apiclient.utils.EnumMenuItems;
 import by.evgen.android.apiclient.utils.Log;
 
-public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks, OnErrorCallbacks.Callbacks {
+public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks, StorageFragment.Callbacks, OnErrorCallbacks.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;

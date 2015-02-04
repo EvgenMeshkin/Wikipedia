@@ -20,7 +20,7 @@ public class ImageUrlProcessor implements Processor<List<Category>,InputStream>{
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
         JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
-        JSONObject pages = query.getJSONObject(Constant.getPages());
+        JSONObject pages = query.getJSONObject(Constant.PAGES);
         Iterator<?> i = pages.keys();
         JSONObject pagesId = pages.getJSONObject(i.next().toString());
         JSONObject thumbnail = pagesId.getJSONObject(Constant.getThumbnail());

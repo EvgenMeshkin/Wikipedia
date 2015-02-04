@@ -91,7 +91,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
         View content = inflater.inflate(R.layout.fragment_details, null);
         mContext = getActivity();
         mHttpDataSource = HttpDataSource.get(mContext);
-        mObj = getArguments().getParcelable(Constant.getKey());
+        mObj = getArguments().getParcelable(Constant.KEY);
         if (mObj != null) {
             mHistory = mObj.getTitle();
             mWebView = (WebView) content.findViewById(R.id.webView);
@@ -173,8 +173,8 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             });
             mWebView.loadDataWithBaseURL(Api.MAIN_URL,
                     mTextHtml,
-                    Constant.getType(),
-                    Constant.getUtf(),
+                    Constant.TYPE,
+                    Constant.UTF,
                     null);
         }
     }
@@ -182,8 +182,8 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     public void notifyWebView(Integer position) {
         mWebView.loadDataWithBaseURL(Api.MAIN_URL + "#" + Decoder.getTitle(mContent.get(position).toString()),
                 mTextHtml,
-                Constant.getType(),
-                Constant.getUtf(),
+                Constant.TYPE,
+                Constant.UTF,
                 null);
     }
 

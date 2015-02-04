@@ -22,7 +22,7 @@ public class ExtrasProcessor implements Processor<List<Category>,InputStream>{
         JSONObject jsonObject = new JSONObject(string);
         Log.text(getClass(), "run");
         JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
-        JSONObject pages = query.getJSONObject(Constant.getPages());
+        JSONObject pages = query.getJSONObject(Constant.PAGES);
         Iterator<?> i = pages.keys();
         JSONObject pagesId = pages.getJSONObject(i.next().toString());
         List<Category> noteArray = new ArrayList<Category>(pagesId.length());

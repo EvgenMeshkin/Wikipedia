@@ -7,6 +7,7 @@ import java.util.List;
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.VkCachedDataSource;
+import by.evgen.android.apiclient.source.VkDataSource;
 
 /**
  * Created by evgen on 25.01.2015.
@@ -20,7 +21,7 @@ public class GetAllVkStorage extends OnErrorCallbacks implements ManagerDownload
         mCallbacks = callbacks;
         ManagerDownload.load(this,
                 Api.STORAGE_KEYS_GET,
-                VkCachedDataSource.get(context),
+                VkDataSource.get(context),
                 new StorageGetKeysProcessor(context));
     }
 

@@ -2,7 +2,7 @@
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="https://oauth.vk.com/"
     android:allowParallelSyncs="false"
-    android:contentAuthority="by.evgen.android.apiclient"
+    android:contentAuthority="by.evgen.android.apiclient.WikiData"
     android:isAlwaysSyncable="true"
-    android:supportsUploading="false"
+    android:supportsUploading="true"
     android:userVisible="true" />

@@ -27,7 +27,7 @@ public class WikiContentProvider extends ContentProvider {
     // Uri
     // authority
     //TODO why GeoData equals HISTORY and usedin WatchList ?
-    static final String AUTHORITY = "by.evgen.android.apiclient.WikiData";
+    public static final String AUTHORITY = "by.evgen.android.apiclient.WikiData";
     static final String HISTORY = "history";
     static final String STORAGE = "storage";
 
@@ -144,9 +144,12 @@ public class WikiContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.d(LOG_TAG, "delete, " + uri.toString());
+        int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 Log.d(LOG_TAG, "URI_HISTORY");
+                db = historyDbHelper.getWritableDatabase();
+                cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
                 break;
             case URI_HISTORY_ID:
                 String id = uri.getLastPathSegment();
@@ -156,17 +159,17 @@ public class WikiContentProvider extends ContentProvider {
                 } else {
                     selection = selection + " AND " + WIKI_ID + " = " + id;
                 }
+                db = historyDbHelper.getWritableDatabase();
+                cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
                 break;
             case URI_STORAGE:
                 Log.d(LOG_TAG, "DELETE URI_STORAGE");
-
+                db = storageDBHelper.getWritableDatabase();
+                cnt = db.delete(StorageDBHelper.WIKI_TABLE, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        db = historyDbHelper.getWritableDatabase();
-        //TODO
-        int cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
     }
@@ -174,9 +177,12 @@ public class WikiContentProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         Log.d(LOG_TAG, "update, " + uri.toString());
+        int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 Log.d(LOG_TAG, "URI_HISTORY");
+                db = historyDbHelper.getWritableDatabase();
+                cnt = db.update(WIKI_TABLE, values, selection, selectionArgs);
                 break;
             case URI_HISTORY_ID:
                 String id = uri.getLastPathSegment();
@@ -186,12 +192,17 @@ public class WikiContentProvider extends ContentProvider {
                 } else {
                     selection = selection + " AND " + WIKI_ID + " = " + id;
                 }
+                db = historyDbHelper.getWritableDatabase();
+                cnt = db.update(WIKI_TABLE, values, selection, selectionArgs);
+                break;
+            case URI_STORAGE:
+                Log.d(LOG_TAG, "UPDATE URI_STORAGE");
+                db = storageDBHelper.getWritableDatabase();
+                cnt = db.update(StorageDBHelper.WIKI_TABLE, values, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        db = historyDbHelper.getWritableDatabase();
-        int cnt = db.update(WIKI_TABLE, values, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
     }

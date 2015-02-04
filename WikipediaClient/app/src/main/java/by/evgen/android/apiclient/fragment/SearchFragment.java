@@ -43,7 +43,7 @@ public class SearchFragment extends AbstractFragment {
         mContext = getActivity();
         mVkDataSource = HttpDataSource.get(mContext);
         mListView = (ListView) content.findViewById(android.R.id.list);
-        mValue = getArguments().getString(Constant.getKey());
+        mValue = getArguments().getString(Constant.KEY);
         mImageLoader = ImageLoader.get(mContext);
         return content;
     }
