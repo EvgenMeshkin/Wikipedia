@@ -9,6 +9,7 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.adapters.SearchArrayAdapter;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.SearchPagesProcessor;
 import by.evgen.android.apiclient.source.DataSource;
@@ -20,19 +21,13 @@ import by.evgen.android.imageloader.ImageLoader;
  */
 public class SearchListViewOnScrollListener extends AbstractOnScrollListener {
 
-    public SearchListViewOnScrollListener(Context context, ListView listView, ImageLoader imageLoader, List data, ArrayAdapter adapter, String value) {
-        super.mImageLoader = imageLoader;
-        super.mListView = listView;
-        super.mData = data;
-        super.mValue = value;
-        super.mAdapter = adapter;
-        super.mFooterProgress = View.inflate(context, R.layout.view_footer_progress, null);
+    public SearchListViewOnScrollListener(Context context, ListView listView, List data, String value) {
+        super(context, listView, data, value);
     }
 
     @Override
     public String getUrl(int count, int offset) {
-            String url = Api.getSearchGet(count, offset) + mValue;
-            return url;
+        return Api.getSearchGet(count, offset) + mValue;
     }
 
     @Override

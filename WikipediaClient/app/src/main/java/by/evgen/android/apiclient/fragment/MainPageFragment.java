@@ -35,10 +35,8 @@ public class MainPageFragment extends AbstractFragment {
     private WebView mWebView;
     private View mProgress;
     private Context mContext;
-    private final String WIKI_NAME = "name";
-    private final String WIKI_DATE = "wikidate";
 
-    @Override
+   @Override
     public void onStop() {
         dismissProgress();
         super.onStop();
@@ -80,12 +78,6 @@ public class MainPageFragment extends AbstractFragment {
     public void onExecute(List data) {
         List<Category> mData = data;
         String mTextHtml = Constant.EMPTY;
-//        ContentValues cv = new ContentValues();
-//        cv.put(WIKI_NAME, "Main Page");
-//        cv.put(WIKI_DATE, new java.util.Date().getTime());
-//        if (!cv.equals(null)&& !mContext.equals(null)) {
-//            mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
-//        }
         if (data == null || data.isEmpty()) {
             Toast.makeText(mContext, "No data", Toast.LENGTH_SHORT).show();
         } else {
@@ -95,8 +87,6 @@ public class MainPageFragment extends AbstractFragment {
             Log.text(getClass(), mTextHtml);
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
-            webSettings.setLoadWithOverviewMode(true);
-            webSettings.setBuiltInZoomControls(true);
             mWebView.loadDataWithBaseURL(Api.MAIN_URL,
                     mTextHtml,
                     Constant.TYPE,

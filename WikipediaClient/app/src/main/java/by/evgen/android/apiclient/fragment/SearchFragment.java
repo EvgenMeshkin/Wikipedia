@@ -34,7 +34,7 @@ public class SearchFragment extends AbstractFragment {
     private String mValue;
     private ListView mListView;
     private DataSource mVkDataSource;
-    private final int COUNT = 100;
+    private final int COUNT = 20;
     private SearchPagesProcessor mSearchPagesProcessor = new SearchPagesProcessor();
 
     @Override
@@ -65,11 +65,12 @@ public class SearchFragment extends AbstractFragment {
 
     @Override
     public void onExecute(List data) {
-        if (mAdapter == null) {
-            mAdapter = new SearchArrayAdapter(mContext, R.layout.adapter_item, data);
-            mListView.setFooterDividersEnabled(true);
-            mListView.setAdapter(mAdapter);
-            mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, mImageLoader, data, mAdapter, mValue)); //{
+//        if (mAdapter == null) {
+//            mAdapter = new SearchArrayAdapter(mContext, R.layout.adapter_item, data);
+//            mListView.setFooterDividersEnabled(true);
+//            mListView.setAdapter(mAdapter);
+
+            mListView.setOnScrollListener(new SearchListViewOnScrollListener(getActivity(), mListView, data,  mValue)); //{
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -78,9 +79,9 @@ public class SearchFragment extends AbstractFragment {
                     showDetails(note);
                 }
             });
-        } else {
-            data.clear();
-        }
+ //       } else {
+ //           data.clear();
+//        }
     }
 
     private String getUrl(int count, int offset) {

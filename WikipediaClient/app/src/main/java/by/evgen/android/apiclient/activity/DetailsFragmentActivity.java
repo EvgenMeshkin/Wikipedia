@@ -129,9 +129,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            case R.id.action_settings:
-                return true;
-            case R.id.search:
+           case R.id.search:
                 onSearchRequested();
                 return true;
             case R.id.action_note:

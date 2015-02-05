@@ -81,8 +81,6 @@ public class SearchFragmentActivity extends ActionBarActivity implements Abstrac
             case R.id.search:
                 onSearchRequested();
                 return true;
-            case R.id.action_settings:
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

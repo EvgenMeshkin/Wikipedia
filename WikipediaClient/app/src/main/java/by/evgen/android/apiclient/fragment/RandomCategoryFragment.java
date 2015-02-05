@@ -30,8 +30,7 @@ public class RandomCategoryFragment extends AbstractFragment {
     private Context mContext;
     private ListView mListView;
     private DataSource mHttpDataSource;
-    private final int COUNT = 50;
-    private CategoryMembersProcessor mCategoryProcessor = new CategoryMembersProcessor();
+   private CategoryMembersProcessor mCategoryProcessor = new CategoryMembersProcessor();
 
     @Override
     public View getViewLayout(LayoutInflater inflater) {
@@ -39,6 +38,7 @@ public class RandomCategoryFragment extends AbstractFragment {
         mContext = getActivity();
         mHttpDataSource = HttpDataSource.get(mContext);
         mListView = (ListView) content.findViewById(android.R.id.list);
+        mListView.setBackgroundColor(getResources().getColor(R.color.primary));
         return content;
     }
 
@@ -54,7 +54,7 @@ public class RandomCategoryFragment extends AbstractFragment {
 
     @Override
     public String getUrl() {
-        return getUrl(COUNT, 0);
+        return Api.RANDOM_PAGE_GET;
     }
 
     @Override
@@ -76,11 +76,6 @@ public class RandomCategoryFragment extends AbstractFragment {
         } else {
             data.clear();
         }
-    }
-
-    private String getUrl(int count, int offset) {
-        String search = Api.RANDOM_PAGE_GET;
-        return search;
     }
 
     @Override

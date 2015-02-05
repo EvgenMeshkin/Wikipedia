@@ -1,5 +1,6 @@
 package by.evgen.android.apiclient.listener;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -9,10 +10,13 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.adapters.SearchArrayAdapter;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.helper.ManagerDownload;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.DataSource;
+import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
 
 /**
@@ -21,16 +25,28 @@ import by.evgen.android.imageloader.ImageLoader;
 public abstract class AbstractOnScrollListener implements AbsListView.OnScrollListener, ManagerDownload.Callback<List<Category>> {
 
     private int mPreviousTotal = 0;
-    private int mVisibleThreshold = 5;
+    private int mVisibleThreshold = 2;
     public ListView mListView;
     public List<Category> mData;
     public ArrayAdapter mAdapter;
     public View mFooterProgress;
     public boolean isImageLoaderControlledByDataManager = false;
-    public static final int COUNT = 100;
+    public static final int COUNT = 20;
     public ImageLoader mImageLoader;
     private boolean isPagingEnabled = true;
     public String mValue;
+
+    public AbstractOnScrollListener(Context context, ListView listView, List data, String value) {
+        mImageLoader = ImageLoader.get(context);
+        mListView = listView;
+        mData = data;
+        mValue = value;
+        mAdapter = new SearchArrayAdapter(context, R.layout.adapter_item, data);
+        mFooterProgress = View.inflate(context, R.layout.view_footer_progress, null);
+        mListView.setFooterDividersEnabled(true);
+        mListView.addFooterView(mFooterProgress, null, false);
+        mListView.setAdapter(mAdapter);
+    }
 
     public abstract String getUrl(int count, int offset);
 
@@ -40,6 +56,7 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        Log.text(getClass(), "onScrollStateChanged");
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                 if (!isImageLoaderControlledByDataManager) {
@@ -63,12 +80,14 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         ListAdapter adapter = view.getAdapter();
         final int count = getRealAdapterCount(adapter);
+        Log.text(getClass(), "onScroll" + count + mPreviousTotal + totalItemCount);
         if (count == 0) {
             return;
         }
         if (mPreviousTotal != totalItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + mVisibleThreshold)) {
             mPreviousTotal = totalItemCount;
             isImageLoaderControlledByDataManager = true;
+            Log.text(getClass(), "onScroll if" + count);
             ManagerDownload.load(this,
                     getUrl(COUNT, count),
                     getDataSource(),
@@ -77,14 +96,17 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         if (mData != null && mData.size() == COUNT) {
             isPagingEnabled = true;
         } else {
-            isPagingEnabled = false;
+           // isPagingEnabled = false;
         }
         refreshFooter();
     }
 
     public void updateAdapter(List<Category> data) {
+        Log.text(getClass(), "onScrollUpdateAdapter");
         if (data != null && data.size() == COUNT) {
             isPagingEnabled = true;
+            Log.text(getClass(), "onScrollUpdateAdapter addFooter");
+            mListView.removeFooterView(mFooterProgress);
             mListView.addFooterView(mFooterProgress, null, false);
         } else {
             isPagingEnabled = false;
@@ -125,15 +147,18 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
 
     @Override
     public void onPostExecute(List<Category> data) {
-            if (mAdapter == null) {
-                updateAdapter(data);
+      Log.text(getClass(), "onScrollPostExecute");
+     // if (mAdapter == null) {
+            isPagingEnabled = true;
+            refreshFooter();
+            updateAdapter(data);
             mImageLoader.resume();
             isImageLoaderControlledByDataManager = false;
-        } else {
-            data.clear();
-            updateAdapter(data);
-        }
-        refreshFooter();
+//        } else {
+//            data.clear();
+//            updateAdapter(data);
+//        }
+
     }
 
     @Override

@@ -39,7 +39,6 @@ import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragment.AbstractDbFragment;
 import by.evgen.android.apiclient.fragment.AbstractFragment;
-import by.evgen.android.apiclient.fragment.FavouritesFragment;
 import by.evgen.android.apiclient.fragment.MainPageFragment;
 import by.evgen.android.apiclient.fragment.RandomCategoryFragment;
 import by.evgen.android.apiclient.fragment.StorageFragment;
@@ -214,7 +213,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                 Log.text(getClass(), "Clear history");
                 this.getContentResolver().delete(WikiContentProvider.WIKI_HISTORY_URI, null, null);
             }
-            if (frag instanceof FavouritesFragment) {
+            if (frag instanceof StorageFragment) {
                 Log.text(getClass(), "Clear Storage");
                 new ClearVkStorage(this);
             }
@@ -235,9 +234,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
             return true;
         }
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            case R.id.search:
+           case R.id.search:
                 onSearchRequested();
                 return true;
             default:
