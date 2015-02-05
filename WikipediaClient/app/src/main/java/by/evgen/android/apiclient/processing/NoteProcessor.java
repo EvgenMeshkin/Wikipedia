@@ -15,7 +15,7 @@ public class NoteProcessor implements Processor<Long,InputStream>{
     public Long process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        Long id = jsonObject.getLong(Constant.getResponse());
+        Long id = jsonObject.getLong(Constant.RESPONSE);
         return id;
     }
 

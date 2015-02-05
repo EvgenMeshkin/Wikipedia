@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import by.evgen.android.apiclient.Api;
+import by.evgen.android.apiclient.db.HistoryDBHelper;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
@@ -46,12 +47,12 @@ public class DateAdapter extends SimpleCursorAdapter {
             mDataCursor.moveToPosition(position);
             if (position > 0) {
                 mDataCursor.moveToPrevious();
-                mPrevDate = (new java.sql.Date(mDataCursor.getLong(mDataCursor.getColumnIndex(Constant.getDbDate())))).toString();
+                mPrevDate = (new java.sql.Date(mDataCursor.getLong(mDataCursor.getColumnIndex(HistoryDBHelper.WIKI_DATE)))).toString();
                 mDataCursor.moveToNext();
             }
-            int title = mDataCursor.getColumnIndex(Constant.getDbName());
+            int title = mDataCursor.getColumnIndex(HistoryDBHelper.WIKI_NAME);
             String task_title = mDataCursor.getString(title);
-            int title_date = mDataCursor.getColumnIndex(Constant.getDbDate());
+            int title_date = mDataCursor.getColumnIndex(HistoryDBHelper.WIKI_DATE);
             Long task_day = mDataCursor.getLong(title_date);
             String dt = (new java.sql.Date(task_day)).toString();
             holder = new ViewHolder();

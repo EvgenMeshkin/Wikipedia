@@ -23,7 +23,6 @@ import by.evgen.android.apiclient.listener.FavouritesListViewListener;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
 import by.evgen.android.apiclient.source.DataSource;
-import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 import by.evgen.android.apiclient.utils.Log;
 import by.evgen.android.imageloader.ImageLoader;
@@ -48,7 +47,7 @@ public class FavouritesFragment extends AbstractFragment {
         mContext = getActivity();
         mListView = (ListView) content.findViewById(android.R.id.list);
         mImageLoader = ImageLoader.get(mContext);
-        mEditSearch = (EditText) content.findViewById(R.id.editText);
+        mEditSearch = (EditText) content.findViewById(R.id.editSearch);
         mSwipeRefreshLayout = (SwipeRefreshLayout) content.findViewById(by.evgen.android.apiclient.R.id.swipe_container);
         return content;
     }

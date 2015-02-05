@@ -48,14 +48,14 @@ public class SentsVkStorage extends OnErrorCallbacks implements ManagerDownload.
 
     @Override
     public void onAllVkStorage(List<String> data) {
-        String pageName = Constant.getEmpty();
+        String pageName = Constant.EMPTY;
         Log.text(getClass(), "Storage" + data);
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).contains(mBaseUrl)) {
                 pageName = data.get(i);
             }
         }
-        if (!pageName.equals(Constant.getEmpty())) {
+        if (!pageName.equals(Constant.EMPTY)) {
             Toast.makeText(mContext, "You already added this note", Toast.LENGTH_SHORT).show();
         } else {
             ManagerDownload.load(this,

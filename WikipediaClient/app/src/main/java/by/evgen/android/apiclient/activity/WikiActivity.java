@@ -6,7 +6,6 @@ package by.evgen.android.apiclient.activity;
 
 import android.annotation.TargetApi;
 import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -38,6 +37,7 @@ import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
+import by.evgen.android.apiclient.fragment.AbstractDbFragment;
 import by.evgen.android.apiclient.fragment.AbstractFragment;
 import by.evgen.android.apiclient.fragment.FavouritesFragment;
 import by.evgen.android.apiclient.fragment.MainPageFragment;
@@ -49,10 +49,11 @@ import by.evgen.android.apiclient.helper.ClearVkStorage;
 import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.helper.RandomPageCallback;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.EnumMenuItems;
 import by.evgen.android.apiclient.utils.Log;
 
-public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, WatchListFragment.Callbacks, StorageFragment.Callbacks, OnErrorCallbacks.Callbacks {
+public class WikiActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, LoadVkUserData.Callbacks, RandomPageCallback.Callbacks, AbstractDbFragment.Callbacks, OnErrorCallbacks.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -60,7 +61,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private View mHeaderDrawer;
-    private final String KEY = "key";
     private final String KEYNOTE = "keynote";
     private MenuItem mClearHist;
     private boolean mVisible = false;
@@ -115,8 +115,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     @Override
     public void onUserData(Bitmap foto, String first, String last) {
         Log.text(this.getClass(), "FirstName" + first);
-        TextView firstname = (TextView) mHeaderDrawer.findViewById(R.id.text1);
-        TextView lastname = (TextView) mHeaderDrawer.findViewById(R.id.text2);
+        TextView firstname = (TextView) mHeaderDrawer.findViewById(R.id.title);
+        TextView lastname = (TextView) mHeaderDrawer.findViewById(R.id.content);
         ImageView fotos = (ImageView) mHeaderDrawer.findViewById(R.id.icon);
         fotos.setImageBitmap(foto);
         firstname.setText(first);
@@ -126,10 +126,10 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     @Override
     public void onShowDetails(NoteGsonModel note) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY, note);
+        bundle.putParcelable(Constant.KEY, note);
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
-        intent.putExtra(KEY, bundle);
+        intent.putExtra(Constant.KEY, bundle);
         intent.putExtra(KEYNOTE, note);
         startActivity(intent);
     }

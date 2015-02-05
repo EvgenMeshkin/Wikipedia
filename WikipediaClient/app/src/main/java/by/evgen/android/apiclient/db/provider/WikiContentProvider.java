@@ -8,25 +8,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import by.evgen.android.apiclient.db.HistoryDBHelper;
 import by.evgen.android.apiclient.db.StorageDBHelper;
+import by.evgen.android.apiclient.utils.Log;
 
 /**
  * Created by evgen on 13.12.2014.
  */
 public class WikiContentProvider extends ContentProvider {
 
-    final String LOG_TAG = WikiContentProvider.class.getSimpleName();
-    // Table
-    static final String WIKI_TABLE = "history";
-    // Items
-    static final String WIKI_ID = "_id";
-    static final String WIKI_DATE = "wikidate";
-    // Uri
-    // authority
-    //TODO why GeoData equals HISTORY and usedin WatchList ?
     public static final String AUTHORITY = "by.evgen.android.apiclient.WikiData";
     static final String HISTORY = "history";
     static final String STORAGE = "storage";
@@ -44,7 +35,7 @@ public class WikiContentProvider extends ContentProvider {
             + AUTHORITY + "." + STORAGE;
     static final String WIKI_STORAGE_ITEM_TYPE = "vnd.android.cursor.item/vnd."
             + AUTHORITY + "." + STORAGE;
-    // UriMatcher
+
     static final int URI_HISTORY = 1;
     static final int URI_HISTORY_ID = 2;
     static final int URI_STORAGE = 3;
@@ -65,39 +56,38 @@ public class WikiContentProvider extends ContentProvider {
     private SQLiteDatabase db;
 
     public boolean onCreate() {
-        Log.d(LOG_TAG, "onCreate");
+        Log.text(getClass(), "onCreate");
         storageDBHelper = new StorageDBHelper(getContext());
         historyDbHelper = new HistoryDBHelper(getContext());
         return true;
     }
 
+    @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Log.d(LOG_TAG, "query, " + uri.toString());
+        Log.text(getClass(), "query, " + uri.toString());
         Cursor cursor = null;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
-                Log.d(LOG_TAG, "URI_HISTORY");
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = "date(" + WIKI_DATE + ") DESC";
+                    sortOrder = "date(" + HistoryDBHelper.WIKI_DATE + ") DESC";
                 }
                 db = historyDbHelper.getWritableDatabase();
-                cursor = db.query(WIKI_TABLE, projection, selection,
+                cursor = db.query(HistoryDBHelper.WIKI_TABLE, projection, selection,
                         selectionArgs, null, null, sortOrder);
                 cursor.setNotificationUri(getContext().getContentResolver(),
                         WIKI_HISTORY_URI);
                 break;
             case URI_HISTORY_ID: // Uri с ID
                 String id = uri.getLastPathSegment();
-                Log.d(LOG_TAG, "URI_HISTORY_ID, " + id);
                 if (TextUtils.isEmpty(selection)) {
-                    selection = WIKI_ID + " = " + id;
+                    selection = HistoryDBHelper.WIKI_ID + " = " + id;
                 } else {
-                    selection = selection + " AND " + WIKI_ID + " = " + id;
+                    selection = selection + " AND " + HistoryDBHelper.WIKI_ID + " = " + id;
                 }
                 break;
             case URI_STORAGE:
-                Log.d(LOG_TAG, "QUERY URI_STORAGE");
+                //TODO
 //                if (TextUtils.isEmpty(sortOrder)) {
 //                    sortOrder = "title(" + StorageDBHelper.WIKI_NAME + ") DESC";
 //                }
@@ -110,25 +100,22 @@ public class WikiContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-
         return cursor;
     }
 
+    @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.d(LOG_TAG, "insert, " + uri.toString());
+        Log.text(getClass(), "insert, " + uri.toString());
         Uri resultUri = null;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
-                Log.d(LOG_TAG, "URI_HISTORY");
                 db = historyDbHelper.getWritableDatabase();
-                long rowID = db.insert(WIKI_TABLE, null, values);
+                long rowID = db.insert(HistoryDBHelper.WIKI_TABLE, null, values);
                 resultUri = ContentUris.withAppendedId(WIKI_HISTORY_URI, rowID);
                 break;
             case URI_HISTORY_ID:
-                Log.d(LOG_TAG, "URI_HISTORY_ID, " );
                 break;
             case URI_STORAGE:
-                Log.d(LOG_TAG, "INSERT URI_STORAGE");
                 db = storageDBHelper.getWritableDatabase();
                 long storID = db.insert(StorageDBHelper.WIKI_TABLE, null, values);
                 resultUri = ContentUris.withAppendedId(WIKI_STORAGE_URI, storID);
@@ -140,30 +127,26 @@ public class WikiContentProvider extends ContentProvider {
         return resultUri;
     }
 
-    //TODO add overides to all overrided methods
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.d(LOG_TAG, "delete, " + uri.toString());
+        Log.text(getClass(), "delete, " + uri.toString());
         int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
-                Log.d(LOG_TAG, "URI_HISTORY");
                 db = historyDbHelper.getWritableDatabase();
-                cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
+                cnt = db.delete(HistoryDBHelper.WIKI_TABLE, selection, selectionArgs);
                 break;
             case URI_HISTORY_ID:
                 String id = uri.getLastPathSegment();
-                Log.d(LOG_TAG, "URI_HISTORY_ID, " + id);
                 if (TextUtils.isEmpty(selection)) {
-                    selection = WIKI_ID + " = " + id;
+                    selection = HistoryDBHelper.WIKI_ID + " = " + id;
                 } else {
-                    selection = selection + " AND " + WIKI_ID + " = " + id;
+                    selection = selection + " AND " + HistoryDBHelper.WIKI_ID + " = " + id;
                 }
                 db = historyDbHelper.getWritableDatabase();
-                cnt = db.delete(WIKI_TABLE, selection, selectionArgs);
+                cnt = db.delete(HistoryDBHelper.WIKI_TABLE, selection, selectionArgs);
                 break;
             case URI_STORAGE:
-                Log.d(LOG_TAG, "DELETE URI_STORAGE");
                 db = storageDBHelper.getWritableDatabase();
                 cnt = db.delete(StorageDBHelper.WIKI_TABLE, selection, selectionArgs);
                 break;
@@ -174,29 +157,27 @@ public class WikiContentProvider extends ContentProvider {
         return cnt;
     }
 
+    @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        Log.d(LOG_TAG, "update, " + uri.toString());
+        Log.text(getClass(), "update, " + uri.toString());
         int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
-                Log.d(LOG_TAG, "URI_HISTORY");
-                db = historyDbHelper.getWritableDatabase();
-                cnt = db.update(WIKI_TABLE, values, selection, selectionArgs);
+                 db = historyDbHelper.getWritableDatabase();
+                cnt = db.update(HistoryDBHelper.WIKI_TABLE, values, selection, selectionArgs);
                 break;
             case URI_HISTORY_ID:
                 String id = uri.getLastPathSegment();
-                Log.d(LOG_TAG, "URI_HISTORY_ID, " + id);
                 if (TextUtils.isEmpty(selection)) {
-                    selection = WIKI_ID + " = " + id;
+                    selection = HistoryDBHelper.WIKI_ID + " = " + id;
                 } else {
-                    selection = selection + " AND " + WIKI_ID + " = " + id;
+                    selection = selection + " AND " + HistoryDBHelper.WIKI_ID + " = " + id;
                 }
                 db = historyDbHelper.getWritableDatabase();
-                cnt = db.update(WIKI_TABLE, values, selection, selectionArgs);
+                cnt = db.update(HistoryDBHelper.WIKI_TABLE, values, selection, selectionArgs);
                 break;
             case URI_STORAGE:
-                Log.d(LOG_TAG, "UPDATE URI_STORAGE");
                 db = storageDBHelper.getWritableDatabase();
                 cnt = db.update(StorageDBHelper.WIKI_TABLE, values, selection, selectionArgs);
                 break;
@@ -207,15 +188,15 @@ public class WikiContentProvider extends ContentProvider {
         return cnt;
     }
 
+    @Override
     public String getType(Uri uri) {
-        Log.d(LOG_TAG, "getType, " + uri.toString());
+        Log.text(getClass(), "getType, " + uri.toString());
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 return WIKI_HISTORY_TYPE;
             case URI_HISTORY_ID:
                 return WIKI_HISTORY_ITEM_TYPE;
             case URI_STORAGE:
-                Log.d(LOG_TAG, "GETTYPE URI_STORAGE");
                 return WIKI_STORAGE_TYPE;
             case URI_STORAGE_ID:
                 return WIKI_STORAGE_ITEM_TYPE;

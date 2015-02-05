@@ -32,8 +32,8 @@ public class MobileViewProcessor extends WrapperArrayProcessor<Category>{
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONObject query = jsonObject.getJSONObject(Constant.getMobile());
-        JSONArray array = (JSONArray)query.get(Constant.getSections());
+        JSONObject query = jsonObject.getJSONObject(Constant.MOBILE);
+        JSONArray array = (JSONArray)query.get(Constant.SECTIONS);
         ContentValues cv = new ContentValues();
         cv.put(HistoryDBHelper.WIKI_NAME, mTitle);
         cv.put(HistoryDBHelper.WIKI_DATE, new java.util.Date().getTime());

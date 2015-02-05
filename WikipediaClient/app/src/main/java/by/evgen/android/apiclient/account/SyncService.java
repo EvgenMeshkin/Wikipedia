@@ -9,7 +9,6 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by evgen on 05.11.2014.
  */
-//TODO refactoring or read about that
 public class SyncService extends Service {
 
     private static final Object sSyncAdapterLock = new Object();

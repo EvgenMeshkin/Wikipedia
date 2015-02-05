@@ -15,8 +15,8 @@ public class LikeIsProcessor implements Processor<String,InputStream>{
     public String process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        JSONObject query = jsonObject.getJSONObject(Constant.getResponse());
-        String liked = query.getString(Constant.getLiked());
+        JSONObject query = jsonObject.getJSONObject(Constant.RESPONSE);
+        String liked = query.getString(Constant.LIKED);
         return liked;
     }
 

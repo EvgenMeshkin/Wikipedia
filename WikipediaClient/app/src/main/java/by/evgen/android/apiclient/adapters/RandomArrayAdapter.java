@@ -48,9 +48,9 @@ public class RandomArrayAdapter extends ArrayAdapter<Category> {
         Category item = getItem(position);
         Log.text(getClass(), item.getTitle());
         mTitle = (TextView) convertView.findViewById(android.R.id.text1);
-        mTitle.setText(Constant.getEmpty());
+        mTitle.setText(Constant.EMPTY);
         mContent = (TextView) convertView.findViewById(android.R.id.text2);
-        mContent.setText(Constant.getLoad());
+        mContent.setText(Constant.LOAD);
         mImageView = (ImageView) convertView.findViewById(android.R.id.icon);
         mImageView.setImageBitmap(null);
         convertView.setTag(Api.EXTRAS_PAGE_GET + Decoder.getHtml(item.getTitle()));

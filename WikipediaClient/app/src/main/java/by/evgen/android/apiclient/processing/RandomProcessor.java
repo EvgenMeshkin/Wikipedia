@@ -20,8 +20,7 @@ public class RandomProcessor extends WrapperArrayProcessor<Category> {
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
         JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
-        JSONArray array = (JSONArray)query.get(Constant.getWikirandom());
-        return array;
+        return (JSONArray)query.get(Constant.WIKIRANDOM);
     }
 
 }

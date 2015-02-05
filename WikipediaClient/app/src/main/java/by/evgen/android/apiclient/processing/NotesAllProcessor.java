@@ -19,9 +19,8 @@ public class NotesAllProcessor extends WrapperArrayProcessor<Category>{
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONObject query = jsonObject.getJSONObject(Constant.getResponse());
-        JSONArray array = (JSONArray)query.get(Constant.getItems());
-        return array;
+        JSONObject query = jsonObject.getJSONObject(Constant.RESPONSE);
+        return (JSONArray)query.get(Constant.ITEMS);
     }
 
 }

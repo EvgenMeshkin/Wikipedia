@@ -31,7 +31,7 @@ public class StorageGetKeysProcessor implements Processor<List<String>,InputStre
     public List<String> process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        JSONArray array = (JSONArray) jsonObject.get(Constant.getResponse());
+        JSONArray array = (JSONArray) jsonObject.get(Constant.RESPONSE);
         List<String> noteArray = new ArrayList<String>(array.length());
         mContext.getContentResolver().delete(WikiContentProvider.WIKI_STORAGE_URI, null, null);
         ContentValues[] valueses = new ContentValues[array.length()];

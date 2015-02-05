@@ -79,7 +79,7 @@ public class MainPageFragment extends AbstractFragment {
     @Override
     public void onExecute(List data) {
         List<Category> mData = data;
-        String mTextHtml = Constant.getEmpty();
+        String mTextHtml = Constant.EMPTY;
 //        ContentValues cv = new ContentValues();
 //        cv.put(WIKI_NAME, "Main Page");
 //        cv.put(WIKI_DATE, new java.util.Date().getTime());

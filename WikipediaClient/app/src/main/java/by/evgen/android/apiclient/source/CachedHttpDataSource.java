@@ -151,7 +151,7 @@ public class CachedHttpDataSource extends HttpDataSource {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return Constant.getEmpty();
+        return Constant.EMPTY;
     }
 
 

@@ -19,11 +19,11 @@ public class MainPageProcessor implements Processor<List<Category>,InputStream> 
     public List<Category> process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        JSONObject parse = jsonObject.getJSONObject(Constant.getParse());
+        JSONObject parse = jsonObject.getJSONObject(Constant.PARSE);
         Log.text(getClass(), "MainPage");
-        String text = parse.getString(Constant.getText());
+        String text = parse.getString(Constant.TEXT);
         List<Category> category = new ArrayList<Category>();
-        category.add(new Category(parse.getJSONObject(Constant.getText())));
+        category.add(new Category(parse.getJSONObject(Constant.TEXT)));
         Log.text(getClass(), text);
         return category;
     }

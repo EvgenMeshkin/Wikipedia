@@ -19,8 +19,8 @@ public class ContentsArrayProcessor extends WrapperArrayProcessor<String> {
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONObject jsonObjectquery = jsonObject.getJSONObject(Constant.getMobile());
-        JSONArray array = (JSONArray)jsonObjectquery.get(Constant.getSections());
+        JSONObject jsonObjectquery = jsonObject.getJSONObject(Constant.MOBILE);
+        JSONArray array = (JSONArray)jsonObjectquery.get(Constant.SECTIONS);
         return array;
     }
 
