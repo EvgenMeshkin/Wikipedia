@@ -146,7 +146,7 @@ public class ImageLoader {
     synchronized boolean imageViewReused(MemoryValue memoryValue){
         String tag = mImageViews.get(memoryValue.imageView);
         Log.i(TAG, "Check " + tag);
-        if (tag.equals(null) || !tag.equals(memoryValue.url))
+        if (tag.isEmpty() || !tag.equals(memoryValue.url))
             return true;
         return false;
     }

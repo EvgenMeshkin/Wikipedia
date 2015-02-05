@@ -12,6 +12,7 @@ import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.auth.secure.EncrManager;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -20,7 +21,6 @@ import by.evgen.android.apiclient.utils.Log;
 public class VkCachedDataSource extends CachedHttpDataSource {
 
     public static final String KEY = "VkCachedDataSource";
-    public static final String ACCOUNT_TYPE = "by.evgen.android.apiclient";
     private Context mContext;
 
     public VkCachedDataSource(Context context) {
@@ -36,7 +36,7 @@ public class VkCachedDataSource extends CachedHttpDataSource {
     public InputStream getResult(String p) throws Exception {
         if (Authorized.isLogged()) {
             AccountManager manager = AccountManager.get(mContext);
-            Account vkAccount = new Account(mContext.getString(R.string.acount_name), ACCOUNT_TYPE);
+            Account vkAccount = new Account(mContext.getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
             String url = p + "&access_token=" + EncrManager.decrypt(mContext, manager.getUserData(vkAccount, "Token"));
             Log.text(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
             return super.getResult(url);

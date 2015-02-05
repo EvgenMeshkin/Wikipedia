@@ -1,7 +1,9 @@
 package by.evgen.android.apiclient.fragment;
 
+import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SyncStatusObserver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -127,8 +129,11 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
 
     //TODO rename to something else
     private void setData (){
-        final Bundle extras = new Bundle();
-        ContentResolver.requestSync(null, WikiContentProvider.AUTHORITY, extras);
+        Account vkAccount = new Account(getActivity().getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
+        ContentResolver.requestSync(vkAccount, WikiContentProvider.AUTHORITY, bundle);
         mLoadermanager = getLoaderManager();
         mLoadermanager.initLoader(1, null, this);
         mListView = (ListView) mContent.findViewById(android.R.id.list);
@@ -168,7 +173,7 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void refreshSearch (Bundle bundle){
-        Log.text(getClass(), "refresz");
+        Log.text(getClass(), "refresh");
         mLoadermanager = getLoaderManager();
         mLoadermanager.restartLoader(1, bundle, this);
     }

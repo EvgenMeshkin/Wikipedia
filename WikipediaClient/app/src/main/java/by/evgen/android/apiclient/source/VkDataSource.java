@@ -38,9 +38,7 @@ public class VkDataSource implements DataSource<InputStream, String> {
 
     @Override
     public InputStream getResult(String p) throws Exception {
-//        URL url = new URL(p);
-//        return url.openStream();
-        if (Authorized.isLogged()) {
+      if (Authorized.isLogged()) {
             AccountManager manager = AccountManager.get(mContext);
             Account vkAccount = new Account(mContext.getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
             URL url = new URL(p + "&access_token=" + EncrManager.decrypt(mContext, manager.getUserData(vkAccount, "Token")));

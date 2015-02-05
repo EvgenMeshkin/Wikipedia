@@ -12,16 +12,15 @@ import by.evgen.android.apiclient.utils.Log;
 //TODO refactoring or read about that
 public class SyncService extends Service {
 
+    private static final Object sSyncAdapterLock = new Object();
     private static SyncAdapter sSyncAdapter;
 
     @Override
     public void onCreate() {
-        super.onCreate();
-        if (sSyncAdapter == null) {
-            synchronized (SyncAdapter.class) {
-                Log.text(getClass(), "Start sync servise");
-                sSyncAdapter = new SyncAdapter(getApplicationContext());
-            }
+        Log.text(getClass(), "Start sync servise");
+        synchronized (sSyncAdapterLock) {
+            if (sSyncAdapter == null)
+                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
         }
     }
 

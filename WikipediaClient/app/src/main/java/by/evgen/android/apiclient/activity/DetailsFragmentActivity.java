@@ -1,6 +1,8 @@
 package by.evgen.android.apiclient.activity;
 
+import android.accounts.Account;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import java.util.List;
 
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
+import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragment.AbstractFragment;
 import by.evgen.android.apiclient.fragment.DetailsFragment;
@@ -36,6 +39,7 @@ import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.helper.SentsVkNotes;
 import by.evgen.android.apiclient.helper.SentsVkStorage;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -101,6 +105,11 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     public void sentStorage (MenuItem item) {
         Log.text(getClass(), "sentStorage");
         new SentsVkStorage(this, Decoder.getTitle(mNoteGsonModel.getTitle()));
+        Account vkAccount = new Account(this.getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
+        ContentResolver.requestSync(vkAccount, WikiContentProvider.AUTHORITY, bundle);
     }
 
 

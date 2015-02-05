@@ -89,6 +89,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
         displayView(1);
+        final MenuAdapter menuAdapter = new MenuAdapter(WikiActivity.this, EnumMenuItems.values());
+        mDrawerList.setAdapter(menuAdapter);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar,
                 R.string.app_name, // nav drawer open - description for accessibility
@@ -96,12 +98,11 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         ) {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
-                mDrawerList.setAdapter(null);
+                menuAdapter.notifyDataSetChanged();
                 supportInvalidateOptionsMenu();
             }
             public void onDrawerOpened(View drawerView) {
                 getSupportActionBar().setTitle(mDrawerTitle);
-                mDrawerList.setAdapter(new MenuAdapter(WikiActivity.this, EnumMenuItems.values()));
                 supportInvalidateOptionsMenu();
             }
         };
@@ -153,7 +154,6 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
       String name = getResources().getString(EnumMenuItems.values()[position-1].getTitle());
       Log.text(getClass(), name);
           FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
-         // transactionWiki.setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right);
           switch (EnumMenuItems.values()[position-1].valueOf(name)) {
               case Home:
                   MainPageFragment fragmentPage = new MainPageFragment();
@@ -188,7 +188,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
                   mDrawerLayout.closeDrawer(mDrawerList);
                   return;
           }
-         // transactionWiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+          transactionWiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
           transactionWiki.commit();
           mTitle = name;
           mDrawerLayout.closeDrawer(mDrawerList);

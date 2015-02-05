@@ -100,7 +100,7 @@ public class LoaderRandomArray {
 
     synchronized boolean viewReused(MemoryValue memoryValue){
         String tag = mViews.get(memoryValue.convertView);
-        if (tag.equals(null) || !tag.equals(memoryValue.url))
+        if (tag.isEmpty() || !tag.equals(memoryValue.url))
             return true;
         return false;
     }

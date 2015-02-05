@@ -8,9 +8,16 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
+import java.io.InputStream;
 import java.util.List;
 
+import by.evgen.android.apiclient.Api;
+import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.helper.GetAllVkStorage;
+import by.evgen.android.apiclient.helper.ManagerDownload;
+import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
+import by.evgen.android.apiclient.source.VkDataSource;
+import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -21,8 +28,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GetAllVk
     private final AccountManager mAccountManager;
     private final Context mContext;
 
-    public SyncAdapter(Context context) {
-        super(context, true);
+    public SyncAdapter(Context context, boolean autoInitialize) {
+        super(context, autoInitialize);
         mContext = context;
         mAccountManager = AccountManager.get(context);
     }
@@ -30,18 +37,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GetAllVk
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider,
                               SyncResult syncResult) {
-        new GetAllVkStorage(this, mContext);
-        Log.text(getClass(), "Start sync adapter");
-//        String authtoken = null;
-//        try {
-//             authtoken = mAccountManager.blockingGetAuthToken(account,
-//                    "https://oauth.vk.com/", true);
-//            String login = account.name;
-//            String password = mAccountManager.getPassword(account);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
+        Log.text(getClass(), "Start sync adapter" + Authorized.isLogged());
+        try {
+        //TODO
+        Authorized.setLogged(true);
+        if (Authorized.isLogged()) {
+                StorageGetKeysProcessor processor = new StorageGetKeysProcessor(mContext);
+                InputStream dataUrl = VkDataSource.get(mContext).getResult(Api.STORAGE_KEYS_GET);
+                processor.process(dataUrl);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void syncFeeds(ContentProviderClient provider, SyncResult syncResult, String where, String[] whereArgs) {
