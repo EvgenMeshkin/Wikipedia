@@ -52,12 +52,6 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
         final Bundle result = new Bundle();
         final AccountManager am = AccountManager.get(mContext.getApplicationContext());
         String authToken = am.peekAuthToken(account, authTokenType);
-        if (TextUtils.isEmpty(authToken)) {
-            final String password = am.getPassword(account);
-//            if (!TextUtils.isEmpty(password)) {
-//                authToken = AuthTokenLoader.signIn(mContext, account.name, password);
-//            }
-        }
         if (!TextUtils.isEmpty(authToken)) {
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -65,7 +59,6 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
         } else {
             final Intent intent = new Intent(mContext, VkLoginActivity.class);
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-//            intent.putExtra(VkLoginActivity.EXTRA_TOKEN_TYPE, authTokenType);
             final Bundle bundle = new Bundle();
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         }

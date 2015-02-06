@@ -6,6 +6,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import by.evgen.android.apiclient.Api;
+import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.processing.StorageSetProcessor;
 import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.utils.Log;
@@ -16,6 +17,7 @@ import by.evgen.android.apiclient.utils.Log;
 public class ClearVkStorage extends OnErrorCallbacks implements ManagerDownload.Callback<Long>, GetAllVkStorage.Callbacks {
 
     private Context mContext;
+    public Boolean mRefresh;
 
     public ClearVkStorage(Context context) {
         super(context);
@@ -30,8 +32,10 @@ public class ClearVkStorage extends OnErrorCallbacks implements ManagerDownload.
 
     @Override
     public void onPostExecute(Long data) {
-        Toast.makeText(mContext, "Note delete", Toast.LENGTH_SHORT).show();
-    }
+       if (mRefresh) {
+           mContext.getContentResolver().delete(WikiContentProvider.WIKI_STORAGE_URI, null, null);
+       }
+   }
 
     @Override
     public void onError(Exception e) {
@@ -50,6 +54,9 @@ public class ClearVkStorage extends OnErrorCallbacks implements ManagerDownload.
                     Api.STORAGE_SET + data.get(i) +"&value=",
                     VkCachedDataSource.get(mContext),
                     new StorageSetProcessor());
+            if (i == data.size()-1) {
+                mRefresh = true;
+            }
         }
     }
 

@@ -91,7 +91,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
             mSwipeRefreshLayout.setRefreshing(false);
         }
         mProgress.setVisibility(View.GONE);
-        if (data != null || !data.isEmpty()) {
+        if (data != null) {
             onExecute(data);
         }
     }

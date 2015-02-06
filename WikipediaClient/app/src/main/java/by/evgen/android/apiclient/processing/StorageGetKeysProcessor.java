@@ -2,6 +2,7 @@ package by.evgen.android.apiclient.processing;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,13 +38,14 @@ public class StorageGetKeysProcessor implements Processor<List<String>,InputStre
         ContentValues[] valueses = new ContentValues[array.length()];
         for (int i = 0; i < array.length(); i++) {
             String stringValue = array.getString(i);
+            stringValue = new String(Base64.decode(stringValue, 0));
             ContentValues cv = new ContentValues();
             cv.put(StorageDBHelper.WIKI_NAME, stringValue);
             valueses[i] = cv;
             noteArray.add(stringValue);
             Log.text(getClass(), stringValue);
         }
-        if (!mContext.equals(null)) {
+        if (mContext != null) {
             mContext.getContentResolver().bulkInsert(WikiContentProvider.WIKI_STORAGE_URI, valueses);
         }
         return noteArray;

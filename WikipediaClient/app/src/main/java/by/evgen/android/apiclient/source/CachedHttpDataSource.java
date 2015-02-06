@@ -118,7 +118,7 @@ public class CachedHttpDataSource extends HttpDataSource {
 
     public static long copy(InputStream input, OutputStream output, byte[] buffer) throws IOException {
         long count = 0;
-        int n = 0;
+        int n;
         while (-1 != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
@@ -130,7 +130,7 @@ public class CachedHttpDataSource extends HttpDataSource {
         return md5(p);
     }
 
-    public static final String md5(final String s) {
+    public static String md5(final String s) {
         final String MD5 = "MD5";
         try {
             // Create MD5 Hash

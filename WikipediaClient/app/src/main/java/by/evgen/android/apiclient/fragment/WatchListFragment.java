@@ -35,7 +35,7 @@ public class WatchListFragment extends AbstractDbFragment {
 
     @Override
     public CursorLoader getCursorLoader(String val) {
-        return new CursorLoader(getActivity(), WikiContentProvider.WIKI_HISTORY_URI, mFrom, "name LIKE  '%" + val + "%'", null, null);
+        return new CursorLoader(getActivity(), WikiContentProvider.WIKI_HISTORY_URI, mFrom, "name LIKE ?", new String[]{"%" + val + "%"}, null);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class MobileViewProcessor extends WrapperArrayProcessor<Category>{
         ContentValues cv = new ContentValues();
         cv.put(HistoryDBHelper.WIKI_NAME, mTitle);
         cv.put(HistoryDBHelper.WIKI_DATE, new java.util.Date().getTime());
-        if (!cv.equals(null) && !mContext.equals(null)) {
+        if (mContext != null) {
             mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
         }
         return array;

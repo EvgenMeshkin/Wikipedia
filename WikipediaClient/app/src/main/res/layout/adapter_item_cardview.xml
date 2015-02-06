@@ -37,7 +37,7 @@
             android:layout_alignBottom="@android:id/icon"
             android:textAlignment="center"
             android:textSize="24dp"
-            android:textColor="#607D8B"
+            android:textColor="#fff3cc28"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"/>
         <TextView

@@ -69,7 +69,6 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
             Log.text(getClass(), "Loader create" + val);
         }
         if (context != null) {
-            //TODO make ? params
             mCursorLoader = getCursorLoader(val);
             Log.text(getClass(), mCursorLoader.toString());
             return mCursorLoader;

@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.sql.PreparedStatement;
+
 import by.evgen.android.apiclient.db.HistoryDBHelper;
 import by.evgen.android.apiclient.db.StorageDBHelper;
 import by.evgen.android.apiclient.utils.Log;
@@ -73,6 +75,7 @@ public class WikiContentProvider extends ContentProvider {
                     sortOrder = "date(" + HistoryDBHelper.WIKI_DATE + ") DESC";
                 }
                 db = historyDbHelper.getWritableDatabase();
+                //PreparedStatement preparedStatement = db.pre
                 cursor = db.query(HistoryDBHelper.WIKI_TABLE, projection, selection,
                         selectionArgs, null, null, sortOrder);
                 cursor.setNotificationUri(getContext().getContentResolver(),

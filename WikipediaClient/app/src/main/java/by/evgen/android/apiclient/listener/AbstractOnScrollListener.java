@@ -95,8 +95,6 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         }
         if (mData != null && mData.size() == COUNT) {
             isPagingEnabled = true;
-        } else {
-           // isPagingEnabled = false;
         }
         refreshFooter();
     }

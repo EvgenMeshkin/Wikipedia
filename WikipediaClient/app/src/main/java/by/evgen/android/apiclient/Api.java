@@ -1,5 +1,11 @@
 package by.evgen.android.apiclient;
 
+import android.util.Base64;
+
+import java.io.UnsupportedEncodingException;
+
+import by.evgen.android.apiclient.utils.Log;
+
 /**
  * Created by evgen on 15.11.2014.
  */
@@ -37,8 +43,16 @@ public class Api {
         return search;
     }
 
+    public static byte[] df;
+
     public static String getStorage(String value) {
-        String str = Api.STORAGE_SET + value +"&value=" + value;
+        try {
+            df = value.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String str = Api.STORAGE_SET + Base64.encodeToString(df, 0) +"&value=" + value;
+        Log.text(Api.class, Base64.encodeToString(df, 0));
         return str;
     }
 
