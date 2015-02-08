@@ -1,7 +1,6 @@
 package by.evgen.android.apiclient.os;
 
 import android.os.Handler;
-import android.os.Looper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;

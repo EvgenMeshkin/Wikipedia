@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.db.provider;
+package by.evgen.android.apiclient.db;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -9,10 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import java.sql.PreparedStatement;
-
-import by.evgen.android.apiclient.db.HistoryDBHelper;
-import by.evgen.android.apiclient.db.StorageDBHelper;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -58,7 +54,7 @@ public class WikiContentProvider extends ContentProvider {
     private SQLiteDatabase db;
 
     public boolean onCreate() {
-        Log.text(getClass(), "onCreate");
+        Log.d(getClass(), "onCreate");
         storageDBHelper = new StorageDBHelper(getContext());
         historyDbHelper = new HistoryDBHelper(getContext());
         return true;
@@ -67,7 +63,7 @@ public class WikiContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Log.text(getClass(), "query, " + uri.toString());
+        Log.d(getClass(), "query, " + uri.toString());
         Cursor cursor = null;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
@@ -75,7 +71,6 @@ public class WikiContentProvider extends ContentProvider {
                     sortOrder = "date(" + HistoryDBHelper.WIKI_DATE + ") DESC";
                 }
                 db = historyDbHelper.getWritableDatabase();
-                //PreparedStatement preparedStatement = db.pre
                 cursor = db.query(HistoryDBHelper.WIKI_TABLE, projection, selection,
                         selectionArgs, null, null, sortOrder);
                 cursor.setNotificationUri(getContext().getContentResolver(),
@@ -108,7 +103,7 @@ public class WikiContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.text(getClass(), "insert, " + uri.toString());
+        Log.d(getClass(), "insert, " + uri.toString());
         Uri resultUri = null;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
@@ -132,7 +127,7 @@ public class WikiContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.text(getClass(), "delete, " + uri.toString());
+        Log.d(getClass(), "delete, " + uri.toString());
         int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
@@ -163,7 +158,7 @@ public class WikiContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        Log.text(getClass(), "update, " + uri.toString());
+        Log.d(getClass(), "update, " + uri.toString());
         int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
@@ -193,7 +188,7 @@ public class WikiContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        Log.text(getClass(), "getType, " + uri.toString());
+        Log.d(getClass(), "getType, " + uri.toString());
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 return WIKI_HISTORY_TYPE;

@@ -1,7 +1,5 @@
 package by.evgen.android.apiclient.fragment;
 
-import android.accounts.Account;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,18 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.List;
-
 import by.evgen.android.apiclient.R;
-import by.evgen.android.apiclient.adapters.StorageCursorAdapter;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.db.StorageDBHelper;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
-import by.evgen.android.apiclient.helper.GetAllVkStorage;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.FindResponder;
 import by.evgen.android.apiclient.utils.Log;
@@ -36,7 +27,7 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by User on 05.02.2015.
  */
-public abstract class AbstractDbFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, GetAllVkStorage.Callbacks {
+public abstract class AbstractDbFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private View mContent;
     private SimpleCursorAdapter mAdapter;
@@ -49,31 +40,27 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
     public LoaderManager mLoadManager;
     public CursorLoader mCursorLoader;
 
-    @Override
-    public void onAllVkStorage(List<String> data) {
-
-    }
-
     public interface Callbacks {
         void onShowDetails(NoteGsonModel note);
+
         void onErrorDialog(Exception e);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.text(getClass(), "Loader create");
+        Log.d(getClass(), "Loader create");
         Context context = getActivity();
         String val = Constant.EMPTY;
         if (args != null) {
             val = args.getString(Constant.KEY);
-            Log.text(getClass(), "Loader create" + val);
+            Log.d(getClass(), "Loader create" + val);
         }
         if (context != null) {
             mCursorLoader = getCursorLoader(val);
-            Log.text(getClass(), mCursorLoader.toString());
+            Log.d(getClass(), mCursorLoader.toString());
             return mCursorLoader;
         } else {
-            return  null;
+            return null;
         }
     }
 
@@ -81,10 +68,10 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.text(getClass(), "Loader finish" + data.toString());
+        Log.d(getClass(), "Loader finish" + data.toString());
         Context context = getActivity();
         if (context != null) {
-            mAdapter = (SimpleCursorAdapter)getAdapter(context, data);
+            mAdapter = getAdapter(context, data);
             mListView.setAdapter(mAdapter);
         }
     }
@@ -123,7 +110,7 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
         return mContent;
     }
 
-    private void refreshData(){
+    private void refreshData() {
         sync();
         mLoadManager = getLoaderManager();
         mLoadManager.initLoader(1, null, this);
@@ -137,7 +124,7 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 str = s.toString();
-                Log.text(getClass(), str);
+                Log.d(getClass(), str);
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.KEY, str);
                 refreshSearch(bundle);
@@ -162,10 +149,11 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
     }
 
     public abstract Void sync();
+
     public abstract NoteGsonModel getNote(Cursor cursor);
 
-    public void refreshSearch (Bundle bundle){
-        Log.text(getClass(), "refresh");
+    public void refreshSearch(Bundle bundle) {
+        Log.d(getClass(), "refresh");
         mLoadManager = getLoaderManager();
         mLoadManager.restartLoader(1, bundle, this);
     }

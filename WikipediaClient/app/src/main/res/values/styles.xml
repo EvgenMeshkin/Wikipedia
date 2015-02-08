@@ -9,6 +9,8 @@
         <item name="android:divider">@color/divider</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        </style>
+        <item name="colorAccent">@color/primary</item>
+
+    </style>
 
 </resources>

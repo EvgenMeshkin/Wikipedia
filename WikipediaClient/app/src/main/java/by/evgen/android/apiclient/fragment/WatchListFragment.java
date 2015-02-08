@@ -2,31 +2,14 @@ package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.DateAdapter;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.db.HistoryDBHelper;
-import by.evgen.android.apiclient.db.StorageDBHelper;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
-import by.evgen.android.apiclient.utils.Constant;
-import by.evgen.android.apiclient.utils.FindResponder;
-import by.evgen.android.apiclient.utils.Log;
+import by.evgen.android.apiclient.db.WikiContentProvider;
 
 /**
  * Created by evgen on 06.01.2015.

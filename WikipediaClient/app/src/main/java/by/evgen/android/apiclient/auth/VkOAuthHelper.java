@@ -31,7 +31,7 @@ public class VkOAuthHelper {
     }
 
     public static boolean proceedRedirectURL(Activity activity, String url, Callbacks callbacks) {
-        Log.text(VkOAuthHelper.class, url);
+        Log.d(VkOAuthHelper.class, url);
         if (url.startsWith(REDIRECT_URL)) {
             Uri uri = Uri.parse(url);
             String fragment = uri.getFragment();
@@ -63,7 +63,7 @@ public class VkOAuthHelper {
         }
         try {
             manager.setUserData(account, "Token", EncrManager.encrypt(activity, token));
-            Log.text(activity.getClass(), "Saccount  -  " + manager.getUserData(account, "Token"));
+            Log.d(activity.getClass(), "Saccount  -  " + manager.getUserData(account, "Token"));
         } catch (Exception e) {
             callbacks.onError(e);
         }

@@ -1,6 +1,7 @@
 package by.evgen.android.apiclient.source;
 
 import android.content.Context;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,7 +26,6 @@ import by.evgen.android.apiclient.utils.Log;
 public class CachedHttpDataSource extends HttpDataSource {
 
     public static final String KEY = "CachedHttpDataSource";
-    public static final String TAG = "cache_http_data_source";
     private Map<String, File> mLruCache= Collections.synchronizedMap(new LinkedHashMap<String, File>());
     private Context mContext;
     private File mCacheFile;
@@ -51,7 +51,7 @@ public class CachedHttpDataSource extends HttpDataSource {
         File file = new File(cacheDir, "__cache");
         file.mkdirs();
         String[] list = file.list();
-        Log.text(getClass(), "directory cache:  " + Arrays.toString(list));
+        Log.d(getClass(), "directory cache:  " + Arrays.toString(list));
         String path = file.getPath() + File.separator + generateFileName(p);
         mCacheFile = new File(path);
         if (mCacheFile.exists() && !mLruCache.containsKey(path)) {
@@ -60,11 +60,11 @@ public class CachedHttpDataSource extends HttpDataSource {
             checkSize();
         }
         if (mLruCache.containsKey(path)) {
-            Log.text(getClass(), "load from file");
+            Log.d(getClass(), "load from file");
             mCacheFile = mLruCache.get(path);
             return mCacheFile;
         } else {
-            Log.text(getClass(), "Do not load load from file");
+            Log.d(getClass(), "Do not load load from file");
             mCacheFile = new File(path);
             InputStream inputStream = super.getResult(p);
             try {
@@ -76,13 +76,13 @@ public class CachedHttpDataSource extends HttpDataSource {
             mLruCache.put(path, mCacheFile);
             mSize += mCacheFile.length();
             checkSize();
-            Log.text(getClass(), "copy stream success get from file");
+            Log.d(getClass(), "copy stream success get from file");
             return mCacheFile;
         }
     }
 
         private void checkSize() {
-        Log.text(getClass(), "cache size = " + mSize + " length = " + mLruCache.size());
+        Log.d(getClass(), "cache size = " + mSize + " length = " + mLruCache.size());
             long limit = 30000;
             if(mSize > limit){
             Iterator<Map.Entry<String, File>> iter = mLruCache.entrySet().iterator();
@@ -90,12 +90,12 @@ public class CachedHttpDataSource extends HttpDataSource {
                 Map.Entry<String, File> entry = iter.next();
                 mSize -= entry.getValue().length();
                 entry.getValue().delete();
-                Log.text(getClass(), "delete file:   " + entry.getKey());
+                Log.d(getClass(), "delete file:   " + entry.getKey());
                 iter.remove();
                 if (mSize <= limit)
                     break;
             }
-            Log.text(getClass(), "Clean cache. New size " + mLruCache.size());
+            Log.d(getClass(), "Clean cache. New size " + mLruCache.size());
         }
     }
 

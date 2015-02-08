@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.helper;
+package by.evgen.android.apiclient.helper.vkhelper;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -7,6 +7,8 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.bo.Category;
+import by.evgen.android.apiclient.helper.ManagerDownload;
+import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.processing.NoteProcessor;
 import by.evgen.android.apiclient.processing.NotesAllProcessor;
 import by.evgen.android.apiclient.source.VkCachedDataSource;
@@ -14,7 +16,7 @@ import by.evgen.android.apiclient.source.VkCachedDataSource;
 /**
  * Created by evgen on 11.01.2015.
  */
-public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Callback<List<Category>>{
+public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Callback<List<Category>> {
 
     private String mBaseTitle;
     private Callbacks mCallbacks;
@@ -24,7 +26,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
         void onReturnId(Long id);
     }
 
-    public SentsVkNotes (final Callbacks callbacks, final Context context, final String title){
+    public SentsVkNotes(final Callbacks callbacks, final Context context, final String title) {
         super(context);
         mCallbacks = callbacks;
         mContext = context;
@@ -33,7 +35,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
                 Api.VKNOTES_ALL_GET,
                 VkCachedDataSource.get(mContext),
                 new NotesAllProcessor());
-   }
+    }
 
     @Override
     public void onPreExecute() {
@@ -50,7 +52,6 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
             }
         }
         if (id != null) {
-            mCallbacks.onReturnId(id);
             Toast.makeText(mContext, "You already added this note", Toast.LENGTH_SHORT).show();
         } else {
             ManagerDownload.load(new ManagerDownload.Callback<Long>() {
@@ -60,8 +61,10 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
 
                                      @Override
                                      public void onPostExecute(Long data) {
-                                         mCallbacks.onReturnId(data);
-                                         Toast.makeText(mContext, "Note added", Toast.LENGTH_SHORT).show();
+                                         if (mCallbacks != null) {
+                                             mCallbacks.onReturnId(data);
+                                             Toast.makeText(mContext, "Note added", Toast.LENGTH_SHORT).show();
+                                         }
                                      }
 
                                      @Override
@@ -75,7 +78,7 @@ public class SentsVkNotes extends OnErrorCallbacks implements ManagerDownload.Ca
         }
     }
 
-    private void onErrorSent (Exception e) {
+    private void onErrorSent(Exception e) {
         super.sentOnError(e);
     }
 

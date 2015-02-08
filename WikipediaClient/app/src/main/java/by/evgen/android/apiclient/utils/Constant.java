@@ -9,6 +9,7 @@ public class Constant {
     public static final String QUERY = "query";
     public static final String PAGES = "pages";
     public static final String KEY = "key";
+    public static final String KEYN = "keynote";
     public static final String UTF = "utf-8";
     public static final String TYPE = "text/html";
     public static final String LOAD = "Loading...";
@@ -25,5 +26,10 @@ public class Constant {
     public static final String WIKIRANDOM = "wikigrokrandom";
     public static final String SEARCH = "search";
     public static final String ACCOUNT_TYPE = "by.evgen.android.apiclient";
+    public static final String DIALOG = "dialog";
+    public static final String MAINPAGE = "Main Page";
+    public static final String INLOGIN = "You must login";
+
+
 
 }

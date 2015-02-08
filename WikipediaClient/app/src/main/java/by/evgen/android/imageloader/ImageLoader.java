@@ -5,6 +5,11 @@ package by.evgen.android.imageloader;
  */
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.widget.ImageView;
+
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
@@ -16,12 +21,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import android.os.Handler;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
-import android.widget.ImageView;
-
 import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.os.assist.LIFOLinkedBlockingDeque;
@@ -30,39 +29,39 @@ import by.evgen.android.apiclient.processing.ImageUrlProcessor;
 import by.evgen.android.apiclient.processing.Processor;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
+import by.evgen.android.apiclient.utils.Log;
 
 public class ImageLoader {
 
-    private static final String TAG = "ImageLoader";
     private MemoryCache memoryCache = new MemoryCache();
     private Map<ImageView, String> mImageViews = new ConcurrentHashMap<ImageView, String>();
     private ExecutorService mExecutorService;
     public static final String KEY = "ImageLoader";
     private Context mContext;
     private AtomicBoolean isPause = new AtomicBoolean(false);
-    private final int stub_id = by.evgen.android.apiclient.R.drawable.stub;
     private Set<ImageView> mImagesViews = new HashSet<ImageView>();
     private final Object mLock = new Object();
 
-    public ImageLoader(Context context){
-    mContext = context;
-    mExecutorService = new ThreadPoolExecutor(5, 5, 0, TimeUnit.MILLISECONDS,
-            new LIFOLinkedBlockingDeque<Runnable>());
+    public ImageLoader(Context context) {
+        mContext = context;
+        mExecutorService = new ThreadPoolExecutor(5, 5, 0, TimeUnit.MILLISECONDS,
+                new LIFOLinkedBlockingDeque<Runnable>());
     }
 
     public static ImageLoader get(Context context) {
         return WikiApplication.get(context, KEY);
     }
 
-    public void displayImage(final String url,final ImageView imageView){
+    public void displayImage(final String url, final ImageView imageView) {
         mImageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null) {
-            Log.i(TAG, "FromTheCache");
+            Log.d(getClass(), "FromTheCache");
             imageView.setImageBitmap(bitmap);
-        }   else {
-            Log.i(TAG, "Not FromTheCache");
+        } else {
+            Log.d(getClass(), "Not FromTheCache");
             queueImage(url, imageView);
+            int stub_id = by.evgen.android.apiclient.R.drawable.stub;
             imageView.setImageResource(stub_id);
         }
     }
@@ -84,7 +83,7 @@ public class ImageLoader {
         }
     }
 
-    private void queueImage(String url, ImageView imageView){
+    private void queueImage(String url, ImageView imageView) {
         MemoryValue p = new MemoryValue(url, imageView, mContext);
         mExecutorService.submit(new ImagesLoader(p));
     }
@@ -98,36 +97,36 @@ public class ImageLoader {
         public final HttpDataSource dataUrl;
         public final Processor processUrl;
 
-        public MemoryValue(String url, ImageView imageView, Context context){
+        public MemoryValue(String url, ImageView imageView, Context context) {
             this.url = url;
             this.imageView = imageView;
             this.dataSource = new CachedHttpDataSource(context);
             this.processor = new BitmapProcessor();
             dataUrl = new HttpDataSource();
             processUrl = new ImageUrlProcessor();
-            }
+        }
     }
 
     private class ImagesLoader implements Runnable {
 
-       private final MemoryValue mMemoryValue;
-       private Handler mHandler = new Handler();
-       private ImagesLoader(MemoryValue mMemoryValue){
+        private final MemoryValue mMemoryValue;
+        private Handler mHandler = new Handler();
+
+        private ImagesLoader(MemoryValue mMemoryValue) {
             this.mMemoryValue = mMemoryValue;
         }
 
         @Override
         public void run() {
-            try{
+            try {
                 InputStream dataUrl = mMemoryValue.dataUrl.getResult(mMemoryValue.url);
-                Object procesUrl = mMemoryValue.processUrl.process(dataUrl);
-                List<Category> data = (List<Category>)procesUrl;
-                String str = data.get(0).getUrlImage();
-                str = str.substring(str.indexOf("px")-2, str.indexOf("px")+2);
-                String url = data.get(0).getUrlImage().replaceAll(str,"300px");
+                List<Category> data = (List<Category>)mMemoryValue.processUrl.process(dataUrl);
+                Category category = data.get(0);
+                String str = category.getUrlImage();
+                str = str.substring(str.indexOf("px") - 2, str.indexOf("px") + 2);
+                String url = category.getUrlImage().replaceAll(str, "300px");
                 InputStream dataSource = mMemoryValue.dataSource.getResult(url);
-                Object processingResult = mMemoryValue.processor.process(dataSource);
-                Bitmap bmp = (Bitmap) processingResult;
+                Bitmap bmp = (Bitmap)mMemoryValue.processor.process(dataSource);
                 bmp = CircleMaskedBitmap.getCircleMaskedBitmapUsingShader(bmp, 100);
                 if (bmp != null) {
                     memoryCache.put(mMemoryValue.url, bmp);
@@ -137,36 +136,34 @@ public class ImageLoader {
                 }
                 BitmapDisplayer bd = new BitmapDisplayer(bmp, mMemoryValue);
                 mHandler.post(bd);
-            }catch(Throwable th){
-                return;
+            } catch (Throwable th) {
+                th.printStackTrace();
             }
         }
     }
 
-    synchronized boolean imageViewReused(MemoryValue memoryValue){
+    synchronized boolean imageViewReused(MemoryValue memoryValue) {
         String tag = mImageViews.get(memoryValue.imageView);
-        Log.i(TAG, "Check " + tag);
-        if (tag.isEmpty() || !tag.equals(memoryValue.url))
-            return true;
-        return false;
+        Log.d(getClass(), "Check " + tag);
+        return tag.isEmpty() || !tag.equals(memoryValue.url);
     }
 
-    class BitmapDisplayer implements Runnable{
+    class BitmapDisplayer implements Runnable {
 
         private Bitmap bitmap;
         private MemoryValue memoryValue;
 
-        public BitmapDisplayer(Bitmap bitmap, MemoryValue memoryValue){
+        public BitmapDisplayer(Bitmap bitmap, MemoryValue memoryValue) {
             this.bitmap = bitmap;
             this.memoryValue = memoryValue;
         }
 
-        public void run(){
+        public void run() {
             if (imageViewReused(memoryValue)) {
                 return;
             }
-        memoryValue.imageView.setImageBitmap(bitmap);
+            memoryValue.imageView.setImageBitmap(bitmap);
         }
     }
 
- }
+}

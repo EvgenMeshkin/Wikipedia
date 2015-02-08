@@ -10,7 +10,7 @@ public final class Log {
 
     private static Boolean mOff = BuildConfig.DEBUG;
 
-    public static synchronized void text(Class name, String text) {
+    public static synchronized void d(Class name, String text) {
         if (mOff) {
             android.util.Log.d(name.getSimpleName(), text);
         }

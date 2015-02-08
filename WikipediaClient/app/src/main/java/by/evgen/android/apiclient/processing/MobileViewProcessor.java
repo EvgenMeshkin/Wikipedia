@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.db.HistoryDBHelper;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
+import by.evgen.android.apiclient.db.WikiContentProvider;
 import by.evgen.android.apiclient.utils.Constant;
 
 /**

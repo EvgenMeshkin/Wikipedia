@@ -32,7 +32,7 @@ public class VkDataSource implements DataSource<InputStream, String> {
     }
 
     public static VkDataSource get(Context context) {
-        Log.text(VkDataSource.class, "getContext");
+        Log.d(VkDataSource.class, "getContext");
         return WikiApplication.get(context, KEY);
     }
 
@@ -42,7 +42,7 @@ public class VkDataSource implements DataSource<InputStream, String> {
             AccountManager manager = AccountManager.get(mContext);
             Account vkAccount = new Account(mContext.getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
             URL url = new URL(p + "&access_token=" + EncrManager.decrypt(mContext, manager.getUserData(vkAccount, "Token")));
-            Log.text(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
+            Log.d(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
             return url.openStream();
         } else {
             throw new AuthenticationException("You must login");

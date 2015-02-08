@@ -31,24 +31,25 @@ public class NoteGsonModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringArray(new String[] {  title, content });
+        parcel.writeStringArray(new String[]{title, content});
 
     }
+
     public static final Parcelable.Creator<NoteGsonModel> CREATOR = new Parcelable.Creator<NoteGsonModel>() {
-    public NoteGsonModel createFromParcel(Parcel in) {
-        return new NoteGsonModel(in);
-    }
-    public NoteGsonModel[] newArray(int size) {
-        return new NoteGsonModel[size];
-    }
-};
+        public NoteGsonModel createFromParcel(Parcel in) {
+            return new NoteGsonModel(in);
+        }
+
+        public NoteGsonModel[] newArray(int size) {
+            return new NoteGsonModel[size];
+        }
+    };
 
     private NoteGsonModel(Parcel parcel) {
         String[] data = new String[2];
         parcel.readStringArray(data);
         title = data[0];
         content = data[1];
-
     }
 
 }

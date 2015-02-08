@@ -6,7 +6,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.evgen.android.apiclient.helper.LoaderRandomArray;
+import by.evgen.android.apiclient.helper.wikihelper.LoaderRandomArray;
 import by.evgen.android.apiclient.source.CachedHttpDataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
 import by.evgen.android.apiclient.source.VkCachedDataSource;
@@ -19,7 +19,7 @@ import by.evgen.android.imageloader.ImageLoader;
 
 public class WikiApplication extends Application {
 
-     private final Map<String, Object> mGetService = new HashMap<String, Object>();
+    private final Map<String, Object> mGetService = new HashMap<String, Object>();
 
     @Override
     public void onCreate() {

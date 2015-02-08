@@ -66,7 +66,7 @@
         </activity>
 
         <service
-            android:name=".account.WikiAuthService"
+            android:name=".service.WikiAuthService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -77,7 +77,7 @@
         </service>
 
         <service
-            android:name="by.evgen.android.apiclient.account.SyncService"
+            android:name=".service.SyncService"
             android:exported="false"
             android:process=":sync" >
             <intent-filter>
@@ -89,7 +89,7 @@
         </service>
 
         <provider
-            android:name="by.evgen.android.apiclient.db.provider.WikiContentProvider"
+            android:name=".db.WikiContentProvider"
             android:authorities="by.evgen.android.apiclient.WikiData"
             android:exported="true"
             android:syncable="true"

@@ -14,13 +14,13 @@ public class CircleMaskedBitmap {
 
     public static boolean CIRCLE = true;
 
-    public static synchronized Bitmap scaleTo(Bitmap source, int size){
+    public static synchronized Bitmap scaleTo(Bitmap source, int size) {
 
         int destWidth = source.getWidth();
         int destHeight = source.getHeight();
         destHeight = destHeight * size / destWidth;
         destWidth = size;
-        if (destHeight < size){
+        if (destHeight < size) {
             destWidth = destWidth * size / destHeight;
             destHeight = size;
         }
@@ -30,8 +30,8 @@ public class CircleMaskedBitmap {
         return destBitmap;
     }
 
-    public static synchronized Bitmap getCircleMaskedBitmapUsingShader(Bitmap source, int radius){
-        if (source == null){
+    public static synchronized Bitmap getCircleMaskedBitmapUsingShader(Bitmap source, int radius) {
+        if (source == null) {
             return null;
         }
         if (CIRCLE) {

@@ -1,9 +1,10 @@
-package by.evgen.android.apiclient.account;
+package by.evgen.android.apiclient.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import by.evgen.android.apiclient.adapters.SyncAdapter;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
@@ -16,7 +17,7 @@ public class SyncService extends Service {
 
     @Override
     public void onCreate() {
-        Log.text(getClass(), "Start sync servise");
+        Log.d(getClass(), "Start sync servise");
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null)
                 sSyncAdapter = new SyncAdapter(getApplicationContext(), true);

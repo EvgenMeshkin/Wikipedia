@@ -10,12 +10,9 @@ import org.json.JSONObject;
  */
 public class Category extends JSONObjectWrapper {
 
-    public static final String URL = "fullurl";
-    public static final String URLIMAGE = "source";
-    public static final String URLFOTO = "photo_200_orig";
-    private static final String ACTION = "action";
-    private static final String PROP = "prop";
-    private static final String FORMAT = "format";
+    private static final String URL = "fullurl";
+    private static final String URLIMAGE = "source";
+    private static final String URLFOTO = "photo_200_orig";
     private static final String NS = "ns";
     private static final String TITLE = "title";
     private static final String ID = "id";
@@ -24,10 +21,9 @@ public class Category extends JSONObjectWrapper {
     private static final String LASTNAME = "last_name";
     private static final String LINE = "line";
     private static final String TEXT = "text";
-    private static final String TEXTP = "*";
     private static final String EXTRACT = "extract";
-
-    private static final String NAME = "NAME";
+    private static final String PAGEID = "pageid";
+    private static final String VALUE = "value";
 
     public static final Parcelable.Creator<Category> CREATOR
             = new Parcelable.Creator<Category>() {
@@ -60,16 +56,20 @@ public class Category extends JSONObjectWrapper {
         return getString(NS);
     }
 
+    public String getPageId() {
+        return getString(PAGEID);
+    }
+
     public String getTitle() {
-        return getString(TITLE );
+        return getString(TITLE);
+    }
+
+    public String getValue() {
+        return getString(VALUE);
     }
 
     public String getText() {
-        return getString(TEXT );
-    }
-
-    public String getTextPage() {
-        return getString(TEXTP );
+        return getString(TEXT);
     }
 
     public String getUrl() {

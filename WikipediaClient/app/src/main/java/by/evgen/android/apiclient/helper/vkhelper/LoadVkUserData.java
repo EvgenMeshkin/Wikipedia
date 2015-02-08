@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.helper;
+package by.evgen.android.apiclient.helper.vkhelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,8 @@ import java.util.List;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.bo.Category;
+import by.evgen.android.apiclient.helper.ManagerDownload;
+import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.processing.BitmapProcessor;
 import by.evgen.android.apiclient.processing.FotoIdUrlProcessor;
 import by.evgen.android.apiclient.source.HttpDataSource;
@@ -22,7 +24,7 @@ public class LoadVkUserData extends OnErrorCallbacks implements ManagerDownload.
     private Callbacks mCallbacks;
     private Context mContext;
 
-    public LoadVkUserData(Callbacks callbacks, Context context){
+    public LoadVkUserData(Callbacks callbacks, Context context) {
         super(context);
         mContext = context;
         ManagerDownload.load(this,
@@ -36,7 +38,7 @@ public class LoadVkUserData extends OnErrorCallbacks implements ManagerDownload.
         void onUserData(Bitmap foto, String first, String last);
     }
 
-   @Override
+    @Override
     public void onPreExecute() {
 
     }
@@ -47,7 +49,7 @@ public class LoadVkUserData extends OnErrorCallbacks implements ManagerDownload.
         String url = item.getUrlFoto();
         final String first = item.getFirstName();
         final String last = item.getLastName();
-        Log.text(this.getClass(), "Load url " + url);
+        Log.d(this.getClass(), "Load url " + url);
         ManagerDownload.load(new ManagerDownload.Callback<Bitmap>() {
 
                                  @Override
@@ -71,12 +73,12 @@ public class LoadVkUserData extends OnErrorCallbacks implements ManagerDownload.
                 new BitmapProcessor());
     }
 
-   @Override
+    @Override
     public void onError(Exception e) {
         onErrorSent(e);
     }
 
-    private void onErrorSent (Exception e){
+    private void onErrorSent(Exception e) {
         super.sentOnError(e);
     }
 

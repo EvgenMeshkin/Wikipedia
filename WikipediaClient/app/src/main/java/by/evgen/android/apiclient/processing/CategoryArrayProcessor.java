@@ -20,7 +20,6 @@ public class CategoryArrayProcessor extends WrapperArrayProcessor<Category> {
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
         JSONObject jsonObject1 = jsonObject.getJSONObject(Constant.QUERY);
-        JSONArray array = (JSONArray)jsonObject1.get(Constant.GEOSEARCH);
-        return array;
+        return (JSONArray)jsonObject1.get(Constant.GEOSEARCH);
     }
 }

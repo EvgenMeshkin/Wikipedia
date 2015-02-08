@@ -21,14 +21,13 @@ import by.evgen.android.apiclient.utils.FindResponder;
  */
 public abstract class AbstractFragment <T> extends Fragment implements ManagerDownload.Callback<List<Category>> {
 
-    private View mContent;
     private DataSource mDatasource;
     private Processor mProcessor;
     private String mUrl;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View mProgress;
 
-    public interface Callbacks <T> {
+    public interface Callbacks<T> {
         void onShowDetails(T note);
         void onErrorDialog(Exception e);
     }
@@ -37,7 +36,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
         return FindResponder.findFirstResponder(this, Callbacks.class);
     }
 
-    public void showDetails( T note) {
+    public void showDetails(T note) {
         mProgress.setVisibility(View.GONE);
         Callbacks callbacks = getCallbacks();
         callbacks.onShowDetails(note);
@@ -45,12 +44,12 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mContent = getViewLayout(inflater);
+        View content = getViewLayout(inflater);
         mDatasource = getDataSource();
         mProcessor = getProcessor();
         mUrl = getUrl();
-        mProgress = mContent.findViewById(android.R.id.progress);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mContent.findViewById(by.evgen.android.apiclient.R.id.swipe_container);
+        mProgress = content.findViewById(android.R.id.progress);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) content.findViewById(by.evgen.android.apiclient.R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -58,7 +57,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
             }
         });
         load(mUrl, mDatasource, mProcessor);
-        return mContent;
+        return content;
     }
 
     public abstract View getViewLayout(LayoutInflater inflater);
@@ -71,7 +70,7 @@ public abstract class AbstractFragment <T> extends Fragment implements ManagerDo
 
     public abstract void onExecute(List<Category> data);
 
-    public void load (String Url, DataSource dataSource, Processor processor) {
+    public void load(String Url, DataSource dataSource, Processor processor) {
         ManagerDownload.load(this,
                 Url,
                 dataSource,

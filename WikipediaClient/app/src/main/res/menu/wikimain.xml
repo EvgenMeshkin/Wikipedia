@@ -1,22 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".DetailsFragmentActivity" >
+    tools:context=".DetailsFragmentActivity">
     <item
         android:id="@+id/search"
         android:orderInCategory="1"
         android:title="search"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        />
+        app:actionViewClass="android.support.v7.widget.SearchView" />
     <item
         android:id="@+id/clearHist"
         android:orderInCategory="2"
         android:title="Clear history"
         app:showAsAction="always"
         android:onClick="clearHist"
-        android:icon="@drawable/ic_action_delete"
-        />
+        android:icon="@drawable/ic_action_delete" />
 
 </menu>

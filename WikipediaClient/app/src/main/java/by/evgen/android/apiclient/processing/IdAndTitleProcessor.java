@@ -12,15 +12,14 @@ import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
 /**
- * Created by evgen on 28.01.2015.
+ * Created by evgen on 06.02.2015.
  */
-public class ExtrasProcessor implements Processor<List<Category>,InputStream>{
+public class IdAndTitleProcessor implements Processor<List<Category>,InputStream>{
 
     @Override
     public List<Category> process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
-        Log.d(getClass(), "run");
         JSONObject query = jsonObject.getJSONObject(Constant.QUERY);
         JSONObject pages = query.getJSONObject(Constant.PAGES);
         Iterator<?> i = pages.keys();
@@ -28,7 +27,9 @@ public class ExtrasProcessor implements Processor<List<Category>,InputStream>{
         List<Category> noteArray = new ArrayList<Category>(pagesId.length());
         Category category = new Category(pagesId);
         noteArray.add(category);
+        Log.d(getClass(), noteArray.toString());
         return noteArray;
     }
 
 }
+

@@ -1,8 +1,10 @@
-package by.evgen.android.apiclient.account;
+package by.evgen.android.apiclient.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import by.evgen.android.apiclient.auth.WikiAuthenticator;
 
 /**
  * Created by evgen on 22.01.2015.

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.db.HistoryDBHelper;
-import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.imageloader.ImageLoader;
 
@@ -59,14 +58,14 @@ public class DateAdapter extends SimpleCursorAdapter {
             if (convertView == null) {
                 if (!dt.equals(mPrevDate)) {
                     convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.view_separator, null);
-                    holder.sec_hr = (TextView) convertView.findViewById(android.R.id.text2);
+                    holder.sec_hr = (TextView) convertView.findViewById(android.R.id.content);
                     holder.sec_hr.setVisibility(View.VISIBLE);
                 } else {
                     convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.adapter_item, null);
-                    holder.sec_hr = (TextView) convertView.findViewById(android.R.id.text2);
+                    holder.sec_hr = (TextView) convertView.findViewById(android.R.id.content);
                     holder.sec_hr.setVisibility(View.GONE);
                 }
-                holder.name = (TextView) convertView.findViewById(android.R.id.text1);//Task Title
+                holder.name = (TextView) convertView.findViewById(android.R.id.title);
                 holder.img = (ImageView) convertView.findViewById(android.R.id.icon);
                 convertView.setTag(holder);
             } else {

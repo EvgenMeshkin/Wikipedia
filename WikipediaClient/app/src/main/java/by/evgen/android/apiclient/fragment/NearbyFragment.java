@@ -25,20 +25,19 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by User on 30.10.2014.
  */
-public class WikiFragment extends AbstractFragment implements GpsLocation.Callbacks {
+public class NearbyFragment extends AbstractFragment<NoteGsonModel> implements GpsLocation.Callbacks {
 
     private RecyclerWikiAdapter mAdapter;
     private List<Category> mData;
-    private static String mLocation;
+    private static String mLocation = "53.677226|23.8489383";
     private Context mContext;
     private CategoryArrayProcessor mCategoryArrayProcessor = new CategoryArrayProcessor();
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
 
     @Override
     public void onShowKor(String latitude) {
         mLocation = latitude;
-        Log.text(getClass(), "latitude=" + mLocation);
+        Log.d(getClass(), "latitude=" + mLocation);
         super.load(getUrl(), getDataSource(), getProcessor());
     }
 
@@ -46,8 +45,8 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
     public View getViewLayout(LayoutInflater inflater) {
         View content = inflater.inflate(by.evgen.android.apiclient.R.layout.fragment_wiki_recycler, null);
         mRecyclerView = (RecyclerView) content.findViewById(by.evgen.android.apiclient.R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         mRecyclerView.setItemAnimator(itemAnimator);
         mContext = getActivity();
@@ -68,9 +67,8 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
 
     @Override
     public String getUrl() {
-        mLocation = Api.GEOSEARCH_GET + "53.677226|23.8489383";//mLocation;
-        Log.text(getClass(), "mLocation=" + mLocation);
-        return mLocation;
+        Log.d(getClass(), "mLocation=" + mLocation);
+        return Api.GEOSEARCH_GET + mLocation;
     }
 
     public void showDetails(NoteGsonModel note){
@@ -78,10 +76,10 @@ public class WikiFragment extends AbstractFragment implements GpsLocation.Callba
     }
 
     @Override
-    public void onExecute(List data) {
+    public void onExecute(List<Category> data) {
         if (mAdapter == null) {
             mAdapter = new RecyclerWikiAdapter(mContext, data);
-            mRecyclerView.setAdapter(mAdapter); //      recyclerView.setItemAnimator(itemAnimator);r(mAdapter);
+            mRecyclerView.setAdapter(mAdapter);
             mData = data;
             mRecyclerView.addOnItemTouchListener(
                     new RecyclerItemClickListener(mContext, new RecyclerItemClickListener.OnItemClickListener() {

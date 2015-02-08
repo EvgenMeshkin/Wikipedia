@@ -10,18 +10,17 @@ import by.evgen.android.apiclient.utils.Constant;
 /**
  * Created by evgen on 31.12.2014.
  */
-public class ContentsArrayProcessor extends WrapperArrayProcessor<String> {
+public class ContentsArrayProcessor extends WrapperArrayProcessor<Category> {
 
     @Override
-    protected String createObject(JSONObject jsonObject) {
-        return new Category(jsonObject).getLine();
+    protected Category createObject(JSONObject jsonObject) {
+        return new Category(jsonObject);
     }
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
         JSONObject jsonObjectquery = jsonObject.getJSONObject(Constant.MOBILE);
-        JSONArray array = (JSONArray)jsonObjectquery.get(Constant.SECTIONS);
-        return array;
+        return (JSONArray)jsonObjectquery.get(Constant.SECTIONS);
     }
 
 }

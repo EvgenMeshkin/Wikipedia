@@ -24,7 +24,7 @@ import by.evgen.android.imageloader.CircleMaskedBitmap;
 /**
  * Created by User on 28.01.2015.
  */
-public class RandomCategoryFragment extends AbstractFragment {
+public class RandomCategoryFragment extends AbstractFragment<NoteGsonModel> {
 
     private ArrayAdapter mAdapter;
     private Context mContext;
@@ -58,8 +58,8 @@ public class RandomCategoryFragment extends AbstractFragment {
     }
 
     @Override
-    public void onExecute(List data) {
-        Log.text(getClass(), data.toString());
+    public void onExecute(List<Category> data) {
+        Log.d(getClass(), data.toString());
         if (mAdapter == null) {
             CircleMaskedBitmap.CIRCLE = false;
             mAdapter = new RandomArrayAdapter(mContext, R.layout.adapter_item_cardview, data);
@@ -83,5 +83,6 @@ public class RandomCategoryFragment extends AbstractFragment {
         CircleMaskedBitmap.CIRCLE = true;
         super.onStop();
     }
+
 }
 

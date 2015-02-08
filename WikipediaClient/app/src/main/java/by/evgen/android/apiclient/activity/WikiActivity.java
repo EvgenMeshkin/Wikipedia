@@ -4,13 +4,11 @@ package by.evgen.android.apiclient.activity;
  * Created by User on 30.10.2014.
  */
 
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -35,19 +33,19 @@ import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.MenuAdapter;
 import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
+import by.evgen.android.apiclient.db.WikiContentProvider;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragment.AbstractDbFragment;
 import by.evgen.android.apiclient.fragment.AbstractFragment;
 import by.evgen.android.apiclient.fragment.MainPageFragment;
+import by.evgen.android.apiclient.fragment.NearbyFragment;
 import by.evgen.android.apiclient.fragment.RandomCategoryFragment;
 import by.evgen.android.apiclient.fragment.StorageFragment;
 import by.evgen.android.apiclient.fragment.WatchListFragment;
-import by.evgen.android.apiclient.fragment.WikiFragment;
-import by.evgen.android.apiclient.helper.ClearVkStorage;
-import by.evgen.android.apiclient.helper.LoadVkUserData;
 import by.evgen.android.apiclient.helper.OnErrorCallbacks;
-import by.evgen.android.apiclient.helper.RandomPageCallback;
+import by.evgen.android.apiclient.helper.vkhelper.ClearVkStorage;
+import by.evgen.android.apiclient.helper.vkhelper.LoadVkUserData;
+import by.evgen.android.apiclient.helper.wikihelper.RandomPageCallback;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.EnumMenuItems;
 import by.evgen.android.apiclient.utils.Log;
@@ -60,11 +58,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private View mHeaderDrawer;
-    private final String KEYNOTE = "keynote";
-    private MenuItem mClearHist;
     private boolean mVisible = false;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +67,8 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         mTitle = getTitle();
-        if (Authorized.isLogged()){
-            Log.text(getClass(), "LoadDataUser  -  " );
+        if (Authorized.isLogged()) {
+            Log.d(getClass(), "LoadDataUser  -  ");
             new LoadVkUserData(this, this);
             mHeaderDrawer = View.inflate(this, R.layout.view_header, null);
         } else {
@@ -81,25 +76,25 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         }
         mDrawerTitle = getResources().getString(R.string.menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark_material_light));
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.addHeaderView(mHeaderDrawer);
         mDrawerList.setHeaderDividersEnabled(true);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         displayView(1);
         final MenuAdapter menuAdapter = new MenuAdapter(WikiActivity.this, EnumMenuItems.values());
         mDrawerList.setAdapter(menuAdapter);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar,
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
+                R.string.app_name,
+                R.string.app_name
         ) {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
                 menuAdapter.notifyDataSetChanged();
                 supportInvalidateOptionsMenu();
             }
+
             public void onDrawerOpened(View drawerView) {
                 getSupportActionBar().setTitle(mDrawerTitle);
                 supportInvalidateOptionsMenu();
@@ -113,13 +108,13 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
 
     @Override
     public void onUserData(Bitmap foto, String first, String last) {
-        Log.text(this.getClass(), "FirstName" + first);
-        TextView firstname = (TextView) mHeaderDrawer.findViewById(R.id.title);
-        TextView lastname = (TextView) mHeaderDrawer.findViewById(R.id.content);
+        Log.d(this.getClass(), "FirstName" + first);
+        TextView firstName = (TextView) mHeaderDrawer.findViewById(R.id.title);
+        TextView lastName = (TextView) mHeaderDrawer.findViewById(R.id.content);
         ImageView fotos = (ImageView) mHeaderDrawer.findViewById(R.id.icon);
         fotos.setImageBitmap(foto);
-        firstname.setText(first);
-        lastname.setText(last);
+        firstName.setText(first);
+        lastName.setText(last);
     }
 
     @Override
@@ -129,69 +124,69 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
         intent.putExtra(Constant.KEY, bundle);
-        intent.putExtra(KEYNOTE, note);
+        intent.putExtra(Constant.KEYN, note);
         startActivity(intent);
     }
 
     @Override
     public void onErrorDialog(Exception e) {
         DialogFragment newFragment = ErrorDialog.newInstance(e.getMessage());
-        newFragment.show(getSupportFragmentManager(), "dialog");
+        newFragment.show(getSupportFragmentManager(), Constant.DIALOG);
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(
-                AdapterView<?> parent, View view, int position,  long id
+                AdapterView<?> parent, View view, int position, long id
         ) {
             displayView(position);
         }
     }
 
     private void displayView(int position) {
-      if (position <= EnumMenuItems.values().length) {
-      String name = getResources().getString(EnumMenuItems.values()[position-1].getTitle());
-      Log.text(getClass(), name);
-          FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
-          switch (EnumMenuItems.values()[position-1].valueOf(name)) {
-              case Home:
-                  MainPageFragment fragmentPage = new MainPageFragment();
-                  transactionWiki.replace(R.id.framemain, fragmentPage);
-                  mVisible = false;
-                  mDrawerLayout.closeDrawer(mDrawerList);
-                  break;
-              case Random:
-                  RandomCategoryFragment categoryFragment = new RandomCategoryFragment();
-                  transactionWiki.replace(R.id.framemain, categoryFragment);
-                  mVisible = false;
-                  mDrawerLayout.closeDrawer(mDrawerList);
-                  break;
-              case Nearby:
-                  WikiFragment fragmentWiki = new WikiFragment();
-                  transactionWiki.replace(R.id.framemain, fragmentWiki);
-                  mVisible = false;
-                  break;
-              case Favourites:
-                  StorageFragment fragmentFavor = new StorageFragment();
-                  transactionWiki.replace(R.id.framemain, fragmentFavor);
-                  mVisible = true;
-                  break;
-              case Watchlist:
-                  WatchListFragment fragmentWatch = new WatchListFragment();
-                  transactionWiki.replace(R.id.framemain, fragmentWatch);
-                  mVisible = true;
-                  break;
-              case Log_in:
-                  startActivity(new Intent(this, StartActivity.class));
-              default:
-                  mDrawerLayout.closeDrawer(mDrawerList);
-                  return;
-          }
-          transactionWiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-          transactionWiki.commit();
-          mTitle = name;
-          mDrawerLayout.closeDrawer(mDrawerList);
-      }
+        if (position <= EnumMenuItems.values().length) {
+            String name = getResources().getString(EnumMenuItems.values()[position - 1].getTitle());
+            Log.d(getClass(), name);
+            FragmentTransaction transactionWiki = getSupportFragmentManager().beginTransaction();
+            switch (EnumMenuItems.valueOf(name)) {
+                case Home:
+                    MainPageFragment fragmentPage = new MainPageFragment();
+                    transactionWiki.replace(R.id.framemain, fragmentPage);
+                    mVisible = false;
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                    break;
+                case Random:
+                    RandomCategoryFragment categoryFragment = new RandomCategoryFragment();
+                    transactionWiki.replace(R.id.framemain, categoryFragment);
+                    mVisible = false;
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                    break;
+                case Nearby:
+                    NearbyFragment fragmentWiki = new NearbyFragment();
+                    transactionWiki.replace(R.id.framemain, fragmentWiki);
+                    mVisible = false;
+                    break;
+                case Favourites:
+                    StorageFragment fragmentFavor = new StorageFragment();
+                    transactionWiki.replace(R.id.framemain, fragmentFavor);
+                    mVisible = true;
+                    break;
+                case Watchlist:
+                    WatchListFragment fragmentWatch = new WatchListFragment();
+                    transactionWiki.replace(R.id.framemain, fragmentWatch);
+                    mVisible = true;
+                    break;
+                case Log_in:
+                    startActivity(new Intent(this, StartActivity.class));
+                default:
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                    return;
+            }
+            transactionWiki.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transactionWiki.commit();
+            mTitle = name;
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     @Override
@@ -199,22 +194,22 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.wikimain, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItem search =  menu.findItem(R.id.search);
+        MenuItem search = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        mClearHist =  menu.findItem(R.id.clearHist);
-        mClearHist.setVisible(mVisible);
+        MenuItem clearHist = menu.findItem(R.id.clearHist);
+        clearHist.setVisible(mVisible);
         return true;
     }
 
-    public void clearHist (MenuItem item) {
-        for(Fragment frag : getSupportFragmentManager().getFragments()) {
+    public void clearHist(MenuItem item) {
+        for (Fragment frag : getSupportFragmentManager().getFragments()) {
             if (frag instanceof WatchListFragment) {
-                Log.text(getClass(), "Clear history");
+                Log.d(getClass(), "Clear history");
                 this.getContentResolver().delete(WikiContentProvider.WIKI_HISTORY_URI, null, null);
             }
             if (frag instanceof StorageFragment) {
-                Log.text(getClass(), "Clear Storage");
+                Log.d(getClass(), "Clear Storage");
                 new ClearVkStorage(this);
             }
         }
@@ -222,7 +217,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
 
     @Override
     public void onNewIntent(Intent intent) {
-       if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             intent.setClass(this, SearchFragmentActivity.class);
             startActivity(intent);
         }
@@ -234,7 +229,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
             return true;
         }
         switch (item.getItemId()) {
-           case R.id.search:
+            case R.id.search:
                 onSearchRequested();
                 return true;
             default:

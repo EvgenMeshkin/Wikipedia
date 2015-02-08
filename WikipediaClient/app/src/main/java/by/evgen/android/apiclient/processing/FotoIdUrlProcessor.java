@@ -19,8 +19,7 @@ public class FotoIdUrlProcessor extends WrapperArrayProcessor<Category> {
 
     @Override
     protected JSONArray createArray(JSONObject jsonObject) throws JSONException {
-        JSONArray array = (JSONArray)jsonObject.get(Constant.RESPONSE);
-        return array;
+        return (JSONArray)jsonObject.get(Constant.RESPONSE);
     }
 
 }

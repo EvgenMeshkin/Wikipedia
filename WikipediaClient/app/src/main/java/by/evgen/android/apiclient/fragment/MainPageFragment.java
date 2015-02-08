@@ -1,9 +1,7 @@
 package by.evgen.android.apiclient.fragment;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -17,7 +15,6 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
@@ -28,7 +25,7 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by evgen on 24.01.2015.
  */
-public class MainPageFragment extends AbstractFragment {
+public class MainPageFragment extends AbstractFragment<NoteGsonModel> {
 
     private MobileViewProcessor mMobileProcessor;
     private HttpDataSource mHttpDataSource;
@@ -51,7 +48,7 @@ public class MainPageFragment extends AbstractFragment {
     public View getViewLayout(LayoutInflater inflater) {
         View content = inflater.inflate(R.layout.fragment_details, null);
         mContext = getActivity();
-        mMobileProcessor = new MobileViewProcessor(mContext, "Main Page");
+        mMobileProcessor = new MobileViewProcessor(mContext, Constant.MAINPAGE);
         mHttpDataSource = HttpDataSource.get(mContext);
         mWebView = (WebView) content.findViewById(R.id.webView);
         mProgress = content.findViewById(android.R.id.progress);
@@ -70,21 +67,19 @@ public class MainPageFragment extends AbstractFragment {
     }
 
     public String getUrl() {
-        String url = Api.MOBILE_GET + Decoder.getHtml("Main page");
-        return url;
+        return Api.MOBILE_GET + Decoder.getHtml(Constant.MAINPAGE);
     }
 
     @Override
-    public void onExecute(List data) {
-        List<Category> mData = data;
+    public void onExecute(List<Category> data) {
         String mTextHtml = Constant.EMPTY;
         if (data == null || data.isEmpty()) {
             Toast.makeText(mContext, "No data", Toast.LENGTH_SHORT).show();
         } else {
             for (int i = 0; i < data.size(); i++) {
-                mTextHtml = mTextHtml + mData.get(i).getText();
+                mTextHtml = mTextHtml + data.get(i).getText();
             }
-            Log.text(getClass(), mTextHtml);
+            Log.d(getClass(), mTextHtml);
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             mWebView.loadDataWithBaseURL(Api.MAIN_URL,

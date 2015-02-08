@@ -17,7 +17,7 @@ public class StorageSetProcessor implements Processor<Long,InputStream> {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
         Long id = jsonObject.getLong(Constant.RESPONSE);
-        Log.text(getClass(), "Storage set");
+        Log.d(getClass(), "Storage set");
         return id;
     }
 

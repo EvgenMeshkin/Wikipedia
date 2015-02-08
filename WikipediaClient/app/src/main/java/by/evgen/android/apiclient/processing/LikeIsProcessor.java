@@ -9,15 +9,14 @@ import by.evgen.android.apiclient.utils.Constant;
 /**
  * Created by User on 12.01.2015.
  */
-public class LikeIsProcessor implements Processor<String,InputStream>{
+public class LikeIsProcessor implements Processor<Integer,InputStream>{
 
     @Override
-    public String process(InputStream inputStream) throws Exception {
+    public Integer process(InputStream inputStream) throws Exception {
         String string = new StringProcessor().process(inputStream);
         JSONObject jsonObject = new JSONObject(string);
         JSONObject query = jsonObject.getJSONObject(Constant.RESPONSE);
-        String liked = query.getString(Constant.LIKED);
-        return liked;
+        return query.getInt(Constant.LIKED);
     }
 
 }

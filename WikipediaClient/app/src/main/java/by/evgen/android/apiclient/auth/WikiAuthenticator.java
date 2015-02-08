@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.account;
+package by.evgen.android.apiclient.auth;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
@@ -32,7 +32,6 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         final Intent intent = new Intent(mContext, VkLoginActivity.class);
-//        intent.putExtra(VkLoginActivity.EXTRA_TOKEN_TYPE, accountType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
         if (options != null) {

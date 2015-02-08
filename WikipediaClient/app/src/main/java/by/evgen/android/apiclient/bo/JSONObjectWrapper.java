@@ -33,20 +33,8 @@ public class JSONObjectWrapper implements Parcelable {
         return mJO.optString(key);
     }
 
-    protected Boolean getBoolean(String key) {
-        return mJO.optBoolean(key);
-    }
-
     protected Long getLong(String id) {
         return mJO.optLong(id);
-    }
-
-    protected void set(String key, String value) {
-        try {
-            mJO.put(key, value);
-        } catch (JSONException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
     @Override
@@ -67,8 +55,7 @@ public class JSONObjectWrapper implements Parcelable {
     /**
      * Read from parcel.
      *
-     * @param in
-     *            the in
+     * @param in the in
      */
     protected void readFromParcel(final Parcel in) {
         String string = in.readString();
@@ -78,4 +65,5 @@ public class JSONObjectWrapper implements Parcelable {
             throw new IllegalArgumentException("invalid parcel");
         }
     }
+
 }

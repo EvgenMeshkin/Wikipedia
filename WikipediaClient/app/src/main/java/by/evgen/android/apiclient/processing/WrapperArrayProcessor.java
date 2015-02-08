@@ -25,7 +25,7 @@ public abstract class WrapperArrayProcessor <T> implements Processor<List<T>,Inp
             JSONObject object = array.getJSONObject(i);
             noteArray.add(createObject(object));
         }
-        Log.text(getClass(), noteArray.toString());
+        Log.d(getClass(), noteArray.toString());
         return noteArray;
     }
 

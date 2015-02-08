@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Created by evgen on 26.10.2014.
  */
 public class LIFOLinkedBlockingDeque<T> extends LinkedBlockingDeque<T> {
+
     private static final long serialVersionUID = -4114786347960826192L;
 
     /**

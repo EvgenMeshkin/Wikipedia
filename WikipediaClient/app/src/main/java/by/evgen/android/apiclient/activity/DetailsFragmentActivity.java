@@ -1,8 +1,6 @@
 package by.evgen.android.apiclient.activity;
 
-import android.accounts.Account;
 import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,15 +26,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
 import by.evgen.android.apiclient.fragment.AbstractFragment;
 import by.evgen.android.apiclient.fragment.DetailsFragment;
-import by.evgen.android.apiclient.helper.LikeVkNotes;
 import by.evgen.android.apiclient.helper.OnErrorCallbacks;
-import by.evgen.android.apiclient.helper.SentsVkNotes;
-import by.evgen.android.apiclient.helper.SentsVkStorage;
+import by.evgen.android.apiclient.helper.vkhelper.LikeVkNotes;
+import by.evgen.android.apiclient.helper.vkhelper.SentsVkNotes;
+import by.evgen.android.apiclient.helper.vkhelper.SentsVkStorage;
+import by.evgen.android.apiclient.helper.wikihelper.WikiGetIdTitle;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Decoder;
 import by.evgen.android.apiclient.utils.Log;
@@ -46,13 +43,11 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by User on 13.11.2014.
  */
-public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, SentsVkNotes.Callbacks, DetailsFragment.Callbacks, OnErrorCallbacks.Callbacks {
+public class DetailsFragmentActivity extends ActionBarActivity implements AbstractFragment.Callbacks<NoteGsonModel>, DetailsFragment.Callbacks, OnErrorCallbacks.Callbacks, WikiGetIdTitle.Callbacks {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListRight;
     private NoteGsonModel mNoteGsonModel;
-    private final String KEY = "key";
-    private final String KEYNOTE = "keynote";
     private final int stub_id = R.drawable.right_drawer;
 
     @Override
@@ -62,12 +57,11 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);//setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark_material_light));
         mDrawerListRight = (ListView) findViewById(R.id.list_right_menu);
-        if (getIntent().getParcelableExtra(KEYNOTE) != null) {
-        mNoteGsonModel =  getIntent().getParcelableExtra(KEYNOTE);
+        if (getIntent().getParcelableExtra(Constant.KEYN) != null) {
+            mNoteGsonModel = getIntent().getParcelableExtra(Constant.KEYN);
         }
         DetailsFragment details = new DetailsFragment();
         mDrawerListRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,9 +72,9 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
                 mDrawerLayout.closeDrawer(mDrawerListRight);
             }
         });
-        details.setArguments(getIntent().<Bundle>getParcelableExtra(KEY));
-            getSupportFragmentManager().beginTransaction().add(
-                    R.id.framemain, details).commit();
+        details.setArguments(getIntent().<Bundle>getParcelableExtra(Constant.KEY));
+        getSupportFragmentManager().beginTransaction().add(
+                R.id.framemain, details).commit();
     }
 
     @Override
@@ -88,7 +82,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItem search =  menu.findItem(R.id.search);
+        MenuItem search = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
@@ -96,31 +90,34 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     @Override
     public void onNewIntent(Intent intent) {
-        if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             intent.setClass(this, SearchFragmentActivity.class);
             startActivity(intent);
         }
     }
 
-    public void sentStorage (MenuItem item) {
-        Log.text(getClass(), "sentStorage");
-        new SentsVkStorage(this, Decoder.getTitle(mNoteGsonModel.getTitle()));
-        Account vkAccount = new Account(this.getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
-        ContentResolver.requestSync(vkAccount, WikiContentProvider.AUTHORITY, bundle);
+    @Override
+    public void onSetIdTitle(List<Category> data) {
+        Category category = data.get(0);
+        String pageId = category.getPageId();
+        new SentsVkStorage(this, pageId, Decoder.getHtml(mNoteGsonModel.getTitle()));
+        Log.d(getClass(), "pageId = " + pageId);
+    }
+
+    public void sentStorage(MenuItem item) {
+        Log.d(getClass(), "sentStorage");
+        new WikiGetIdTitle(this, this, "&titles=" + Decoder.getHtml(mNoteGsonModel.getTitle()));
     }
 
 
     public void sentNote(MenuItem item) {
-        Log.text(getClass(), "sentNote");
-        new SentsVkNotes(this, this, Decoder.getTitle(mNoteGsonModel.getTitle()));
+        Log.d(getClass(), "sentNote");
+        new SentsVkNotes(null, this, Decoder.getTitle(mNoteGsonModel.getTitle()));
     }
 
     public void sentLike(MenuItem item) {
-        Log.text(getClass(), "sentLike");
-              new LikeVkNotes(this, Decoder.getTitle(mNoteGsonModel.getTitle()));
+        Log.d(getClass(), "sentLike");
+        new LikeVkNotes(this, Decoder.getTitle(mNoteGsonModel.getTitle()));
     }
 
     @Override
@@ -129,7 +126,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-           case R.id.search:
+            case R.id.search:
                 onSearchRequested();
                 return true;
             case R.id.action_note:
@@ -145,31 +142,26 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     public void onShowDetails(NoteGsonModel note) {
         mNoteGsonModel = note;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY, note);
+        bundle.putParcelable(Constant.KEY, note);
         Intent intent = new Intent();
         intent.setClass(this, DetailsFragmentActivity.class);
-        intent.putExtra(KEY, bundle);
-        intent.putExtra(KEYNOTE, note);
+        intent.putExtra(Constant.KEY, bundle);
+        intent.putExtra(Constant.KEYN, note);
         startActivity(intent);
     }
 
     @Override
     public void onErrorDialog(Exception e) {
         e.printStackTrace();
-        Log.text(getClass(), "OnError  " + e);
+        Log.d(getClass(), "OnError  " + e);
         DialogFragment newFragment = ErrorDialog.newInstance(e.getMessage());
-        newFragment.show(getSupportFragmentManager(), "dialog");
+        newFragment.show(getSupportFragmentManager(), Constant.DIALOG);
     }
 
     @Override
-    public void onReturnId(Long id) {
-
-    }
-
-    @Override
-    public void onSetContents(List data) {
+    public void onSetContents(List<Category> data) {
         if (data != null) {
-            mDrawerListRight.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, android.R.id.text2, data) {
+            mDrawerListRight.setAdapter(new ArrayAdapter<Category>(this, R.layout.drawer_list_item, android.R.id.text2, data) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null) {
@@ -177,14 +169,13 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
                     }
                     ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
                     imageView.setImageResource(stub_id);
-                    TextView textView = (TextView) convertView.findViewById(android.R.id.text2);
-                    textView.setText(getItem(position));
-                    if (position == 0){
+                    TextView textView = (TextView) convertView.findViewById(android.R.id.content);
+                    textView.setText(getItem(position).getLine());
+                    if (position == 0) {
                         textView.setText(mNoteGsonModel.getTitle());
                     }
-                   // Animation anim = AnimationUtils.loadAnimation(DetailsFragmentActivity.this, R.anim.anim);
                     TranslateAnimation anim = new TranslateAnimation(150, 0, 0, 0);
-                    anim.setDuration(1000 + position*100);
+                    anim.setDuration(1000 + position * 100);
                     convertView.startAnimation(anim);
                     convertView.setTag(position);
                     return convertView;

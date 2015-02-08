@@ -1,8 +1,6 @@
 package by.evgen.android.apiclient.processing;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.util.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,9 +9,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.evgen.android.apiclient.db.HistoryDBHelper;
-import by.evgen.android.apiclient.db.StorageDBHelper;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
 
@@ -34,19 +29,10 @@ public class StorageGetKeysProcessor implements Processor<List<String>,InputStre
         JSONObject jsonObject = new JSONObject(string);
         JSONArray array = (JSONArray) jsonObject.get(Constant.RESPONSE);
         List<String> noteArray = new ArrayList<String>(array.length());
-        mContext.getContentResolver().delete(WikiContentProvider.WIKI_STORAGE_URI, null, null);
-        ContentValues[] valueses = new ContentValues[array.length()];
         for (int i = 0; i < array.length(); i++) {
             String stringValue = array.getString(i);
-            stringValue = new String(Base64.decode(stringValue, 0));
-            ContentValues cv = new ContentValues();
-            cv.put(StorageDBHelper.WIKI_NAME, stringValue);
-            valueses[i] = cv;
             noteArray.add(stringValue);
-            Log.text(getClass(), stringValue);
-        }
-        if (mContext != null) {
-            mContext.getContentResolver().bulkInsert(WikiContentProvider.WIKI_STORAGE_URI, valueses);
+            Log.d(getClass(), stringValue);
         }
         return noteArray;
     }

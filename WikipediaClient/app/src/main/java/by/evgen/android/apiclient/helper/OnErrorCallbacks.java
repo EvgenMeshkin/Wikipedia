@@ -8,7 +8,6 @@ import android.content.Context;
 public class OnErrorCallbacks {
 
     private Context mContext;
-    private Callbacks iCallbacks;
 
     public OnErrorCallbacks(Context context) {
         mContext = context;
@@ -19,7 +18,7 @@ public class OnErrorCallbacks {
     }
 
     public void sentOnError (Exception e){
-        iCallbacks = (Callbacks) mContext;
+        Callbacks iCallbacks = (Callbacks) mContext;
         iCallbacks.onErrorDialog(e);
     }
 

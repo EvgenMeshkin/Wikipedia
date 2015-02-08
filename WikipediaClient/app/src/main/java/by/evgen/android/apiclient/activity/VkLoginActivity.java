@@ -19,17 +19,15 @@ import by.evgen.android.apiclient.utils.Log;
 
 public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.Callbacks {
 
-    private WebView mWebView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vk_login);
-        mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        mWebView.setWebViewClient(new VkWebViewClient());
-        mWebView.loadUrl(VkOAuthHelper.AUTORIZATION_URL);
+        WebView webView = (WebView) findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.setWebViewClient(new VkWebViewClient());
+        webView.loadUrl(VkOAuthHelper.AUTORIZATION_URL);
     }
 
     @Override
@@ -62,23 +60,21 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Log.text(getClass(), "page started " + url);
+            Log.d(getClass(), "page started " + url);
             showProgress();
             view.setVisibility(View.INVISIBLE);
         }
 
-       @Override
+        @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-           Log.text(getClass(), "overr " + url);
-           if (VkOAuthHelper.proceedRedirectURL(VkLoginActivity.this, url, VkLoginActivity.this)) {
-                Log.text(getClass(), "overr redr");
+            Log.d(getClass(), "overr " + url);
+            if (VkOAuthHelper.proceedRedirectURL(VkLoginActivity.this, url, VkLoginActivity.this)) {
                 view.setVisibility(View.INVISIBLE);
-                Log.text(getClass(), "Parsing url" + url);
+                Log.d(getClass(), "Parsing url" + url);
                 setResult(RESULT_OK);
                 finish();
                 return true;
             } else {
-                //view.loadUrl(url);
                 return false;
             }
         }
@@ -89,16 +85,16 @@ public class VkLoginActivity extends ActionBarActivity implements VkOAuthHelper.
             super.onReceivedError(view, errorCode, description, failingUrl);
             view.setVisibility(View.VISIBLE);
             dismissProgress();
-            Log.text(getClass(), "error " + failingUrl);
+            Log.d(getClass(), "error " + failingUrl);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            Log.text(getClass(), "finish " + url);
+            Log.d(getClass(), "finish " + url);
             if (url.contains("&amp;")) {
                 url = url.replace("&amp;", "&");
-                Log.text(getClass(), "overr after replace " + url);
+                Log.d(getClass(), "overr after replace " + url);
                 view.loadUrl(url);
                 return;
             }

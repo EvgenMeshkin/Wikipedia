@@ -1,4 +1,4 @@
-package by.evgen.android.apiclient.helper;
+package by.evgen.android.apiclient.helper.wikihelper;
 
 import android.content.Context;
 import android.os.Handler;
@@ -35,7 +35,7 @@ public class LoaderRandomArray {
     public static final String KEY = "LoaderRandomArray";
     private Context mContext;
 
-    public LoaderRandomArray(Context context){
+    public LoaderRandomArray(Context context) {
         mContext = context;
         mExecutorService = new ThreadPoolExecutor(5, 5, 0, TimeUnit.MILLISECONDS,
                 new LIFOLinkedBlockingDeque<Runnable>());
@@ -45,12 +45,12 @@ public class LoaderRandomArray {
         return WikiApplication.get(context, KEY);
     }
 
-    public void displayView(final String title, final View convertView){
+    public void displayView(final String title, final View convertView) {
         mViews.put(convertView, title);
         queueView(title, convertView);
-      }
+    }
 
-    private void queueView(String url, View convertView){
+    private void queueView(String url, View convertView) {
         MemoryValue p = new MemoryValue(url, convertView, mContext);
         mExecutorService.submit(new DataLoader(p));
     }
@@ -63,7 +63,7 @@ public class LoaderRandomArray {
         public final HttpDataSource dataUrl;
         public final Processor processUrl;
 
-        public MemoryValue(String url, View convertView, Context context){
+        public MemoryValue(String url, View convertView, Context context) {
             this.url = url;
             this.convertView = convertView;
             this.dataSource = new CachedHttpDataSource(context);
@@ -76,51 +76,49 @@ public class LoaderRandomArray {
 
         private final MemoryValue mMemoryValue;
         private Handler mHandler = new Handler();
-        private DataLoader(MemoryValue mMemoryValue){
+
+        private DataLoader(MemoryValue mMemoryValue) {
             this.mMemoryValue = mMemoryValue;
         }
 
         @Override
         public void run() {
-            try{
+            try {
                 InputStream dataUrl = mMemoryValue.dataUrl.getResult(mMemoryValue.url);
-                Object procesUrl = mMemoryValue.processUrl.process(dataUrl);
-                List<Category> data = (List<Category>)procesUrl;
+                List<Category> data = (List<Category>) mMemoryValue.processUrl.process(dataUrl);
                 Category category = data.get(0);
                 if (viewReused(mMemoryValue)) {
                     return;
                 }
                 ViewDisplayer bd = new ViewDisplayer(category, mMemoryValue);
                 mHandler.post(bd);
-            }catch(Throwable th){
-                return;
+            } catch (Throwable th) {
+                th.printStackTrace();
             }
         }
     }
 
-    synchronized boolean viewReused(MemoryValue memoryValue){
+    synchronized boolean viewReused(MemoryValue memoryValue) {
         String tag = mViews.get(memoryValue.convertView);
-        if (tag.isEmpty() || !tag.equals(memoryValue.url))
-            return true;
-        return false;
+        return tag.isEmpty() || !tag.equals(memoryValue.url);
     }
 
-    class ViewDisplayer implements Runnable{
+    class ViewDisplayer implements Runnable {
 
         private Category category;
         private MemoryValue memoryValue;
 
-        public ViewDisplayer(Category category, MemoryValue memoryValue){
+        public ViewDisplayer(Category category, MemoryValue memoryValue) {
             this.category = category;
             this.memoryValue = memoryValue;
         }
 
-        public void run(){
+        public void run() {
             if (viewReused(memoryValue)) {
                 return;
             }
-            TextView title = (TextView) memoryValue.convertView.findViewById(android.R.id.text1);
-            TextView content = (TextView) memoryValue.convertView.findViewById(android.R.id.text2);
+            TextView title = (TextView) memoryValue.convertView.findViewById(android.R.id.title);
+            TextView content = (TextView) memoryValue.convertView.findViewById(android.R.id.content);
             ImageView imageView = (ImageView) memoryValue.convertView.findViewById(android.R.id.icon);
             if (category != null) {
                 title.setText(category.getTitle());
@@ -133,6 +131,5 @@ public class LoaderRandomArray {
             }
         }
     }
-
 
 }

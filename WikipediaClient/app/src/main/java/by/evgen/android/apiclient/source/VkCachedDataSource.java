@@ -8,9 +8,9 @@ import org.apache.http.auth.AuthenticationException;
 
 import java.io.InputStream;
 
-import by.evgen.android.apiclient.auth.Authorized;
-import by.evgen.android.apiclient.WikiApplication;
 import by.evgen.android.apiclient.R;
+import by.evgen.android.apiclient.WikiApplication;
+import by.evgen.android.apiclient.auth.Authorized;
 import by.evgen.android.apiclient.auth.secure.EncrManager;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.Log;
@@ -38,10 +38,10 @@ public class VkCachedDataSource extends CachedHttpDataSource {
             AccountManager manager = AccountManager.get(mContext);
             Account vkAccount = new Account(mContext.getString(R.string.acount_name), Constant.ACCOUNT_TYPE);
             String url = p + "&access_token=" + EncrManager.decrypt(mContext, manager.getUserData(vkAccount, "Token"));
-            Log.text(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
+            Log.d(mContext.getClass(), "Datasoaccount  -  " + manager.getUserData(vkAccount, "Token"));
             return super.getResult(url);
         } else {
-            throw new AuthenticationException("You must login");
+            throw new AuthenticationException(Constant.INLOGIN);
         }
    }
 

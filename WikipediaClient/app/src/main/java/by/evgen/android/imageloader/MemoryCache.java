@@ -13,8 +13,7 @@ public class MemoryCache {
 
         @Override
         protected int sizeOf(String key, Bitmap value) {
-            int size = value.getRowBytes() * value.getHeight();
-            return size;
+            return value.getRowBytes() * value.getHeight();
         }
     };
 

@@ -29,4 +29,4 @@ public enum EnumMenuItems {
     public int getIcon() {
         return mIcon;
     }
-};
+}

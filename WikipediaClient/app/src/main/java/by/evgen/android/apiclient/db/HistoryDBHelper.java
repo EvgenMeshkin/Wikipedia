@@ -30,7 +30,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.text(getClass(), "--- onCreate database ---");
+        Log.d(getClass(), "--- onCreate database ---");
         db.execSQL(DB_CREATE);
     }
 

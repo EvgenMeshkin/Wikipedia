@@ -43,7 +43,6 @@ public class GpsLocation implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-     //  showLocation(mManager.getLastKnownLocation(provider));
     }
 
     @Override
@@ -65,4 +64,5 @@ public class GpsLocation implements LocationListener {
         }
         Log.d("id", mCoords);
     }
+
 }

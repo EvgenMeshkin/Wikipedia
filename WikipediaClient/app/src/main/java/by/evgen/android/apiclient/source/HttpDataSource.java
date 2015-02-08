@@ -18,7 +18,7 @@ public class HttpDataSource implements DataSource<InputStream, String> {
     public static final String KEY = "HttpDataSource";
 
     public static HttpDataSource get(Context context) {
-        Log.text(HttpDataSource.class, "getContext");
+        Log.d(HttpDataSource.class, "getContext");
         return WikiApplication.get(context, KEY);
     }
 

@@ -1,10 +1,8 @@
 package by.evgen.android.apiclient.fragment;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -19,11 +17,11 @@ import by.evgen.android.apiclient.Api;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.bo.Category;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
-import by.evgen.android.apiclient.db.provider.WikiContentProvider;
-import by.evgen.android.apiclient.helper.LikeVkNotes;
-import by.evgen.android.apiclient.helper.SentsVkNotes;
-import by.evgen.android.apiclient.helper.SentsVkStorage;
-import by.evgen.android.apiclient.helper.WikiContentPageCallback;
+import by.evgen.android.apiclient.helper.vkhelper.LikeVkNotes;
+import by.evgen.android.apiclient.helper.vkhelper.SentsVkNotes;
+import by.evgen.android.apiclient.helper.vkhelper.SentsVkStorage;
+import by.evgen.android.apiclient.helper.wikihelper.WikiContentPageCallback;
+import by.evgen.android.apiclient.helper.wikihelper.WikiGetIdTitle;
 import by.evgen.android.apiclient.processing.MobileViewProcessor;
 import by.evgen.android.apiclient.source.DataSource;
 import by.evgen.android.apiclient.source.HttpDataSource;
@@ -36,14 +34,13 @@ import by.evgen.android.apiclient.utils.Log;
  * Created by User on 22.10.2014.
  */
 
-
-public class DetailsFragment extends AbstractFragment implements WikiContentPageCallback.Callbacks, SentsVkNotes.Callbacks {
+public class DetailsFragment extends AbstractFragment<NoteGsonModel> implements WikiContentPageCallback.Callbacks, WikiGetIdTitle.Callbacks {
 
     private MobileViewProcessor mMobileViewProcessor;
     private HttpDataSource mHttpDataSource;
     private NoteGsonModel mObj;
     private WebView mWebView;
-    private List mContent;
+    private List<Category> mContent;
     private View mProgress;
     private Context mContext;
     private String mTextHtml;
@@ -51,8 +48,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     public ImageButton mImageButton;
     public ImageButton mNoteButton;
     public ImageButton mStorageButton;
-    private final String WIKI_NAME = "name";
-    private final String WIKI_DATE = "wikidate";
+
 
     @Override
     public void onStop() {
@@ -61,12 +57,15 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     @Override
-    public void onReturnId(Long id) {
-
+    public void onSetIdTitle(List<Category> data) {
+        Category category = data.get(0);
+        String pageId = category.getPageId();
+        new SentsVkStorage(mContext, pageId, Decoder.getHtml(mObj.getTitle()));
+        Log.d(getClass(), "pageId = " + pageId);
     }
 
     public interface Callbacks {
-        void onSetContents(List data);
+        void onSetContents(List<Category> data);
     }
 
     public void showDetails(NoteGsonModel note) {
@@ -101,23 +100,23 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             mImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new LikeVkNotes(mContext, mHistory.replaceAll(" ", "_"));
+                    new LikeVkNotes(mContext, Decoder.getTitle(mHistory));
                 }
             });
             mNoteButton = (ImageButton)content.findViewById(R.id.noteButton);
             mNoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.text(getClass(), "noteButton click");
-                    new SentsVkNotes(DetailsFragment.this, mContext, mHistory.replaceAll(" ", "_"));
+                    Log.d(getClass(), "noteButton click");
+                    new SentsVkNotes(null, mContext, Decoder.getTitle(mHistory));
                 }
             });
             mStorageButton = (ImageButton)content.findViewById(R.id.storageButton);
             mStorageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.text(getClass(), "sentStorage");
-                    new SentsVkStorage(mContext, mHistory.replaceAll(" ", "_"));
+                    Log.d(getClass(), "sentStorage");
+                    new WikiGetIdTitle(mContext, DetailsFragment.this, "&titles=" + Decoder.getHtml(mObj.getTitle()));
                 }
             });
             mWebView.setWebViewClient(new WikiWebViewClient());
@@ -136,26 +135,18 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     public String getUrl() {
-        String url = Api.MOBILE_GET + Decoder.getHtml(mObj.getTitle());
-        return url;
+        return Api.MOBILE_GET + Decoder.getHtml(mObj.getTitle());
     }
 
     @Override
-    public void onExecute(List data) {
-        List<Category> mData = data;
+    public void onExecute(List<Category> data) {
         if (data == null || data.isEmpty()) {
             Toast.makeText(mContext, "Note added", Toast.LENGTH_SHORT).show();
         } else {
-            mTextHtml = "";
-//            ContentValues cv = new ContentValues();
-//            cv.put(WIKI_NAME, mHistory);
-//            cv.put(WIKI_DATE, new java.util.Date().getTime());
-//            if (!cv.equals(null) && !mContext.equals(null)) {
-//                mContext.getContentResolver().insert(WikiContentProvider.WIKI_HISTORY_URI, cv);
-//            }
+            mTextHtml = Constant.EMPTY;
             new WikiContentPageCallback(mContext, this, Api.CONTENTS_GET + mHistory);
             for (int i = 0; i < data.size(); i++) {
-                mTextHtml = mTextHtml + mData.get(i).getText();
+                mTextHtml = mTextHtml + data.get(i).getText();
             }
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
@@ -164,7 +155,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
             mWebView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Log.text(getClass(), "Long Click");
+                    Log.d(getClass(), "Long Click");
                     mImageButton.setVisibility(View.VISIBLE);
                     mNoteButton.setVisibility(View.VISIBLE);
                     mStorageButton.setVisibility(View.VISIBLE);
@@ -180,7 +171,7 @@ public class DetailsFragment extends AbstractFragment implements WikiContentPage
     }
 
     public void notifyWebView(Integer position) {
-        mWebView.loadDataWithBaseURL(Api.MAIN_URL + "#" + Decoder.getTitle(mContent.get(position).toString()),
+        mWebView.loadDataWithBaseURL(Api.MAIN_URL + "#" + Decoder.getTitle(mContent.get(position).getLine()),
                 mTextHtml,
                 Constant.TYPE,
                 Constant.UTF,

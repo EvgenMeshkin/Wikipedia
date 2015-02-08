@@ -1,12 +1,13 @@
-package by.evgen.android.apiclient.helper;
+package by.evgen.android.apiclient.helper.vkhelper;
 
 import android.content.Context;
 
 import java.util.List;
 
 import by.evgen.android.apiclient.Api;
+import by.evgen.android.apiclient.helper.ManagerDownload;
+import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.processing.StorageGetKeysProcessor;
-import by.evgen.android.apiclient.source.VkCachedDataSource;
 import by.evgen.android.apiclient.source.VkDataSource;
 
 /**

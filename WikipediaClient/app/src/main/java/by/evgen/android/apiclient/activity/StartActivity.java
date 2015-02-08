@@ -1,6 +1,7 @@
 package by.evgen.android.apiclient.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -12,7 +13,7 @@ import by.evgen.android.apiclient.auth.Authorized;
 
 public class StartActivity extends ActionBarActivity {
 
-    public static final int requestL = 0;
+    public static final int REQUEST_L = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +21,14 @@ public class StartActivity extends ActionBarActivity {
         if (Authorized.isLogged()) {
             startMainActivity();
         } else {
-            startActivityForResult(new Intent(this, VkLoginActivity.class), requestL);
+            startActivityForResult(new Intent(this, VkLoginActivity.class), REQUEST_L);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == requestL && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_L && resultCode == RESULT_OK) {
             Authorized.setLogged(true);
             startMainActivity();
         } else {
@@ -37,7 +38,11 @@ public class StartActivity extends ActionBarActivity {
 
     private void startMainActivity() {
         Intent intent = new Intent(this, WikiActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        } else {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         startActivity(intent);
         finish();
     }

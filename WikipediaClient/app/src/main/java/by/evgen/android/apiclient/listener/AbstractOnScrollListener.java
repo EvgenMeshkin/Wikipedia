@@ -25,7 +25,6 @@ import by.evgen.android.imageloader.ImageLoader;
 public abstract class AbstractOnScrollListener implements AbsListView.OnScrollListener, ManagerDownload.Callback<List<Category>> {
 
     private int mPreviousTotal = 0;
-    private int mVisibleThreshold = 2;
     public ListView mListView;
     public List<Category> mData;
     public ArrayAdapter mAdapter;
@@ -36,7 +35,7 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     private boolean isPagingEnabled = true;
     public String mValue;
 
-    public AbstractOnScrollListener(Context context, ListView listView, List data, String value) {
+    public AbstractOnScrollListener(Context context, ListView listView, List<Category> data, String value) {
         mImageLoader = ImageLoader.get(context);
         mListView = listView;
         mData = data;
@@ -56,7 +55,7 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        Log.text(getClass(), "onScrollStateChanged");
+        Log.d(getClass(), "onScrollStateChanged");
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                 if (!isImageLoaderControlledByDataManager) {
@@ -80,14 +79,15 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         ListAdapter adapter = view.getAdapter();
         final int count = getRealAdapterCount(adapter);
-        Log.text(getClass(), "onScroll" + count + mPreviousTotal + totalItemCount);
+        Log.d(getClass(), "onScroll" + count + mPreviousTotal + totalItemCount);
         if (count == 0) {
             return;
         }
+        int mVisibleThreshold = 5;
         if (mPreviousTotal != totalItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + mVisibleThreshold)) {
             mPreviousTotal = totalItemCount;
             isImageLoaderControlledByDataManager = true;
-            Log.text(getClass(), "onScroll if" + count);
+            Log.d(getClass(), "onScroll if" + count);
             ManagerDownload.load(this,
                     getUrl(COUNT, count),
                     getDataSource(),
@@ -100,10 +100,10 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
     }
 
     public void updateAdapter(List<Category> data) {
-        Log.text(getClass(), "onScrollUpdateAdapter");
+        Log.d(getClass(), "onScrollUpdateAdapter");
         if (data != null && data.size() == COUNT) {
             isPagingEnabled = true;
-            Log.text(getClass(), "onScrollUpdateAdapter addFooter");
+            Log.d(getClass(), "onScrollUpdateAdapter addFooter");
             mListView.removeFooterView(mFooterProgress);
             mListView.addFooterView(mFooterProgress, null, false);
         } else {
@@ -145,18 +145,12 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
 
     @Override
     public void onPostExecute(List<Category> data) {
-      Log.text(getClass(), "onScrollPostExecute");
-     // if (mAdapter == null) {
+      Log.d(getClass(), "onScrollPostExecute");
             isPagingEnabled = true;
             refreshFooter();
             updateAdapter(data);
             mImageLoader.resume();
             isImageLoaderControlledByDataManager = false;
-//        } else {
-//            data.clear();
-//            updateAdapter(data);
-//        }
-
     }
 
     @Override
@@ -165,5 +159,6 @@ public abstract class AbstractOnScrollListener implements AbsListView.OnScrollLi
         mImageLoader.resume();
         isImageLoaderControlledByDataManager = false;
     }
+
 }
 

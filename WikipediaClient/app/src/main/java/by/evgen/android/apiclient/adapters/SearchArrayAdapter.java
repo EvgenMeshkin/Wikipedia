@@ -20,8 +20,6 @@ import by.evgen.android.imageloader.ImageLoader;
  */
 public class SearchArrayAdapter extends ArrayAdapter<Category> {
 
-    private TextView mTitle;
-    private TextView mContent;
     private ImageLoader mImageLoader;
     private Context mContext;
 
@@ -37,10 +35,10 @@ public class SearchArrayAdapter extends ArrayAdapter<Category> {
             convertView = View.inflate(mContext, R.layout.adapter_item, null);
         }
         Category item = getItem(position);
-        mTitle = (TextView) convertView.findViewById(android.R.id.text1);
-        mTitle.setText(item.getTitle());
-        mContent = (TextView) convertView.findViewById(android.R.id.text2);
-        mContent.setText(item.getDist());
+        TextView title = (TextView) convertView.findViewById(android.R.id.title);
+        title.setText(item.getTitle());
+        TextView content = (TextView) convertView.findViewById(android.R.id.content);
+        content.setText(item.getDist());
         final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(item.getTitle());
         convertView.setTag(item.getId());
         final ImageView imageView = (ImageView) convertView.findViewById(android.R.id.icon);
