@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 
 import by.evgen.android.apiclient.activity.StartActivity;
 import by.evgen.android.apiclient.utils.Constant;
@@ -30,8 +31,10 @@ public class ErrorDialog extends DialogFragment implements DialogInterface.OnCli
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String title = getArguments().getString("Error:");
-        if (title.equals(Constant.INLOGIN)) {
-            textButton = "In login";
+        if (!TextUtils.isEmpty(title)) {
+            if (title.equals(Constant.INLOGIN)) {
+                textButton = "In login";
+            }
         }
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                 .setTitle("Error: ")

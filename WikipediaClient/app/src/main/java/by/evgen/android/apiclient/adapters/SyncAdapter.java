@@ -22,7 +22,7 @@ import by.evgen.android.apiclient.utils.Log;
 /**
  * Created by evgen on 05.11.2014.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter implements GetAllVkStorage.Callbacks {
+public class SyncAdapter extends AbstractThreadedSyncAdapter{
 
     private final Context mContext;
 
@@ -56,12 +56,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements GetAllVk
                     }
                 }
             }).start();
-
         }
-    }
-
-    @Override
-    public void onAllVkStorage(List<String> data) {
     }
 
 }

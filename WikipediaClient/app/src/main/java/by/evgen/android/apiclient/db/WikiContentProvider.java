@@ -5,8 +5,10 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import by.evgen.android.apiclient.utils.Log;
@@ -64,11 +66,11 @@ public class WikiContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Log.d(getClass(), "query, " + uri.toString());
-        Cursor cursor = null;
+        Cursor cursor;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = "date(" + HistoryDBHelper.WIKI_DATE + ") DESC";
+                    sortOrder = "date(" + HistoryDBHelper.WIKI_DATE + ") ASC";
                 }
                 db = historyDbHelper.getWritableDatabase();
                 cursor = db.query(HistoryDBHelper.WIKI_TABLE, projection, selection,
@@ -83,12 +85,16 @@ public class WikiContentProvider extends ContentProvider {
                 } else {
                     selection = selection + " AND " + HistoryDBHelper.WIKI_ID + " = " + id;
                 }
+                db = storageDBHelper.getWritableDatabase();
+                cursor = db.query(HistoryDBHelper.WIKI_TABLE, projection, selection,
+                        selectionArgs, null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(),
+                        WIKI_HISTORY_URI);
                 break;
             case URI_STORAGE:
-                //TODO
-//                if (TextUtils.isEmpty(sortOrder)) {
-//                    sortOrder = "title(" + StorageDBHelper.WIKI_NAME + ") DESC";
-//                }
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = StorageDBHelper.WIKI_NAME + " ASC";
+                }
                 db = storageDBHelper.getWritableDatabase();
                 cursor = db.query(StorageDBHelper.WIKI_TABLE, projection, selection,
                         selectionArgs, null, null, sortOrder);
@@ -108,14 +114,28 @@ public class WikiContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
                 db = historyDbHelper.getWritableDatabase();
-                long rowID = db.insert(HistoryDBHelper.WIKI_TABLE, null, values);
+                long rowID;
+                db.beginTransaction();
+                try {
+                    rowID = db.insert(HistoryDBHelper.WIKI_TABLE, null, values);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
                 resultUri = ContentUris.withAppendedId(WIKI_HISTORY_URI, rowID);
                 break;
             case URI_HISTORY_ID:
                 break;
             case URI_STORAGE:
                 db = storageDBHelper.getWritableDatabase();
-                long storID = db.insert(StorageDBHelper.WIKI_TABLE, null, values);
+                long storID;
+                db.beginTransaction();
+                try {
+                    storID = db.insert(StorageDBHelper.WIKI_TABLE, null, values);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
                 resultUri = ContentUris.withAppendedId(WIKI_STORAGE_URI, storID);
                 break;
             default:
@@ -162,7 +182,7 @@ public class WikiContentProvider extends ContentProvider {
         int cnt;
         switch (uriMatcher.match(uri)) {
             case URI_HISTORY:
-                 db = historyDbHelper.getWritableDatabase();
+                db = historyDbHelper.getWritableDatabase();
                 cnt = db.update(HistoryDBHelper.WIKI_TABLE, values, selection, selectionArgs);
                 break;
             case URI_HISTORY_ID:
@@ -184,6 +204,28 @@ public class WikiContentProvider extends ContentProvider {
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
+    }
+
+    @Override
+    public int bulkInsert(Uri uri, @NonNull ContentValues[] allValues) {
+        db = storageDBHelper.getWritableDatabase();
+        int numInserted = 0;
+        String table = StorageDBHelper.WIKI_TABLE;
+        db.beginTransaction();
+        try {
+            for (ContentValues cv : allValues) {
+                long newID = db.insertWithOnConflict(table, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+                if (newID <= 0) {
+                    throw new SQLException("Error to add: " + uri);
+                }
+            }
+            db.setTransactionSuccessful();
+            getContext().getContentResolver().notifyChange(uri, null);
+            numInserted = allValues.length;
+        } finally {
+            db.endTransaction();
+        }
+        return numInserted;
     }
 
     @Override

@@ -138,6 +138,7 @@ public abstract class AbstractDbFragment extends Fragment implements LoaderManag
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(getClass()," " + position);
                 Cursor cursor = (Cursor) mListView.getAdapter().getItem(position);
                 NoteGsonModel note = getNote(cursor);
                 showDetails(note);
