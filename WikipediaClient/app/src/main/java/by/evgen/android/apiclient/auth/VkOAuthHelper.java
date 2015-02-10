@@ -58,6 +58,7 @@ public class VkOAuthHelper {
     public static void onTokenReceived(Activity activity, Callbacks callbacks, String token) {
         AccountManager manager = AccountManager.get(activity);
         Account account = new Account(activity.getString(R.string.acount_name), ACCOUNT_TYPE);
+        //TODO
         if (manager.addAccountExplicitly(account, activity.getPackageName(), new Bundle())) {
             ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         }

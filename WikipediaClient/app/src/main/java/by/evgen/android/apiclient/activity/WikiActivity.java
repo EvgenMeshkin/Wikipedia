@@ -4,12 +4,15 @@ package by.evgen.android.apiclient.activity;
  * Created by User on 30.10.2014.
  */
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +35,7 @@ import android.widget.TextView;
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.MenuAdapter;
 import by.evgen.android.apiclient.auth.Authorized;
+import by.evgen.android.apiclient.auth.VkOAuthHelper;
 import by.evgen.android.apiclient.bo.NoteGsonModel;
 import by.evgen.android.apiclient.db.WikiContentProvider;
 import by.evgen.android.apiclient.dialogs.ErrorDialog;
@@ -67,6 +71,19 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         mTitle = getTitle();
+        Account[] accounts = null;
+        AccountManager accountManager = AccountManager.get(this);
+        if (accountManager != null) {
+            accounts = accountManager.getAccountsByType(VkOAuthHelper.ACCOUNT_TYPE);
+        }
+        assert accounts != null;
+        for (Account account : accounts) {
+            String userId = accountManager.getUserData(account, "Token");
+            if (userId != null) {
+                Authorized.setLogged(true);
+                break;
+            }
+        }
         if (Authorized.isLogged()) {
             Log.d(getClass(), "LoadDataUser  -  ");
             new LoadVkUserData(this, this);

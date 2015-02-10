@@ -31,14 +31,14 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        final Intent intent = new Intent(mContext, VkLoginActivity.class);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        final Bundle bundle = new Bundle();
-        if (options != null) {
-            bundle.putAll(options);
-        }
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        return bundle;
+//        final Intent intent = new Intent(mContext, VkLoginActivity.class);
+//        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+//        final Bundle bundle = new Bundle();
+//        if (options != null) {
+//            bundle.putAll(options);
+//        }
+//        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return null;
     }
 
     @Override
@@ -48,20 +48,20 @@ public class WikiAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        final Bundle result = new Bundle();
-        final AccountManager am = AccountManager.get(mContext.getApplicationContext());
-        String authToken = am.peekAuthToken(account, authTokenType);
-        if (!TextUtils.isEmpty(authToken)) {
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
-        } else {
-            final Intent intent = new Intent(mContext, VkLoginActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-            final Bundle bundle = new Bundle();
-            bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        }
-        return result;
+//        final Bundle result = new Bundle();
+//        final AccountManager am = AccountManager.get(mContext.getApplicationContext());
+//        String authToken = am.peekAuthToken(account, authTokenType);
+//        if (!TextUtils.isEmpty(authToken)) {
+//            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+//            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+//            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+//        } else {
+//            final Intent intent = new Intent(mContext, VkLoginActivity.class);
+//            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+//            final Bundle bundle = new Bundle();
+//            bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+//        }
+        return null;
     }
 
     @Override
