@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.zip.Inflater;
+
 import by.evgen.android.apiclient.R;
 import by.evgen.android.apiclient.adapters.MenuAdapter;
 import by.evgen.android.apiclient.auth.Authorized;

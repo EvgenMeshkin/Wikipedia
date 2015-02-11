@@ -74,7 +74,7 @@ public class DetailsFragment extends AbstractFragment<NoteGsonModel> implements 
     }
 
     public void setListData(List<Category> data) {
-        if (data != null) {
+        if (data != null && getActivity() != null) {
             mContent = data;
             Callbacks callbacks = getCallbacks();
             callbacks.onSetContents(data);
