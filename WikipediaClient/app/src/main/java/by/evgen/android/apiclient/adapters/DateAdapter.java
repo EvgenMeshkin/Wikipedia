@@ -25,18 +25,13 @@ public class DateAdapter extends SimpleCursorAdapter {
     private String mPrevDate = null;
 
     public DateAdapter(Context context, int layout, Cursor dataCursor, String[] from,
-                         int[] to, int flags) {
+                       int[] to, int flags) {
         super(context, layout, dataCursor, from, to, flags);
         if (dataCursor != null) {
             mImageLoader = ImageLoader.get(context);
             mDataCursor = dataCursor;
             mInflater = LayoutInflater.from(context);
         }
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        super.bindView(view, context, cursor);
     }
 
     @Override
@@ -55,22 +50,21 @@ public class DateAdapter extends SimpleCursorAdapter {
             Long task_day = mDataCursor.getLong(title_date);
             String dt = (new java.sql.Date(task_day)).toString();
             holder = new ViewHolder();
-            if (convertView == null) {
-                if (!dt.equals(mPrevDate)) {
-                    convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.view_separator, null);
-                    holder.sec_hr = (TextView) convertView.findViewById(android.R.id.content);
-                    holder.sec_hr.setVisibility(View.VISIBLE);
-                } else {
-                    convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.adapter_item, null);
-                    holder.sec_hr = (TextView) convertView.findViewById(android.R.id.content);
-                    holder.sec_hr.setVisibility(View.GONE);
-                }
-                holder.name = (TextView) convertView.findViewById(android.R.id.title);
-                holder.img = (ImageView) convertView.findViewById(android.R.id.icon);
-                convertView.setTag(holder);
-            } else {
+            if (convertView != null) {
                 holder = (ViewHolder) convertView.getTag();
             }
+            if (!dt.equals(mPrevDate)) {
+                convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.view_separator, null);
+                holder.sec_hr = (TextView) convertView.findViewById(android.R.id.content);
+                holder.sec_hr.setVisibility(View.VISIBLE);
+            } else {
+                convertView = mInflater.inflate(by.evgen.android.apiclient.R.layout.adapter_item, null);
+                holder.sec_hr = (TextView) convertView.findViewById(android.R.id.content);
+                holder.sec_hr.setVisibility(View.GONE);
+            }
+            holder.name = (TextView) convertView.findViewById(android.R.id.title);
+            holder.img = (ImageView) convertView.findViewById(android.R.id.icon);
+            convertView.setTag(holder);
             holder.sec_hr.setText(dt);
             final String urlImage = Api.IMAGEVIEW_GET + Decoder.getHtml(task_title);
             holder.name.setText(task_title);

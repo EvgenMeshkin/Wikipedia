@@ -3,6 +3,7 @@ package by.evgen.android.apiclient.fragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -171,11 +172,13 @@ public class DetailsFragment extends AbstractFragment<NoteGsonModel> implements 
     }
 
     public void notifyWebView(Integer position) {
-        mWebView.loadDataWithBaseURL(Api.MAIN_URL + "#" + Decoder.getTitle(mContent.get(position).getLine()),
-                mTextHtml,
-                Constant.TYPE,
-                Constant.UTF,
-                null);
+        if (!TextUtils.isEmpty(mTextHtml)) {
+            mWebView.loadDataWithBaseURL(Api.MAIN_URL + "#" + Decoder.getTitle(mContent.get(position).getLine()),
+                    mTextHtml,
+                    Constant.TYPE,
+                    Constant.UTF,
+                    null);
+        }
     }
 
     private void dismissProgress() {
