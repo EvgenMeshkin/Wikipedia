@@ -3,6 +3,7 @@ package by.evgen.android.apiclient.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
@@ -12,6 +13,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,7 +89,21 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         MenuItem search = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        MenuItem like = menu.findItem(R.id.action_like);
+        like.setTitle(setColorItem(getString(R.string.like)));
+        MenuItem note = menu.findItem(R.id.action_note);
+        note.setTitle(setColorItem(getString(R.string.add_note)));
+        MenuItem storage = menu.findItem(R.id.saving_pages);
+        storage.setTitle(setColorItem(getString(R.string.saving_pages)));
         return true;
+    }
+
+    private CharSequence setColorItem (String title) {
+        SpannableStringBuilder text = new SpannableStringBuilder();
+        text.append(title);
+        text.setSpan(new ForegroundColorSpan(Color.BLUE),
+                0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return text;
     }
 
     @Override
@@ -160,8 +178,8 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
 
     @Override
     public void onSetContents(List<Category> data) {
-        if (data != null) {
-            mDrawerListRight.setAdapter(new ArrayAdapter<Category>(this, R.layout.drawer_list_item, android.R.id.text2, data) {
+        if (data != null && mDrawerListRight.getAdapter() == null) {
+            mDrawerListRight.setAdapter(new ArrayAdapter<Category>(this, R.layout.drawer_list_item, android.R.id.content, data) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null) {
