@@ -50,6 +50,7 @@ public class CachedHttpDataSource extends HttpDataSource {
         File cacheDir = mContext.getCacheDir();
         File file = new File(cacheDir, "__cache");
         file.mkdirs();
+
         String[] list = file.list();
         Log.d(getClass(), "directory cache:  " + Arrays.toString(list));
         String path = file.getPath() + File.separator + generateFileName(p);

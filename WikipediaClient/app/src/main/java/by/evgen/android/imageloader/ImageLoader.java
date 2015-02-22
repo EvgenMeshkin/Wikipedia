@@ -100,7 +100,7 @@ public class ImageLoader {
         public MemoryValue(String url, ImageView imageView, Context context) {
             this.url = url;
             this.imageView = imageView;
-            this.dataSource = new CachedHttpDataSource(context);
+            this.dataSource = new HttpDataSource();
             this.processor = new BitmapProcessor();
             dataUrl = new HttpDataSource();
             processUrl = new ImageUrlProcessor();
