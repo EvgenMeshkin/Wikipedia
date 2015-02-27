@@ -129,7 +129,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         new WikiGetIdTitle(this, this, "&titles=" + Decoder.getHtml(mNoteGsonModel.getTitle()));
     }
 mnkjmnn
-
+,..,.,
     public void sentNote(MenuItem item) {
         Log.d(getClass(), "sentNote");
         new SentsVkNotes(null, this, Decoder.getTitle(mNoteGsonModel.getTitle()));
