@@ -110,6 +110,8 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     public void onNewIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             intent.setClass(this, SearchFragmentActivity.class);
+            kkkhkjl
+                    kjj
             startActivity(intent);
         }
     }
