@@ -128,7 +128,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         Log.d(getClass(), "sentStorage");
         new WikiGetIdTitle(this, this, "&titles=" + Decoder.getHtml(mNoteGsonModel.getTitle()));
     }
-
+mnkjmnn
 
     public void sentNote(MenuItem item) {
         Log.d(getClass(), "sentNote");
