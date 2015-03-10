@@ -110,8 +110,6 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     public void onNewIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             intent.setClass(this, SearchFragmentActivity.class);
-            лолоол
-                    bbnbnbnb
             startActivity(intent);
         }
     }
@@ -128,8 +126,7 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         Log.d(getClass(), "sentStorage");
         new WikiGetIdTitle(this, this, "&titles=" + Decoder.getHtml(mNoteGsonModel.getTitle()));
     }
-mnkjmnn
-,..,.,
+
     public void sentNote(MenuItem item) {
         Log.d(getClass(), "sentNote");
         new SentsVkNotes(null, this, Decoder.getTitle(mNoteGsonModel.getTitle()));
