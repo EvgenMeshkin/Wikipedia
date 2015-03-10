@@ -110,13 +110,6 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
     public void onNewIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             intent.setClass(this, SearchFragmentActivity.class);
-<<<<<<< .merge_file_a04596
-            kkkhkjl
-                    kjj
-=======
-            лолоол
-                    bbnbnbnb
->>>>>>> .merge_file_a06240
             startActivity(intent);
         }
     }
@@ -133,8 +126,12 @@ public class DetailsFragmentActivity extends ActionBarActivity implements Abstra
         Log.d(getClass(), "sentStorage");
         new WikiGetIdTitle(this, this, "&titles=" + Decoder.getHtml(mNoteGsonModel.getTitle()));
     }
+<<<<<<< HEAD
+dsdsds
+xcxcxc
+=======
 
-
+>>>>>>> c768629601e8481e5ed0b4157c1cf11938804a23
     public void sentNote(MenuItem item) {
         Log.d(getClass(), "sentNote");
         new SentsVkNotes(null, this, Decoder.getTitle(mNoteGsonModel.getTitle()));

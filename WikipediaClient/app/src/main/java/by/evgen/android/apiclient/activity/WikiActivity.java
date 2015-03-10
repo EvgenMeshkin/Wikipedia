@@ -56,6 +56,7 @@ import by.evgen.android.apiclient.helper.OnErrorCallbacks;
 import by.evgen.android.apiclient.helper.vkhelper.ClearVkStorage;
 import by.evgen.android.apiclient.helper.vkhelper.LoadVkUserData;
 import by.evgen.android.apiclient.helper.wikihelper.RandomPageCallback;
+import by.evgen.android.apiclient.twitter.SearchOnTwitter;
 import by.evgen.android.apiclient.utils.Constant;
 import by.evgen.android.apiclient.utils.EnumMenuItems;
 import by.evgen.android.apiclient.utils.Log;
@@ -77,6 +78,7 @@ public class WikiActivity extends ActionBarActivity implements AbstractFragment.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         mTitle = getTitle();
+        new SearchOnTwitter().execute("Twitter");
         Account[] accounts = null;
         AccountManager accountManager = AccountManager.get(this);
         if (accountManager != null) {
